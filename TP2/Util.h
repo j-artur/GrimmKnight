@@ -14,7 +14,10 @@ enum Sounds
 enum Objects
 {
     PLAYER,
-    WALL,
+    WALL_TOP,
+    WALL_BOTTOM,
+    WALL_LEFT,
+    WALL_RIGHT,
 };
 
 #endif

@@ -19,7 +19,7 @@ Player::Player()
 
     state = IDLE_RIGHT;
 
-    BBox(new Rect(-14.0f, -31.0f, 14.0f, 31.0f));
+    BBox(new Rect(-14.0f, -31.0f, 13.0f, 30.0f));
 }
 
 Player::~Player()
@@ -38,12 +38,16 @@ void Player::Update()
     oldLeft = self->Left();
     oldRight = self->Right();
 
-    if (standing && window->KeyDown('Z'))
+    if (standing)
     {
-        if (!jumping)
+        ySpeed = 0.0f;
+        if (window->KeyDown('Z'))
         {
-            jumping = true;
-            ySpeed = jumpingSpeed;
+            if (!jumping)
+            {
+                jumping = true;
+                ySpeed = jumpingSpeed;
+            }
         }
     }
     if (window->KeyUp('Z'))
@@ -115,28 +119,49 @@ void Player::Draw()
 
 void Player::OnCollision(Object *other)
 {
-    if (other->Type() == WALL)
+    switch (other->Type())
     {
+    case WALL_TOP: {
         Rect *self = (Rect *)BBox();
-        Rect *rect = (Rect *)(((Wall *)other)->BBox());
+        Wall *wall = (Wall *)other;
 
-        if (oldBottom <= rect->Top() && self->Bottom() > rect->Top())
+        if (oldBottom <= wall->Y() && self->Bottom() >= wall->Y())
         {
-            MoveTo(x, rect->Top() - self->bottom - 0.1f);
-            ySpeed = 0.0f;
+            MoveTo(x, other->Y() - self->bottom - 0.1f);
             standing = true;
         }
-        if (oldTop >= rect->Bottom() && self->Top() < rect->Bottom())
+        break;
+    }
+    case WALL_BOTTOM: {
+        Rect *self = (Rect *)BBox();
+        Wall *wall = (Wall *)other;
+
+        if (oldTop >= wall->Y() && self->Top() <= wall->Y())
         {
-            MoveTo(x, rect->Bottom() - self->top + 0.1f);
+            MoveTo(x, other->Y() - self->top + 0.1f);
+            ySpeed = 0.0f;
         }
-        if (oldRight < rect->Left() && self->Right() > rect->Left())
+        break;
+    }
+    case WALL_LEFT: {
+        Rect *self = (Rect *)BBox();
+        Wall *wall = (Wall *)other;
+
+        if (oldRight <= wall->X() && self->Right() >= wall->X())
         {
-            MoveTo(rect->Left() - self->right - 0.1f, y);
+            MoveTo(other->X() - self->right - 0.1f, y);
         }
-        if (oldLeft > rect->Right() && self->Left() < rect->Right())
+        break;
+    }
+    case WALL_RIGHT: {
+        Rect *self = (Rect *)BBox();
+        Wall *wall = (Wall *)other;
+
+        if (oldLeft >= wall->X() && self->Left() <= wall->X())
         {
-            MoveTo(rect->Right() - self->left + 0.1f, y);
+            MoveTo(other->X() - self->left + 0.1f, y);
         }
+        break;
+    }
     }
 }

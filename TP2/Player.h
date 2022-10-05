@@ -36,7 +36,7 @@ class Player : public Object
     float xSpeed = 0.0f;
     float ySpeed = 0.0f;
     float maxXSpeed = 288.0f;
-    float jumpingSpeed = -448.0f;
+    float jumpingSpeed = -464.0f;
     float gravity = 768.0f;
 
   public:
