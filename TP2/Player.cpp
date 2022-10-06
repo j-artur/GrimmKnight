@@ -6,6 +6,7 @@ Player::Player()
 
     tileSet = new TileSet("Resources/Player.png", 36, 68, 6, 12);
     animation = new Animation(tileSet, 0.20f, true);
+    light = new Sprite("Resources/Light.png");
 
     uint idleRight[4] = {0, 1, 2, 3};
     uint idleLeft[4] = {6, 7, 8, 9};
@@ -19,7 +20,7 @@ Player::Player()
 
     state = IDLE_RIGHT;
 
-    BBox(new Rect(-14.0f, -31.0f, 13.0f, 30.0f));
+    BBox(new Rect(-14.0f, -30.0f, 14.0f, 30.0f));
 }
 
 Player::~Player()
@@ -114,6 +115,7 @@ void Player::Update()
 
 void Player::Draw()
 {
+    light->Draw(float((int)x), float((int)y), Layer::MIDDLE);
     animation->Draw(float((int)x), float((int)y), Layer::UPPER);
 }
 

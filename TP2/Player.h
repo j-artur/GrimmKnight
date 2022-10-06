@@ -4,6 +4,7 @@
 
 #include "Animation.h"
 #include "Object.h"
+#include "Sprite.h"
 #include "Util.h"
 #include "Vector.h"
 #include "Wall.h"
@@ -20,6 +21,7 @@ class Player : public Object
 {
   private:
     TileSet *tileSet;
+    Sprite *light;
     Animation *animation;
     PlayerState state;
 
