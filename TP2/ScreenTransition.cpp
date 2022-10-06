@@ -21,6 +21,11 @@ ScreenTransition::ScreenTransition(Orientation orientation, Scene *scene)
     }
 }
 
+bool ScreenTransition::Transitioning()
+{
+    return transitioning;
+}
+
 void ScreenTransition::Update()
 {
     if (transitioning)

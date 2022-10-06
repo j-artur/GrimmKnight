@@ -3,6 +3,7 @@
 #define _PLAYER_H_
 
 #include "Animation.h"
+#include "Cooldown.h"
 #include "Object.h"
 #include "Sprite.h"
 #include "Util.h"
@@ -35,13 +36,13 @@ class Player : public Object
 {
   private:
     TileSet *tileSet;
-    Sprite *light;
     Animation *animation;
+    Sprite *light;
     PlayerState state;
-    Timer attackTimer;
-    Timer fireballTimer;
-    Timer dashingTimer;
-    Timer dashCooldown;
+    Cooldown attackCd{1.1f};
+    Cooldown fireballCd{0.5f};
+    Cooldown dashingCd{0.25f};
+    Cooldown dashCd{0.75f};
     AttackDirection attackDirection = RIGHT;
     Facing facing = F_RIGHT;
 
@@ -57,14 +58,15 @@ class Player : public Object
     bool attacking = false;
     bool fireballing = false;
     bool dashing = false;
-    bool keyCtrl = false;
+    bool dashKeyCtrl = false;
+    bool dashGroundCtrl = false;
 
     float xSpeed = 0.0f;
     float ySpeed = 0.0f;
-    float maxXSpeed = 288.0f;
+    float walkingSpeed = 288.0f;
     float jumpingSpeed = -464.0f;
     float gravity = 768.0f;
-    float dashSpeed = 600.0f;
+    float dashSpeed = 720.0f;
 
   public:
     bool canMove = true;

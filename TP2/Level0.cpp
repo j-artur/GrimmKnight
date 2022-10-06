@@ -62,7 +62,7 @@ void Level0::Init()
 
 void Level0::Update()
 {
-    if (screenTransition->IsTransitioning())
+    if (screenTransition->Transitioning())
         TP2::player->canMove = false;
     else
         TP2::player->canMove = true;

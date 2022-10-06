@@ -25,10 +25,7 @@ class ScreenTransition : public Object
   public:
     ScreenTransition(Orientation orientation, Scene *scene);
 
-    bool IsTransitioning()
-    {
-        return transitioning;
-    };
+    bool Transitioning();
 
     void Update();
     void Draw(){};

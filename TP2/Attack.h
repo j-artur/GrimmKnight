@@ -1,29 +1,26 @@
 #ifndef _ATTACK_H_
 #define _ATTACK_H_
 
-
-#include "Types.h"                    
-#include "Object.h"                    
-#include "Animation.h"   
-#include "TileSet.h"
+#include "Animation.h"
+#include "Object.h"
 #include "Player.h"
-
+#include "TileSet.h"
+#include "Types.h"
 
 class Attack : public Object
 {
-private:
-    TileSet* ts;
-    Animation* anim; 
-    Player* player;
+  private:
+    TileSet *ts;
+    Animation *anim;
+    Player *player;
     AttackDirection direction;
 
+  public:
+    Attack(Player *player, AttackDirection direction);
+    ~Attack();
 
-public:
-    Attack(Player * player, AttackDirection direction);      
-    ~Attack();                   
-
-    void Update();                      
-    void Draw();                       
+    void Update();
+    void Draw();
 };
 
 inline void Attack::Draw()

@@ -14,6 +14,8 @@ enum Sounds
 enum Objects
 {
     PLAYER,
+    ATTACK,
+    FIREBALL,
     CAMERA,
     WALL_TOP,
     WALL_BOTTOM,

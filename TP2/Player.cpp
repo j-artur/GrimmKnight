@@ -10,7 +10,6 @@ Player::Player()
 
     tileSet = new TileSet("Resources/Player.png", 36, 68, 6, 12);
     animation = new Animation(tileSet, 0.20f, true);
-    light = new Sprite("Resources/Light.png");
 
     uint idleRight[4] = {0, 1, 2, 3};
     uint idleLeft[4] = {6, 7, 8, 9};
@@ -22,21 +21,36 @@ Player::Player()
     animation->Add(WALK_RIGHT, walkRight, 2);
     animation->Add(WALK_LEFT, walkLeft, 2);
 
+    light = new Sprite("Resources/Light.png");
+
     state = IDLE_RIGHT;
 
-    BBox(new Rect(-14.0f, -30.0f, 14.0f, 30.0f));
+    Rect *self = new Rect(-14.0f, -30.0f, 14.0f, 30.0f);
+    BBox(self);
+
+    oldTop = self->Top();
+    oldBottom = self->Bottom();
+    oldLeft = self->Left();
+    oldRight = self->Right();
 }
 
 Player::~Player()
 {
     delete tileSet;
     delete animation;
+    delete light;
 }
 
 void Player::Update()
 {
     if (!canMove)
+    {
+        attackCd.Add(0.1f * gameTime);
+        fireballCd.Add(0.1f * gameTime);
+        dashingCd.Add(0.1f * gameTime);
+        dashCd.Add(0.1f * gameTime);
         return;
+    }
 
     // update old position
     Rect *self = (Rect *)BBox();
@@ -104,73 +118,82 @@ void Player::Update()
     }
     else if (window->KeyDown(VK_LEFT))
     {
-        xSpeed = -maxXSpeed;
+        xSpeed = -walkingSpeed;
         state = WALK_LEFT;
     }
     else if (window->KeyDown(VK_RIGHT))
     {
-        xSpeed = +maxXSpeed;
+        xSpeed = +walkingSpeed;
         state = WALK_RIGHT;
     }
 
     // attack command
-    if (window->KeyDown('X') && !attacking)
+    if (attackCd.Ready())
     {
-        attackTimer.Start();
-        attacking = true;
+        if (window->KeyDown('X'))
+        {
+            attackCd.Reset();
 
-        if (!standing && window->KeyDown(VK_DOWN))
-            attackDirection = DOWN;
-        else if (window->KeyDown(VK_UP))
-            attackDirection = UP;
-        else if (facing == F_LEFT)
-            attackDirection = LEFT;
-        else
-            attackDirection = RIGHT;
+            if (!standing && window->KeyDown(VK_DOWN))
+                attackDirection = DOWN;
+            else if (window->KeyDown(VK_UP))
+                attackDirection = UP;
+            else if (facing == F_LEFT)
+                attackDirection = LEFT;
+            else
+                attackDirection = RIGHT;
 
-        Player *p = this;
-        Attack *atk = new Attack(this, attackDirection);
-        TP2::scene->Add(atk, MOVING);
+            Attack *atk = new Attack(this, attackDirection);
+            TP2::scene->Add(atk, MOVING);
+        }
     }
-
-    if (attackTimer.Elapsed(1.1f))
+    else
     {
-        attacking = false;
-        attackTimer.Stop();
-        attackTimer.Reset();
+        attackCd.Add(gameTime);
     }
 
     // fireball command
-    if (window->KeyDown('C') && !fireballing)
+    if (fireballCd.Ready())
     {
-        fireballing = true;
-        fireballTimer.Start();
+        if (window->KeyDown('C'))
+        {
+            fireballCd.Reset();
 
-        Fireball *fb = new Fireball(this, facing);
-        TP2::scene->Add(fb, MOVING);
+            Fireball *fb = new Fireball(this, facing);
+            TP2::scene->Add(fb, MOVING);
+        }
     }
-
-    if (fireballTimer.Elapsed(1.0f))
+    else
     {
-        fireballing = false;
-        fireballTimer.Stop();
-        fireballTimer.Reset();
+        fireballCd.Add(gameTime);
     }
 
     // dash command
-    if (window->KeyDown('V') && !dashing && keyCtrl)
+    if (dashCd.Ready())
     {
-        dashing = true;
-        keyCtrl = false;
-        dashingTimer.Start();
-        dashCooldown.Start();
-        dashSpeed = facing ? 600.0f : -600.0f;
-    }
+        if (window->KeyDown('V') && dashKeyCtrl && dashGroundCtrl)
+        {
+            dashingCd.Reset();
+            dashCd.Reset();
 
-    if (dashingTimer.Elapsed(0.3f))
+            dashGroundCtrl = false;
+            dashKeyCtrl = false;
+            dashing = true;
+            dashSpeed = facing ? 720.0f : -720.0f;
+        }
+    }
+    else
+        dashCd.Add(gameTime);
+
+    if (dashingCd.Ready())
         dashing = false;
-    if (dashCooldown.Elapsed(0.6f) && standing && window->KeyUp('V'))
-        keyCtrl = true;
+    else
+        dashingCd.Add(gameTime);
+
+    if (window->KeyUp('V'))
+        dashKeyCtrl = true;
+    if (standing)
+        dashGroundCtrl = true;
 
     ySpeed += gravity * gameTime;
 
@@ -190,8 +213,10 @@ void Player::Update()
         // select attack or fireball anim based on attacking or fireballing vars and keep on it until it finishes
     } // else
     // select default anim
-
-    Translate(xSpeed * gameTime, ySpeed * gameTime);
+    if (!dashing)
+    {
+        Translate(xSpeed * gameTime, ySpeed * gameTime);
+    }
 
     standing = false;
 
@@ -250,6 +275,7 @@ void Player::OnCollision(Object *other)
         if (justEntered && isInside)
         {
             MoveTo(other->X() - self->right, y);
+            dashingCd.Left(0.1f);
         }
         break;
     }
@@ -264,6 +290,7 @@ void Player::OnCollision(Object *other)
         if (justEntered && isInside)
         {
             MoveTo(other->X() - self->left, y);
+            dashingCd.Left(0.1f);
         }
         break;
     }

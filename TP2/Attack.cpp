@@ -1,8 +1,11 @@
 #include "Attack.h"
 #include "TP2.h"
+#include "Util.h"
 
-Attack::Attack(Player * player, AttackDirection direction)
+Attack::Attack(Player *player, AttackDirection direction)
 {
+    type = ATTACK;
+
     ts = new TileSet("Resources/attack.png", 64, 64, 5, 10);
     anim = new Animation(ts, 0.1f, false);
     this->player = player;
@@ -26,7 +29,8 @@ Attack::~Attack()
 
 void Attack::Update()
 {
-    switch (direction){
+    switch (direction)
+    {
     case UP:
         MoveTo(player->X(), player->Y() - 50.0f);
         break;
@@ -34,7 +38,7 @@ void Attack::Update()
         MoveTo(player->X(), player->Y() + 50.0f);
         break;
     case LEFT:
-        MoveTo(player->X() - 50.0f, player->Y() );
+        MoveTo(player->X() - 50.0f, player->Y());
         break;
     case RIGHT:
         MoveTo(player->X() + 50.0f, player->Y());
@@ -42,7 +46,7 @@ void Attack::Update()
     default:
         break;
     }
-    
+
     anim->NextFrame();
     if (anim->Inactive())
         TP2::scene->Delete();

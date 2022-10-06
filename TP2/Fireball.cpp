@@ -1,8 +1,11 @@
 #include "Fireball.h"
 #include "TP2.h"
+#include "Util.h"
 
-Fireball::Fireball(Player* player, Facing direction)
+Fireball::Fireball(Player *player, Facing direction)
 {
+    type = FIREBALL;
+
     ts = new TileSet("Resources/attack.png", 64, 64, 5, 10);
     anim = new Animation(ts, 0.1f, true);
 
@@ -12,14 +15,13 @@ Fireball::Fireball(Player* player, Facing direction)
     speed = 800.0f;
     distance = 50.0f;
 
-    if (!direction) {
+    if (!direction)
+    {
         speed = -speed;
         distance = -distance;
     }
 
     MoveTo(player->X() + distance, player->Y());
-
-    fireballTimer.Start();
 
     BBox(new Rect(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f));
 }
@@ -36,10 +38,12 @@ Fireball::~Fireball()
 
 void Fireball::Update()
 {
-    anim->NextFrame();
     Translate(speed * gameTime, 0);
 
-
-    if (fireballTimer.Elapsed(2.0f))
+    if (fireballCd.Ready())
         TP2::scene->Delete();
+
+    fireballCd.Add(gameTime);
+
+    anim->NextFrame();
 }
