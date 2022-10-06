@@ -18,7 +18,9 @@
 #define _PROGJOGOS_SCENE_H_
 
 #include "Geometry.h"                           // bounding box dos objetos
+#include <functional>                           // std::function
 #include <list>                                 // lista da biblioteca STL 
+using std::function;                            // function sem precisar do std::
 using std::list;                                // list sem precisar do std::
 using std::pair;                                // pair sem precisar do std::
 class Object;                                   // declaração adiantada
@@ -88,6 +90,8 @@ public:
 
     bool Collision(Object * oa, Object * ob);   // verifica se há colisão entre dois objetos
     void CollisionDetection();                  // trata a colisão entre objetos da cena
+
+    void Apply(function<void(Object *)> fn);           // aplica função a todos os objetos da cena
 };
 
 // --------------------------------------------------------------------------------

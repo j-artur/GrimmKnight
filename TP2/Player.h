@@ -17,12 +17,18 @@ enum PlayerState
     WALK_LEFT
 };
 
-enum AttackDirection {
-    UP, DOWN, LEFT, RIGHT
+enum AttackDirection
+{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
 };
 
-enum Facing {
-    F_LEFT, F_RIGHT
+enum Facing
+{
+    F_LEFT,
+    F_RIGHT
 };
 
 class Player : public Object
@@ -38,7 +44,6 @@ class Player : public Object
     Timer dashCooldown;
     AttackDirection attackDirection = RIGHT;
     Facing facing = F_RIGHT;
-
 
     float oldTop;
     float oldBottom;
@@ -62,6 +67,8 @@ class Player : public Object
     float dashSpeed = 600.0f;
 
   public:
+    bool canMove = true;
+
     Player();
     ~Player();
 

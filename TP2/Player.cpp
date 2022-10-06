@@ -35,6 +35,9 @@ Player::~Player()
 
 void Player::Update()
 {
+    if (!canMove)
+        return;
+
     // update old position
     Rect *self = (Rect *)BBox();
 
@@ -209,10 +212,14 @@ void Player::OnCollision(Object *other)
     case WALL_TOP: {
         Rect *self = (Rect *)BBox();
         Wall *wall = (Wall *)other;
+        Rect *wallBBox = (Rect *)wall->BBox();
 
-        if (oldBottom <= wall->Y() && self->Bottom() >= wall->Y())
+        bool justEntered = oldBottom <= wall->Y() && self->Bottom() >= wall->Y();
+        bool isInside = self->Right() != wallBBox->Left() && self->Left() != wallBBox->Right();
+
+        if (justEntered && isInside)
         {
-            MoveTo(x, other->Y() - self->bottom - 0.1f);
+            MoveTo(x, other->Y() - self->bottom);
             standing = true;
         }
         break;
@@ -220,10 +227,14 @@ void Player::OnCollision(Object *other)
     case WALL_BOTTOM: {
         Rect *self = (Rect *)BBox();
         Wall *wall = (Wall *)other;
+        Rect *wallBBox = (Rect *)wall->BBox();
 
-        if (oldTop >= wall->Y() && self->Top() <= wall->Y())
+        bool justEntered = oldTop >= wall->Y() && self->Top() <= wall->Y();
+        bool isInside = self->Right() != wallBBox->Left() && self->Left() != wallBBox->Right();
+
+        if (justEntered && isInside)
         {
-            MoveTo(x, other->Y() - self->top + 0.1f);
+            MoveTo(x, other->Y() - self->top);
             ySpeed = 0.0f;
         }
         break;
@@ -231,20 +242,28 @@ void Player::OnCollision(Object *other)
     case WALL_LEFT: {
         Rect *self = (Rect *)BBox();
         Wall *wall = (Wall *)other;
+        Rect *wallBBox = (Rect *)wall->BBox();
 
-        if (oldRight <= wall->X() && self->Right() >= wall->X())
+        bool justEntered = oldRight <= wall->X() && self->Right() >= wall->X();
+        bool isInside = self->Bottom() != wallBBox->Top() && self->Top() != wallBBox->Bottom();
+
+        if (justEntered && isInside)
         {
-            MoveTo(other->X() - self->right - 0.1f, y);
+            MoveTo(other->X() - self->right, y);
         }
         break;
     }
     case WALL_RIGHT: {
         Rect *self = (Rect *)BBox();
         Wall *wall = (Wall *)other;
+        Rect *wallBBox = (Rect *)wall->BBox();
 
-        if (oldLeft >= wall->X() && self->Left() <= wall->X())
+        bool justEntered = oldLeft >= wall->X() && self->Left() <= wall->X();
+        bool isInside = self->Bottom() != wallBBox->Top() && self->Top() != wallBBox->Bottom();
+
+        if (justEntered && isInside)
         {
-            MoveTo(other->X() - self->left + 0.1f, y);
+            MoveTo(other->X() - self->left, y);
         }
         break;
     }

@@ -530,4 +530,16 @@ void Scene::CollisionDetection()
     ProcessDeleted();
 }
 
+// ---------------------------------------------------------------------------------
+
+void Scene::Apply(function<void(Object *)> fn)
+{
+    // aplica função a todos os objetos
+    for (auto obj : statics)
+        fn(obj);
+
+    for (auto obj : moving)
+        fn(obj);
+}
+
 // --------------------------------------------------------------------------------

@@ -14,6 +14,7 @@ enum Sounds
 enum Objects
 {
     PLAYER,
+    CAMERA,
     WALL_TOP,
     WALL_BOTTOM,
     WALL_LEFT,

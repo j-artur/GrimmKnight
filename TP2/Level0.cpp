@@ -6,15 +6,20 @@ void Level0::Init()
 {
     background = new Sprite("Resources/Level0Bg.png");
     foreground = new Sprite("Resources/Level0Fg.png");
-    drawX = window->Width();
-    drawY = window->CenterY();
 
     scene = new Scene();
     TP2::scene = scene;
 
+    camera = new Camera();
+    camera->MoveTo((float)window->Width(), window->CenterY());
+    scene->Add(camera, STATIC);
+
+    screenTransition = new ScreenTransition(HORIZONTAL, scene);
+    screenTransition->MoveTo((float)window->Width(), 256.0f);
+    scene->Add(screenTransition, STATIC);
+
     TP2::player = new Player();
     TP2::player->MoveTo(256.0f, -32.0f);
-
     scene->Add(TP2::player, MOVING);
 
     AddWalls(scene, 6, 15, 4, 1);
@@ -50,21 +55,26 @@ void Level0::Init()
     AddWalls(scene, 54, 16, 10, 2);
     AddWalls(scene, 54, 18, 2, 4);
     AddWalls(scene, 56, 22, 24, 2);
-    AddWalls(scene, 70, 8, 2, 4);
+    AddWalls(scene, 70, 18, 2, 4);
     AddWalls(scene, 78, 2, 2, 16);
     AddWalls(scene, 66, 12, 12, 2);
 }
 
 void Level0::Update()
 {
+    if (screenTransition->IsTransitioning())
+        TP2::player->canMove = false;
+    else
+        TP2::player->canMove = true;
+
     scene->Update();
     scene->CollisionDetection();
 }
 
 void Level0::Draw()
 {
-    background->Draw(drawX, drawY, Layer::BACK);
-    foreground->Draw(drawX, drawY, 0.9f);
+    background->Draw(camera->X(), camera->Y(), Layer::BACK);
+    foreground->Draw(camera->X(), camera->Y(), 0.9f);
     scene->Draw();
 }
 

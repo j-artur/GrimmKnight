@@ -1,7 +1,9 @@
 #ifndef _LEVEL0_H_
 #define _LEVEL0_H_
 
+#include "Camera.h"
 #include "Scene.h"
+#include "ScreenTransition.h"
 #include "TP2.h"
 
 class Level0 : public Game
@@ -9,8 +11,9 @@ class Level0 : public Game
   private:
     Sprite *background = nullptr;
     Sprite *foreground = nullptr;
-    float drawX = 0.0f;
-    float drawY = 0.0f;
+    Camera *camera = nullptr;
+    ScreenTransition *screenTransition = nullptr;
+
     static Scene *scene;
 
   public:
