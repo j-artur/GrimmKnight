@@ -16,14 +16,15 @@ Player::Player()
     uint walkRight[2] = {4, 5};
     uint walkLeft[2] = {10, 11};
 
-    animation->Add(IDLE_RIGHT, idleRight, 4);
-    animation->Add(IDLE_LEFT, idleLeft, 4);
-    animation->Add(WALK_RIGHT, walkRight, 2);
-    animation->Add(WALK_LEFT, walkLeft, 2);
+    animation->Add(STILL * RIGHT, idleRight, 4);
+    animation->Add(STILL * LEFT, idleLeft, 4);
+    animation->Add(WALKING * RIGHT, walkRight, 2);
+    animation->Add(WALKING * LEFT, walkLeft, 2);
 
     light = new Sprite("Resources/Light.png");
 
-    state = IDLE_RIGHT;
+    state = FALLING;
+    direction = RIGHT;
 
     Rect *self = new Rect(-14.0f, -30.0f, 14.0f, 30.0f);
     BBox(self);
@@ -41,8 +42,114 @@ Player::~Player()
     delete light;
 }
 
+void Player::Input()
+{
+}
+
 void Player::Update()
 {
+input : {
+    PlayerState nextState = state;
+    Direction nextDirection = direction;
+
+    if (state == STILL || state == WALKING || state == JUMPING || state == FALLING)
+    {
+        if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_RIGHT))
+        {
+            xSpeed = 0.0f;
+            if (direction == LEFT)
+                nextDirection = LEFT;
+            else if (direction == RIGHT)
+                nextDirection = RIGHT;
+        }
+        else if (window->KeyDown(VK_LEFT))
+        {
+            xSpeed = -walkingSpeed;
+            if (state == STILL || state == WALKING)
+                nextState = WALKING;
+            nextDirection = LEFT;
+        }
+        else if (window->KeyDown(VK_RIGHT))
+        {
+            xSpeed = walkingSpeed;
+            if (state == STILL || state == WALKING)
+                nextState = WALKING;
+            nextDirection = RIGHT;
+        }
+        else
+        {
+            xSpeed = 0.0f;
+            if (state == STILL || state == WALKING)
+                nextState = STILL;
+        }
+
+        if (window->KeyDown('Z') && (state == STILL || state == WALKING))
+        {
+            nextState = JUMPING;
+            ySpeed = jumpingSpeed;
+        }
+
+        if (state == JUMPING && window->KeyUp('Z'))
+        {
+            ySpeed = 0.0f;
+            nextState = FALLING;
+        }
+
+        if (window->KeyDown('X') && attackCd.Ready())
+        {
+            // TODO: Create attack animation
+
+            // nextState = ATTACKING;
+
+            attackCd.Reset();
+
+            if ((state == JUMPING || state == FALLING) && window->KeyDown(VK_DOWN))
+                attackDirection = ATK_DOWN;
+            else if (window->KeyDown(VK_UP))
+                attackDirection = ATK_UP;
+            else if (direction == LEFT)
+                attackDirection = ATK_LEFT;
+            else
+                attackDirection = ATK_RIGHT;
+
+            Attack *atk = new Attack(this, attackDirection);
+            TP2::scene->Add(atk, MOVING);
+        }
+
+        if (window->KeyDown('C') && fireballCd.Ready())
+        {
+            // TODO: Create fireball animation
+
+            // nextState = CASTING;
+
+            fireballCd.Reset();
+
+            Fireball *fb = new Fireball(this, direction);
+            TP2::scene->Add(fb, MOVING);
+        }
+
+        if (window->KeyDown('V') && dashCd.Ready() && dashKeyCtrl && dashGroundCtrl)
+        {
+            // TODO: Create dash animation
+
+            nextState = DASHING;
+
+            dashingCd.Reset();
+            dashCd.Reset();
+
+            dashGroundCtrl = false;
+            dashKeyCtrl = false;
+        }
+
+        if (window->KeyUp('V'))
+            dashKeyCtrl = true;
+    }
+
+    state = nextState;
+    direction = nextDirection;
+}
+
+update : {
     if (!canMove)
     {
         attackCd.Add(0.1f * gameTime);
@@ -54,173 +161,98 @@ void Player::Update()
 
     // update old position
     Rect *self = (Rect *)BBox();
-
     oldTop = self->Top();
     oldBottom = self->Bottom();
     oldLeft = self->Left();
     oldRight = self->Right();
 
-    if (standing)
-    {
-        ySpeed = 0.0f;
-        if (window->KeyDown('Z'))
-        {
-            if (!jumping)
-            {
-                jumping = true;
-                ySpeed = jumpingSpeed;
-            }
-        }
-    }
-    if (window->KeyUp('Z'))
-    {
-        if (jumping)
-            ySpeed = -ySpeed / 4.0f;
-        jumping = false;
-    }
+    PlayerState nextState = state;
 
-    if (ySpeed >= 0.0f)
-        jumping = false;
-
-    // dash movement
-    if (dashing)
+    switch (state)
     {
-        xSpeed = 0.0f;
-        ySpeed = 0.0f;
-        Translate(dashSpeed * gameTime, 0);
-    }
-    // walking command
-    else if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_RIGHT))
-    {
-        xSpeed = 0.0f;
-        switch (state)
-        {
-        case WALK_LEFT:
-            state = IDLE_RIGHT;
-            break;
-        case WALK_RIGHT:
-            state = IDLE_LEFT;
-            break;
-        }
-    }
-    else if (window->KeyUp(VK_LEFT) && window->KeyUp(VK_RIGHT))
-    {
-        xSpeed = 0.0f;
-        switch (state)
-        {
-        case WALK_LEFT:
-            state = IDLE_LEFT;
-            break;
-        case WALK_RIGHT:
-            state = IDLE_RIGHT;
-            break;
-        }
-    }
-    else if (window->KeyDown(VK_LEFT))
-    {
-        xSpeed = -walkingSpeed;
-        state = WALK_LEFT;
-    }
-    else if (window->KeyDown(VK_RIGHT))
-    {
-        xSpeed = +walkingSpeed;
-        state = WALK_RIGHT;
-    }
-
-    // attack command
-    if (attackCd.Ready())
-    {
-        if (window->KeyDown('X'))
-        {
-            attackCd.Reset();
-
-            if (!standing && window->KeyDown(VK_DOWN))
-                attackDirection = DOWN;
-            else if (window->KeyDown(VK_UP))
-                attackDirection = UP;
-            else if (facing == F_LEFT)
-                attackDirection = LEFT;
-            else
-                attackDirection = RIGHT;
-
-            Attack *atk = new Attack(this, attackDirection);
-            TP2::scene->Add(atk, MOVING);
-        }
-    }
-    else
-    {
-        attackCd.Add(gameTime);
-    }
-
-    // fireball command
-    if (fireballCd.Ready())
-    {
-        if (window->KeyDown('C'))
-        {
-            fireballCd.Reset();
-
-            Fireball *fb = new Fireball(this, facing);
-            TP2::scene->Add(fb, MOVING);
-        }
-    }
-    else
-    {
-        fireballCd.Add(gameTime);
-    }
-
-    // dash command
-    if (dashCd.Ready())
-    {
-        if (window->KeyDown('V') && dashKeyCtrl && dashGroundCtrl)
-        {
-            dashingCd.Reset();
-            dashCd.Reset();
-
-            dashGroundCtrl = false;
-            dashKeyCtrl = false;
-            dashing = true;
-            dashSpeed = facing ? 720.0f : -720.0f;
-        }
-    }
-    else
-        dashCd.Add(gameTime);
-
-    if (dashingCd.Ready())
-        dashing = false;
-    else
-        dashingCd.Add(gameTime);
-
-    if (window->KeyUp('V'))
-        dashKeyCtrl = true;
-    if (standing)
+    case STILL: {
         dashGroundCtrl = true;
 
-    ySpeed += gravity * gameTime;
+        nextState = FALLING;
+        break;
+    }
+    case WALKING: {
 
-    if (ySpeed > gravity)
-        ySpeed = gravity;
-    if (ySpeed < jumpingSpeed)
-        ySpeed = jumpingSpeed;
+        dashGroundCtrl = true;
 
-    // updates what direction character is facing
-    if (state == WALK_LEFT || state == IDLE_LEFT)
-        facing = F_LEFT;
-    else
-        facing = F_RIGHT;
+        Translate(xSpeed * gameTime, 0.0f);
 
-    if (attacking)
-    {
-        // select attack or fireball anim based on attacking or fireballing vars and keep on it until it finishes
-    } // else
-    // select default anim
-    if (!dashing)
-    {
+        nextState = FALLING;
+        break;
+    }
+    case JUMPING: {
+        ySpeed += gravity * gameTime;
+
         Translate(xSpeed * gameTime, ySpeed * gameTime);
+
+        nextState = ySpeed >= 0.0f ? FALLING : JUMPING;
+        break;
+    }
+    case FALLING: {
+        ySpeed += gravity * gameTime;
+
+        if (ySpeed > gravity * 2.0f)
+            ySpeed = gravity * 2.0f;
+
+        Translate(xSpeed * gameTime, ySpeed * gameTime);
+
+        nextState = FALLING;
+        break;
+    }
+    case DASHING: {
+        if (dashingCd.Ready())
+        {
+            nextState = FALLING;
+            ySpeed = 0.0f;
+        }
+        else
+        {
+            xSpeed = dashSpeed * (direction == LEFT ? -1.0f : 1.0f);
+            Translate(xSpeed * gameTime, 0.0f);
+            nextState = DASHING;
+        }
+        break;
+    }
+    case ATTACKING: {
+        break;
+    }
+    case CASTING: {
+        break;
+    }
+    case HURTING: {
+        break;
+    }
+    case DYING: {
+        break;
+    }
+    case RESPAWNING: {
+        break;
+    }
     }
 
-    standing = false;
+    state = nextState;
+}
 
-    animation->Select(state);
+    attackCd.Add(gameTime);
+    fireballCd.Add(gameTime);
+    dashCd.Add(gameTime);
+    dashingCd.Add(gameTime);
+
+    // if (state == ATTACKING)
+    //     animation->Select(ATTACKING * direction * attackDirection);
+    // else
+    //     animation->Select(state * direction);
+
+    if (xSpeed != 0.0f)
+        animation->Select(WALKING * direction);
+    else
+        animation->Select(STILL * direction);
+
     animation->NextFrame();
 }
 
@@ -245,7 +277,9 @@ void Player::OnCollision(Object *other)
         if (justEntered && isInside)
         {
             MoveTo(x, other->Y() - self->bottom);
-            standing = true;
+            ySpeed = 0.0f;
+            if (state == FALLING)
+                state = STILL;
         }
         break;
     }

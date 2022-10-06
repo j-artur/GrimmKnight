@@ -31,19 +31,17 @@ void Attack::Update()
 {
     switch (direction)
     {
-    case UP:
+    case ATK_UP:
         MoveTo(player->X(), player->Y() - 50.0f);
         break;
-    case DOWN:
+    case ATK_DOWN:
         MoveTo(player->X(), player->Y() + 50.0f);
         break;
-    case LEFT:
+    case ATK_LEFT:
         MoveTo(player->X() - 50.0f, player->Y());
         break;
-    case RIGHT:
+    case ATK_RIGHT:
         MoveTo(player->X() + 50.0f, player->Y());
-        break;
-    default:
         break;
     }
 

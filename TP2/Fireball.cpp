@@ -2,20 +2,20 @@
 #include "TP2.h"
 #include "Util.h"
 
-Fireball::Fireball(Player *player, Facing direction)
+Fireball::Fireball(Player *player, Direction direction)
 {
     type = FIREBALL;
 
     ts = new TileSet("Resources/attack.png", 64, 64, 5, 10);
     anim = new Animation(ts, 0.1f, true);
 
-    int width = ts->TileWidth();
-    int height = ts->TileHeight();
+    int width = 32;
+    int height = 32;
 
     speed = 800.0f;
-    distance = 50.0f;
+    distance = 14.0f;
 
-    if (!direction)
+    if (direction == LEFT)
     {
         speed = -speed;
         distance = -distance;
@@ -46,4 +46,15 @@ void Fireball::Update()
     fireballCd.Add(gameTime);
 
     anim->NextFrame();
+}
+
+// ---------------------------------------------------------------------------------
+
+void Fireball::OnCollision(Object *obj)
+{
+    if (obj->Type() == WALL_LEFT || obj->Type() == WALL_RIGHT)
+    {
+        TP2::scene->Delete(this, MOVING);
+        // anim exploding fireball
+    }
 }

@@ -12,24 +12,30 @@
 
 enum PlayerState
 {
-    IDLE_RIGHT,
-    IDLE_LEFT,
-    WALK_RIGHT,
-    WALK_LEFT
+    STILL = 1,
+    WALKING = 2,
+    JUMPING = 4,
+    FALLING = 8,
+    ATTACKING = 16,
+    CASTING = 32,
+    DASHING = 64,
+    HURTING = 128,
+    DYING = 256,
+    RESPAWNING = 512,
+};
+
+enum Direction
+{
+    LEFT = 1,
+    RIGHT = 3,
 };
 
 enum AttackDirection
 {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-};
-
-enum Facing
-{
-    F_LEFT,
-    F_RIGHT
+    ATK_UP = 5,
+    ATK_DOWN = 7,
+    ATK_LEFT = 11,
+    ATK_RIGHT = 13,
 };
 
 class Player : public Object
@@ -38,26 +44,19 @@ class Player : public Object
     TileSet *tileSet;
     Animation *animation;
     Sprite *light;
-    PlayerState state;
+    PlayerState state = FALLING;
+    Direction direction = RIGHT;
+    AttackDirection attackDirection = ATK_RIGHT;
     Cooldown attackCd{1.1f};
     Cooldown fireballCd{0.5f};
     Cooldown dashingCd{0.25f};
     Cooldown dashCd{0.75f};
-    AttackDirection attackDirection = RIGHT;
-    Facing facing = F_RIGHT;
 
     float oldTop;
     float oldBottom;
     float oldLeft;
     float oldRight;
 
-    bool jumping = false;
-    bool standing = false;
-    float jumpingAmount = 0.0f;
-    bool dying = false;
-    bool attacking = false;
-    bool fireballing = false;
-    bool dashing = false;
     bool dashKeyCtrl = false;
     bool dashGroundCtrl = false;
 
@@ -67,6 +66,8 @@ class Player : public Object
     float jumpingSpeed = -464.0f;
     float gravity = 768.0f;
     float dashSpeed = 720.0f;
+
+    void Input();
 
   public:
     bool canMove = true;

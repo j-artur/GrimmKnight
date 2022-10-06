@@ -15,15 +15,16 @@ class Fireball : public Object
     Animation *anim;
     Cooldown fireballCd{2.0f};
 
-    float speed;
+    float speed = 800.0f;
     float distance;
 
   public:
-    Fireball(Player *player, Facing direction);
+    Fireball(Player *player, Direction direction);
     ~Fireball();
 
     void Update();
     void Draw();
+    void OnCollision(Object *other);
 };
 
 inline void Fireball::Draw()
