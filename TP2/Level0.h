@@ -8,6 +8,7 @@ class Level0 : public Game
 {
   private:
     Sprite *background = nullptr;
+    Sprite *foreground = nullptr;
     float drawX = 0.0f;
     float drawY = 0.0f;
     static Scene *scene;

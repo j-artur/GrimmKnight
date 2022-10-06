@@ -59,3 +59,32 @@ RightWall::RightWall(int iX, int iY, int iHeight)
 
     MoveTo(x, (y1 + y2) / 2.0f);
 }
+
+Block::Block(int iX, int iY, int iWidth, int iHeight)
+{
+    top = new TopWall(iX, iY, iWidth);
+    bottom = new BottomWall(iX, iY + iHeight - 1, iWidth);
+    left = new LeftWall(iX, iY, iHeight);
+    right = new RightWall(iX + iWidth - 1, iY, iHeight);
+}
+
+void Block::AddWalls(Scene *scene)
+{
+    scene->Add(top, STATIC);
+    scene->Add(bottom, STATIC);
+    scene->Add(left, STATIC);
+    scene->Add(right, STATIC);
+}
+
+void AddWalls(Scene *scene, int iX, int iY, int iWidth, int iHeight)
+{
+    Wall *top = new TopWall(iX, iY, iWidth);
+    Wall *bottom = new BottomWall(iX, iY + iHeight - 1, iWidth);
+    Wall *left = new LeftWall(iX, iY, iHeight);
+    Wall *right = new RightWall(iX + iWidth - 1, iY, iHeight);
+
+    scene->Add(top, STATIC);
+    scene->Add(bottom, STATIC);
+    scene->Add(left, STATIC);
+    scene->Add(right, STATIC);
+}

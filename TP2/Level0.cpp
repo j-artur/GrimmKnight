@@ -4,7 +4,8 @@ Scene *Level0::scene = nullptr;
 
 void Level0::Init()
 {
-    background = new Sprite("Resources/Level0.png");
+    background = new Sprite("Resources/Level0Bg.png");
+    foreground = new Sprite("Resources/Level0Fg.png");
     drawX = window->Width();
     drawY = window->CenterY();
 
@@ -16,88 +17,42 @@ void Level0::Init()
 
     scene->Add(TP2::player, MOVING);
 
-    scene->Add(new RightWall(5, 0, 6), STATIC);
-    scene->Add(new BottomWall(4, 5, 2), STATIC);
-    scene->Add(new RightWall(3, 6, 2), STATIC);
-    scene->Add(new BottomWall(2, 7, 2), STATIC);
-    scene->Add(new RightWall(1, 8, 10), STATIC);
-    scene->Add(new TopWall(2, 18, 2), STATIC);
-    scene->Add(new RightWall(3, 18, 2), STATIC);
-    scene->Add(new TopWall(4, 20, 8), STATIC);
-    scene->Add(new LeftWall(12, 18, 2), STATIC);
-    scene->Add(new TopWall(12, 18, 2), STATIC);
-    scene->Add(new RightWall(13, 18, 4), STATIC);
-    scene->Add(new TopWall(14, 22, 8), STATIC);
-    scene->Add(new LeftWall(22, 20, 2), STATIC);
-    scene->Add(new TopWall(22, 20, 12), STATIC);
-    scene->Add(new LeftWall(34, 18, 2), STATIC);
-    scene->Add(new TopWall(34, 18, 4), STATIC);
-    scene->Add(new LeftWall(38, 14, 4), STATIC);
-    scene->Add(new BottomWall(36, 13, 2), STATIC);
-    scene->Add(new LeftWall(36, 12, 2), STATIC);
-    scene->Add(new BottomWall(34, 11, 2), STATIC);
-    scene->Add(new LeftWall(34, 10, 2), STATIC);
-    scene->Add(new BottomWall(28, 9, 6), STATIC);
-    scene->Add(new LeftWall(28, 8, 2), STATIC);
-    scene->Add(new TopWall(28, 8, 8), STATIC);
-    scene->Add(new RightWall(35, 8, 2), STATIC);
-    scene->Add(new TopWall(36, 10, 10), STATIC);
-    scene->Add(new LeftWall(46, 8, 2), STATIC);
-    scene->Add(new TopWall(46, 8, 2), STATIC);
-    scene->Add(new RightWall(48, 8, 2), STATIC);
-    scene->Add(new TopWall(48, 6, 26), STATIC);
-    scene->Add(new RightWall(73, 6, 2), STATIC);
-    scene->Add(new BottomWall(50, 7, 2), STATIC);
-    scene->Add(new RightWall(49, 8, 2), STATIC);
-    scene->Add(new BottomWall(48, 9, 2), STATIC);
-    scene->Add(new RightWall(47, 10, 2), STATIC);
-    scene->Add(new BottomWall(42, 11, 6), STATIC);
-    scene->Add(new RightWall(41, 12, 4), STATIC);
-    scene->Add(new TopWall(42, 16, 8), STATIC);
-    scene->Add(new RightWall(49, 16, 1), STATIC);
-    scene->Add(new TopWall(50, 17, 4), STATIC);
-    scene->Add(new LeftWall(54, 16, 1), STATIC);
-    scene->Add(new TopWall(54, 16, 10), STATIC);
-    scene->Add(new RightWall(54, 16, 2), STATIC);
-    scene->Add(new BottomWall(56, 17, 8), STATIC);
-    scene->Add(new RightWall(55, 18, 4), STATIC);
-    scene->Add(new TopWall(56, 22, 14), STATIC);
-    scene->Add(new LeftWall(70, 18, 4), STATIC);
-    scene->Add(new TopWall(70, 18, 2), STATIC);
-    scene->Add(new RightWall(71, 18, 4), STATIC);
-    scene->Add(new TopWall(72, 22, 8), STATIC);
-    scene->Add(new BottomWall(80, 24, 2), STATIC);
-    scene->Add(new LeftWall(78, 14, 4), STATIC);
-    scene->Add(new BottomWall(66, 13, 12), STATIC);
-    scene->Add(new LeftWall(66, 12, 2), STATIC);
-    scene->Add(new TopWall(66, 12, 12), STATIC);
-    scene->Add(new LeftWall(78, 2, 10), STATIC);
-    scene->Add(new BottomWall(44, 1, 34), STATIC);
-    scene->Add(new RightWall(43, 2, 2), STATIC);
-    scene->Add(new BottomWall(42, 3, 2), STATIC);
-    scene->Add(new RightWall(41, 4, 2), STATIC);
-    scene->Add(new BottomWall(38, 5, 4), STATIC);
-    scene->Add(new LeftWall(38, 4, 2), STATIC);
-    scene->Add(new BottomWall(36, 3, 2), STATIC);
-    scene->Add(new LeftWall(36, 2, 2), STATIC);
-    scene->Add(new BottomWall(24, 1, 12), STATIC);
-    scene->Add(new RightWall(23, 2, 2), STATIC);
-    scene->Add(new BottomWall(22, 3, 2), STATIC);
-    scene->Add(new RightWall(21, 4, 6), STATIC);
-    scene->Add(new TopWall(22, 10, 2), STATIC);
-    scene->Add(new RightWall(23, 10, 4), STATIC);
-    scene->Add(new TopWall(24, 14, 8), STATIC);
-    scene->Add(new RightWall(31, 14, 2), STATIC);
-    scene->Add(new BottomWall(22, 15, 10), STATIC);
-    scene->Add(new LeftWall(22, 12, 4), STATIC);
-    scene->Add(new BottomWall(20, 11, 2), STATIC);
-    scene->Add(new LeftWall(20, 10, 2), STATIC);
-    scene->Add(new BottomWall(18, 9, 2), STATIC);
-    scene->Add(new LeftWall(18, 8, 2), STATIC);
-    scene->Add(new BottomWall(12, 7, 6), STATIC);
-    scene->Add(new LeftWall(12, 6, 2), STATIC);
-    scene->Add(new BottomWall(10, 5, 2), STATIC);
-    scene->Add(new LeftWall(10, 0, 6), STATIC);
+    AddWalls(scene, 6, 15, 4, 1);
+    AddWalls(scene, 12, 8, 8, 1);
+    AddWalls(scene, 22, 13, 2, 3);
+    AddWalls(scene, 30, 15, 3, 1);
+    AddWalls(scene, 16, 15, 2, 1);
+    AddWalls(scene, 18, 15, 1, 4);
+    AddWalls(scene, 19, 18, 1, 1);
+    AddWalls(scene, 26, 9, 2, 1);
+    AddWalls(scene, 28, 7, 1, 3);
+    AddWalls(scene, 4, 0, 2, 6);
+    AddWalls(scene, 2, 6, 2, 2);
+    AddWalls(scene, 0, 8, 2, 10);
+    AddWalls(scene, 2, 18, 2, 2);
+    AddWalls(scene, 4, 20, 8, 4);
+    AddWalls(scene, 12, 18, 2, 4);
+    AddWalls(scene, 14, 22, 8, 2);
+    AddWalls(scene, 22, 20, 12, 2);
+    AddWalls(scene, 26, 14, 2, 6);
+    AddWalls(scene, 34, 18, 4, 2);
+    AddWalls(scene, 38, 14, 2, 4);
+    AddWalls(scene, 38, 10, 10, 2);
+    AddWalls(scene, 36, 10, 2, 4);
+    AddWalls(scene, 38, 4, 4, 2);
+    AddWalls(scene, 36, 2, 8, 2);
+    AddWalls(scene, 10, 0, 70, 2);
+    AddWalls(scene, 40, 12, 2, 4);
+    AddWalls(scene, 46, 8, 4, 2);
+    AddWalls(scene, 48, 6, 26, 2);
+    AddWalls(scene, 42, 16, 8, 1);
+    AddWalls(scene, 50, 17, 4, 1);
+    AddWalls(scene, 54, 16, 10, 2);
+    AddWalls(scene, 54, 18, 2, 4);
+    AddWalls(scene, 56, 22, 24, 2);
+    AddWalls(scene, 70, 8, 2, 4);
+    AddWalls(scene, 78, 2, 2, 16);
+    AddWalls(scene, 66, 12, 12, 2);
 }
 
 void Level0::Update()
@@ -109,6 +64,7 @@ void Level0::Update()
 void Level0::Draw()
 {
     background->Draw(drawX, drawY, Layer::BACK);
+    foreground->Draw(drawX, drawY, 0.9f);
     scene->Draw();
 }
 

@@ -2,6 +2,7 @@
 #include "Attack.h"
 #include "Fireball.h"
 #include "TP2.h"
+#include <cmath>
 
 Player::Player()
 {
@@ -115,7 +116,7 @@ void Player::Update()
         attackTimer.Start();
         attacking = true;
 
-        if (jumping && window->KeyDown(VK_DOWN))
+        if (!standing && window->KeyDown(VK_DOWN))
             attackDirection = DOWN;
         else if (window->KeyDown(VK_UP))
             attackDirection = UP;
@@ -175,10 +176,6 @@ void Player::Update()
     if (ySpeed < jumpingSpeed)
         ySpeed = jumpingSpeed;
 
-    Translate(xSpeed * gameTime, ySpeed * gameTime);
-
-    standing = false;
-
     // updates what direction character is facing
     if (state == WALK_LEFT || state == IDLE_LEFT)
         facing = F_LEFT;
@@ -191,14 +188,18 @@ void Player::Update()
     } // else
     // select default anim
 
+    Translate(xSpeed * gameTime, ySpeed * gameTime);
+
+    standing = false;
+
     animation->Select(state);
     animation->NextFrame();
 }
 
 void Player::Draw()
 {
-    light->Draw(float((int)x), float((int)y), Layer::MIDDLE);
-    animation->Draw(float((int)x), float((int)y), Layer::UPPER);
+    light->Draw(round(x), round(y), 0.95f);
+    animation->Draw(round(x), round(y), Layer::UPPER);
 }
 
 void Player::OnCollision(Object *other)
