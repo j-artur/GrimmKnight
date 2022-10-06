@@ -1,4 +1,7 @@
 #include "Player.h"
+#include "Attack.h"
+#include "Fireball.h"
+#include "TP2.h"
 
 Player::Player()
 {
@@ -38,6 +41,7 @@ void Player::Update()
     oldLeft = self->Left();
     oldRight = self->Right();
 
+    // jumping command
     if (standing && window->KeyDown('Z'))
     {
         if (!jumping)
@@ -56,7 +60,15 @@ void Player::Update()
     if (ySpeed >= 0.0f)
         jumping = false;
 
-    if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_RIGHT))
+    // dash movement
+    if (dashing)
+    {
+        xSpeed = 0.0f;
+        ySpeed = 0.0f;
+        Translate(dashSpeed * gameTime, 0);        
+    }
+    // walking command
+    else if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_RIGHT))
     {
         xSpeed = 0.0f;
         switch (state)
@@ -93,6 +105,63 @@ void Player::Update()
         state = WALK_RIGHT;
     }
 
+    // attack command
+    if (window->KeyDown('X') && !attacking) {
+        attackTimer.Start();
+        attacking = true;
+
+        if (jumping && window->KeyDown(VK_DOWN))
+            attackDirection = DOWN;
+        else if (window->KeyDown(VK_UP))
+            attackDirection = UP;
+        else if (facing == F_LEFT)
+            attackDirection = LEFT;
+        else
+            attackDirection = RIGHT;
+
+
+        Player* p = this;
+        Attack* atk = new Attack(this, attackDirection);
+        TP2::scene->Add(atk, MOVING);
+    }
+    
+    if (attackTimer.Elapsed(1.1f))
+    {
+        attacking = false;
+        attackTimer.Stop();
+        attackTimer.Reset();
+    }
+
+    // fireball command
+    if (window->KeyDown('C') && !fireballing) 
+    {
+        fireballing = true;
+        fireballTimer.Start();
+
+        Fireball *fb = new Fireball(this, facing);
+        TP2::scene->Add(fb, MOVING);
+    }
+
+    if (fireballTimer.Elapsed(1.0f))
+    {
+        fireballing = false;
+        fireballTimer.Stop();
+        fireballTimer.Reset();
+    }
+
+    // dash command
+    if (window->KeyDown('V') && !dashing && keyCtrl)
+    {
+        dashing = true;
+        keyCtrl = false;
+        dashingTimer.Start();
+        dashCooldown.Start();
+        dashSpeed = facing ? 600.0f : -600.0f;
+    }
+
+    if (dashingTimer.Elapsed(0.3f)) dashing = false;
+    if (dashCooldown.Elapsed(0.6f) && standing && window->KeyUp('V')) keyCtrl = true;
+
     ySpeed += gravity * gameTime;
 
     if (ySpeed > gravity)
@@ -103,6 +172,18 @@ void Player::Update()
     Translate(xSpeed * gameTime, ySpeed * gameTime);
 
     standing = false;
+
+    // updates what direction character is facing
+    if (state == WALK_LEFT || state == IDLE_LEFT)
+        facing = F_LEFT;
+    else
+        facing = F_RIGHT;
+
+    if (attacking)
+    {
+        // select attack or fireball anim based on attacking or fireballing vars and keep on it until it finishes
+    } // else
+    // select default anim
 
     animation->Select(state);
     animation->NextFrame();

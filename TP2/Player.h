@@ -16,12 +16,27 @@ enum PlayerState
     WALK_LEFT
 };
 
+enum AttackDirection {
+    UP, DOWN, LEFT, RIGHT
+};
+
+enum Facing {
+    F_LEFT, F_RIGHT
+};
+
 class Player : public Object
 {
   private:
     TileSet *tileSet;
     Animation *animation;
     PlayerState state;
+    Timer attackTimer;
+    Timer fireballTimer;
+    Timer dashingTimer;
+    Timer dashCooldown;
+    AttackDirection attackDirection = RIGHT;
+    Facing facing = F_RIGHT;
+
 
     float oldTop;
     float oldBottom;
@@ -32,12 +47,17 @@ class Player : public Object
     bool standing = false;
     float jumpingAmount = 0.0f;
     bool dying = false;
+    bool attacking = false;
+    bool fireballing = false;
+    bool dashing = false;
+    bool keyCtrl = false;
 
     float xSpeed = 0.0f;
     float ySpeed = 0.0f;
     float maxXSpeed = 288.0f;
     float jumpingSpeed = -448.0f;
     float gravity = 768.0f;
+    float dashSpeed = 600.0f;
 
   public:
     Player();
