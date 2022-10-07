@@ -10,13 +10,12 @@
 class Attack : public Object
 {
   private:
-    TileSet *ts;
     Animation *anim;
     Player *player;
     AttackDirection direction;
 
   public:
-    Attack(Player *player, AttackDirection direction);
+    Attack(TileSet *tileSet, Player *player, AttackDirection direction);
     ~Attack();
 
     void Update();
@@ -25,7 +24,7 @@ class Attack : public Object
 
 inline void Attack::Draw()
 {
-    anim->Draw(x, y, z);
+    anim->Draw(x, y, Layer::UPPER);
 }
 
 #endif

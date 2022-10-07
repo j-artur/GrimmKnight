@@ -95,7 +95,7 @@ inline void Animation::Delay(float delay)
 { animDelay = delay; }
 
 inline uint Animation::Sequence()
-{ return *sequence; }
+{ return sequence ? *sequence : 0; }
 
 // verifica se a animação já encerrou
 inline bool Animation::Inactive()

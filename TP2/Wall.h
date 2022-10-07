@@ -9,6 +9,8 @@
 class Wall : public Object
 {
   public:
+	float absX;
+	float absY;
     void Update(){};
     void Draw(){};
 };

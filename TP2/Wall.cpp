@@ -8,11 +8,12 @@ TopWall::TopWall(int iX, int iY, int iWidth)
     float width = iWidth * 32.0f;
     float x2 = x1 + width;
 
-    float y = iY * 32.0f;
+	absX = (x1 + x2) / 2.0f;
+	absY = iY * 32.0f;
 
     BBox(new Rect(-width / 2.0f, 0.0f, width / 2.0f, 0.0f));
 
-    MoveTo((x1 + x2) / 2.0f, y);
+    MoveTo(absX, absY);
 }
 
 BottomWall::BottomWall(int iX, int iY, int iWidth)
@@ -23,11 +24,12 @@ BottomWall::BottomWall(int iX, int iY, int iWidth)
     float width = iWidth * 32.0f;
     float x2 = x1 + width;
 
-    float y = (iY + 1) * 32.0f;
+	absX = (x1 + x2) / 2.0f;
+	absY = (iY + 1) * 32.0f;
 
     BBox(new Rect(-width / 2.0f, 0.0f, width / 2.0f, 0.0f));
 
-    MoveTo((x1 + x2) / 2.0f, y);
+    MoveTo(absX, absY);
 }
 
 LeftWall::LeftWall(int iX, int iY, int iHeight)
@@ -38,11 +40,12 @@ LeftWall::LeftWall(int iX, int iY, int iHeight)
     float height = iHeight * 32.0f;
     float y2 = y1 + height;
 
-    float x = iX * 32.0f;
+	absX = iX * 32.0f;
+	absY = (y1 + y2) / 2.0f;
 
     BBox(new Rect(0.0f, -height / 2.0f, 0.0f, height / 2.0f));
 
-    MoveTo(x, (y1 + y2) / 2.0f);
+    MoveTo(absX, absY);
 }
 
 RightWall::RightWall(int iX, int iY, int iHeight)
@@ -53,11 +56,12 @@ RightWall::RightWall(int iX, int iY, int iHeight)
     float height = iHeight * 32.0f;
     float y2 = y1 + height;
 
-    float x = (iX + 1) * 32.0f;
+    absX = (iX + 1) * 32.0f;
+	absY = (y1 + y2) / 2.0f;
 
     BBox(new Rect(0.0f, -height / 2.0f, 0.0f, height / 2.0f));
 
-    MoveTo(x, (y1 + y2) / 2.0f);
+    MoveTo(absX, absY);
 }
 
 Block::Block(int iX, int iY, int iWidth, int iHeight)

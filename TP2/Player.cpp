@@ -4,66 +4,14 @@
 #include "TP2.h"
 #include <cmath>
 
-const char *PlayerStateToString(PlayerState state)
-{
-
-    switch (state)
-    {
-    case STILL:
-        return "STILL";
-    case WALKING:
-        return "WALKING";
-    case JUMPING:
-        return "JUMPING";
-    case FALLING:
-        return "FALLING";
-    case ATTACKING:
-        return "ATTACKING";
-    case CASTING:
-        return "CASTING";
-    case DASHING:
-        return "DASHING";
-    case HURTING:
-        return "HURTING";
-    case DYING:
-        return "DYING";
-    case RESPAWNING:
-        return "RESPAWNING";
-    }
-}
-
-const char *DirectionToString(Direction direction)
-{
-    switch (direction)
-    {
-    case LEFT:
-        return "LEFT";
-    case RIGHT:
-        return "RIGHT";
-    }
-}
-
-const char *AttackDirectionToString(AttackDirection direction)
-{
-    switch (direction)
-    {
-    case ATK_UP:
-        return "ATK_UP";
-    case ATK_DOWN:
-        return "ATK_DOWN";
-    case ATK_LEFT:
-        return "ATK_LEFT";
-    case ATK_RIGHT:
-        return "ATK_RIGHT";
-    }
-}
-
 Player::Player()
 {
     type = PLAYER;
 
     tileSet = new TileSet("Resources/Player.png", 100, 68, 5, 40);
     animation = new Animation(tileSet, 0.20f, true);
+
+	attackTileSet = new TileSet("Resources/Attack.png", 80, 80, 4, 8);
 
     uint idleRight[4] = {0, 5, 10, 15};
     uint idleLeft[4] = {20, 25, 30, 35};
@@ -180,7 +128,7 @@ input : {
             else
                 attackDirection = ATK_RIGHT;
 
-            Attack *atk = new Attack(this, attackDirection);
+            Attack *atk = new Attack(attackTileSet, this, attackDirection);
             TP2::scene->Add(atk, MOVING);
         }
 
@@ -214,6 +162,39 @@ input : {
         if (window->KeyUp('V'))
             dashKeyCtrl = true;
     }
+	else if (state == ATTACKING)
+	{
+		if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_RIGHT))
+		{
+			xSpeed = 0.0f;
+			if (direction == LEFT)
+				nextDirection = LEFT;
+			else if (direction == RIGHT)
+				nextDirection = RIGHT;
+		}
+		else if (window->KeyDown(VK_LEFT))
+		{
+			xSpeed = -walkingSpeed;
+			if (state == STILL || state == WALKING)
+				nextState = WALKING;
+			nextDirection = LEFT;
+		}
+		else if (window->KeyDown(VK_RIGHT))
+		{
+			xSpeed = walkingSpeed;
+			if (state == STILL || state == WALKING)
+				nextState = WALKING;
+			nextDirection = RIGHT;
+		}
+		else
+		{
+			xSpeed = 0.0f;
+			if (state == STILL || state == WALKING)
+			{
+				nextState = STILL;
+			}
+		}
+	}
 
     state = nextState;
     direction = nextDirection;
@@ -272,6 +253,12 @@ update : {
 
         Translate(xSpeed * gameTime, ySpeed * gameTime);
 
+		if (ySpeed >= 224.0f)
+		{
+			animation->Restart();
+			animation->Frame(1);
+		}
+
         nextState = FALLING;
         break;
     }
@@ -286,8 +273,21 @@ update : {
             xSpeed = dashSpeed * (direction == LEFT ? -1.0f : 1.0f);
             Translate(xSpeed * gameTime, 0.0f);
             nextState = DASHING;
-            if (dashAnimCd.Elapsed(0.075f))
+			if (dashAnimCd.Elapsed(0.2f))
+			{
+				animation->Restart();
+				animation->Frame(0);
+			}
+			else if (dashAnimCd.Elapsed(0.05f))
+			{
+				animation->Restart();
                 animation->Frame(1);
+			}
+			else
+			{
+				animation->Restart();
+				animation->Frame(0);
+			}
         }
         break;
     }
@@ -343,7 +343,10 @@ update : {
             }
             else
             {
-                animation->Select(ATTACKING * direction * attackDirection);
+				if (direction == LEFT)
+					animation->Select(ATTACKING * ATK_LEFT * LEFT);
+				else
+					animation->Select(ATTACKING * ATK_RIGHT * RIGHT);
             }
         }
         else
@@ -361,7 +364,6 @@ update : {
 
     if (oldAnimState != animation->Sequence())
     {
-        animation->Frame(0);
         animation->Restart();
     }
 
@@ -373,7 +375,7 @@ update : {
 void Player::Draw()
 {
     light->Draw(round(x), round(y), 0.95f);
-    animation->Draw(round(x), round(y), Layer::UPPER);
+    animation->Draw(round(x), round(y), Layer::MIDDLE);
 }
 
 void Player::OnCollision(Object *other)

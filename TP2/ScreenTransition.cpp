@@ -46,24 +46,64 @@ void ScreenTransition::Update()
         case HORIZONTAL:
             if (positive)
             {
-                scene->Apply([&](Object *obj) { obj->Translate(-window->Width() * time, 0.0f); });
+                scene->Apply([&](Object *obj)
+                             {
+                                 if (!transitioning && (obj->Type() == WALL_TOP || obj->Type() == WALL_BOTTOM || obj->Type() == WALL_LEFT || obj->Type() == WALL_RIGHT))
+                                 {
+                                     Wall *wall = (Wall *)obj;
+                                     float newX = wall->absX - window->Width();
+                                     wall->MoveTo(newX, wall->absY);
+                                     wall->absX = newX;
+                                 }
+                                 else
+                                     obj->Translate(-window->Width() * time, 0.0f); });
                 TP2::player->Translate(DISTANCE * time, 0.0f);
             }
             else
             {
-                scene->Apply([&](Object *obj) { obj->Translate(window->Width() * time, 0.0f); });
+                scene->Apply([&](Object *obj)
+                             {
+                                 if (!transitioning && (obj->Type() == WALL_TOP || obj->Type() == WALL_BOTTOM || obj->Type() == WALL_LEFT || obj->Type() == WALL_RIGHT))
+                                 {
+                                     Wall *wall = (Wall *)obj;
+                                     float newX = wall->absX + window->Width();
+                                     wall->MoveTo(newX, wall->absY);
+                                     wall->absX = newX;
+                                 }
+                                 else
+                                     obj->Translate(window->Width() * time, 0.0f); });
                 TP2::player->Translate(-DISTANCE * time, 0.0f);
             }
             break;
         case VERTICAL:
             if (positive)
             {
-                scene->Apply([&](Object *obj) { obj->Translate(0.0f, -window->Height() * time); });
+                scene->Apply([&](Object *obj)
+                             {
+                                 if (!transitioning && (obj->Type() == WALL_TOP || obj->Type() == WALL_BOTTOM || obj->Type() == WALL_LEFT || obj->Type() == WALL_RIGHT))
+                                 {
+                                     Wall *wall = (Wall *)obj;
+                                     float newY = wall->absY - window->Height();
+                                     wall->MoveTo(wall->absX, newY);
+                                     wall->absY = newY;
+                                 }
+                                 else
+                                     obj->Translate(0.0f, -window->Height() * time); });
                 TP2::player->Translate(0.0f, DISTANCE * time);
             }
             else
             {
-                scene->Apply([&](Object *obj) { obj->Translate(0.0f, window->Height() * time); });
+                scene->Apply([&](Object *obj)
+                             {
+                                 if (!transitioning && (obj->Type() == WALL_TOP || obj->Type() == WALL_BOTTOM || obj->Type() == WALL_LEFT || obj->Type() == WALL_RIGHT))
+                                 {
+                                     Wall *wall = (Wall *)obj;
+                                     float newY = wall->absY + window->Height();
+                                     wall->MoveTo(wall->absX, newY);
+                                     wall->absY = newY;
+                                 }
+                                 else
+                                     obj->Translate(0.0f, window->Height() * time); });
                 TP2::player->Translate(0.0f, -DISTANCE * time);
             }
             break;

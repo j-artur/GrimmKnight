@@ -24,15 +24,11 @@ enum PlayerState
     RESPAWNING = 512,
 };
 
-const char *PlayerStateToString(PlayerState state);
-
 enum Direction
 {
     LEFT = 1,
     RIGHT = 5,
 };
-
-const char *DirectionToString(Direction direction);
 
 enum AttackDirection
 {
@@ -42,19 +38,19 @@ enum AttackDirection
     ATK_RIGHT = 27,
 };
 
-const char *AttackDirectionToString(AttackDirection direction);
-
 class Player : public Object
 {
   private:
     TileSet *tileSet;
     Animation *animation;
     Sprite *light;
+	TileSet *attackTileSet;
+
     PlayerState state = FALLING;
     Direction direction = RIGHT;
     AttackDirection attackDirection = ATK_RIGHT;
     Cooldown attackCd{0.7f};
-    Cooldown attackAnimCd{0.1f};
+    Cooldown attackAnimCd{0.2f};
     Cooldown fireballCd{0.5f};
     Cooldown dashAnimCd{0.25f};
     Cooldown dashCd{0.9f};
