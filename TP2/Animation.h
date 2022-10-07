@@ -70,6 +70,7 @@ public:
     uint Frame();                                   // retorna o quadro de animação ativo
     void Delay(float delay);                        // define o tempo entre quadros
 
+    uint Sequence();
     bool Inactive();                                // verifica se a animação já encerrou
     void NextFrame();                               // passa para o próximo frame da animação
     void Restart();                                 // reinicia a animacão (pelo primeiro frame da seqüência)
@@ -92,6 +93,9 @@ inline unsigned Animation::Frame()
 
 inline void Animation::Delay(float delay)
 { animDelay = delay; }
+
+inline uint Animation::Sequence()
+{ return *sequence; }
 
 // verifica se a animação já encerrou
 inline bool Animation::Inactive()

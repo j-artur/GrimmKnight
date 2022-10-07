@@ -24,19 +24,25 @@ enum PlayerState
     RESPAWNING = 512,
 };
 
+const char *PlayerStateToString(PlayerState state);
+
 enum Direction
 {
     LEFT = 1,
-    RIGHT = 3,
+    RIGHT = 5,
 };
+
+const char *DirectionToString(Direction direction);
 
 enum AttackDirection
 {
-    ATK_UP = 5,
-    ATK_DOWN = 7,
-    ATK_LEFT = 11,
-    ATK_RIGHT = 13,
+    ATK_UP = 1,
+    ATK_DOWN = 3,
+    ATK_LEFT = 9,
+    ATK_RIGHT = 27,
 };
+
+const char *AttackDirectionToString(AttackDirection direction);
 
 class Player : public Object
 {
@@ -47,10 +53,11 @@ class Player : public Object
     PlayerState state = FALLING;
     Direction direction = RIGHT;
     AttackDirection attackDirection = ATK_RIGHT;
-    Cooldown attackCd{1.1f};
+    Cooldown attackCd{0.7f};
+    Cooldown attackAnimCd{0.1f};
     Cooldown fireballCd{0.5f};
-    Cooldown dashingCd{0.25f};
-    Cooldown dashCd{0.75f};
+    Cooldown dashAnimCd{0.25f};
+    Cooldown dashCd{0.9f};
 
     float oldTop;
     float oldBottom;
@@ -66,8 +73,6 @@ class Player : public Object
     float jumpingSpeed = -464.0f;
     float gravity = 768.0f;
     float dashSpeed = 720.0f;
-
-    void Input();
 
   public:
     bool canMove = true;

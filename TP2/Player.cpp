@@ -4,27 +4,94 @@
 #include "TP2.h"
 #include <cmath>
 
+const char *PlayerStateToString(PlayerState state)
+{
+
+    switch (state)
+    {
+    case STILL:
+        return "STILL";
+    case WALKING:
+        return "WALKING";
+    case JUMPING:
+        return "JUMPING";
+    case FALLING:
+        return "FALLING";
+    case ATTACKING:
+        return "ATTACKING";
+    case CASTING:
+        return "CASTING";
+    case DASHING:
+        return "DASHING";
+    case HURTING:
+        return "HURTING";
+    case DYING:
+        return "DYING";
+    case RESPAWNING:
+        return "RESPAWNING";
+    }
+}
+
+const char *DirectionToString(Direction direction)
+{
+    switch (direction)
+    {
+    case LEFT:
+        return "LEFT";
+    case RIGHT:
+        return "RIGHT";
+    }
+}
+
+const char *AttackDirectionToString(AttackDirection direction)
+{
+    switch (direction)
+    {
+    case ATK_UP:
+        return "ATK_UP";
+    case ATK_DOWN:
+        return "ATK_DOWN";
+    case ATK_LEFT:
+        return "ATK_LEFT";
+    case ATK_RIGHT:
+        return "ATK_RIGHT";
+    }
+}
+
 Player::Player()
 {
     type = PLAYER;
 
-    tileSet = new TileSet("Resources/Player.png", 36, 68, 6, 12);
+    tileSet = new TileSet("Resources/Player.png", 100, 68, 5, 40);
     animation = new Animation(tileSet, 0.20f, true);
 
-    uint idleRight[4] = {0, 1, 2, 3};
-    uint idleLeft[4] = {6, 7, 8, 9};
-    uint walkRight[2] = {4, 5};
-    uint walkLeft[2] = {10, 11};
+    uint idleRight[4] = {0, 5, 10, 15};
+    uint idleLeft[4] = {20, 25, 30, 35};
+    uint walkRight[2] = {1, 6};
+    uint walkLeft[2] = {21, 26};
+    uint jumpRight[1] = {2};
+    uint jumpLeft[2] = {22};
+    uint fallRight[2] = {7, 12};
+    uint fallLeft[2] = {27, 32};
+    uint attackRight[1] = {17};
+    uint attackLeft[1] = {37};
+    uint dashRight[2] = {11, 16};
+    uint dashLeft[2] = {31, 36};
 
     animation->Add(STILL * RIGHT, idleRight, 4);
     animation->Add(STILL * LEFT, idleLeft, 4);
     animation->Add(WALKING * RIGHT, walkRight, 2);
     animation->Add(WALKING * LEFT, walkLeft, 2);
+    animation->Add(JUMPING * RIGHT, jumpRight, 1);
+    animation->Add(JUMPING * LEFT, jumpLeft, 1);
+    animation->Add(FALLING * RIGHT, fallRight, 2);
+    animation->Add(FALLING * LEFT, fallLeft, 2);
+    animation->Add(ATTACKING * ATK_RIGHT * RIGHT, attackRight, 1);
+    animation->Add(ATTACKING * ATK_LEFT * LEFT, attackLeft, 1);
+    animation->Add(DASHING * RIGHT, dashRight, 2);
+    animation->Add(DASHING * LEFT, dashLeft, 2);
 
     light = new Sprite("Resources/Light.png");
-
-    state = FALLING;
-    direction = RIGHT;
 
     Rect *self = new Rect(-14.0f, -30.0f, 14.0f, 30.0f);
     BBox(self);
@@ -42,12 +109,9 @@ Player::~Player()
     delete light;
 }
 
-void Player::Input()
-{
-}
-
 void Player::Update()
 {
+
 input : {
     PlayerState nextState = state;
     Direction nextDirection = direction;
@@ -80,7 +144,9 @@ input : {
         {
             xSpeed = 0.0f;
             if (state == STILL || state == WALKING)
+            {
                 nextState = STILL;
+            }
         }
 
         if (window->KeyDown('Z') && (state == STILL || state == WALKING))
@@ -95,13 +161,15 @@ input : {
             nextState = FALLING;
         }
 
+        // ATTACK
         if (window->KeyDown('X') && attackCd.Ready())
         {
             // TODO: Create attack animation
 
-            // nextState = ATTACKING;
+            nextState = ATTACKING;
 
             attackCd.Reset();
+            attackAnimCd.Reset();
 
             if ((state == JUMPING || state == FALLING) && window->KeyDown(VK_DOWN))
                 attackDirection = ATK_DOWN;
@@ -116,6 +184,7 @@ input : {
             TP2::scene->Add(atk, MOVING);
         }
 
+        // FIREBALL
         if (window->KeyDown('C') && fireballCd.Ready())
         {
             // TODO: Create fireball animation
@@ -128,13 +197,14 @@ input : {
             TP2::scene->Add(fb, MOVING);
         }
 
+        // DASH
         if (window->KeyDown('V') && dashCd.Ready() && dashKeyCtrl && dashGroundCtrl)
         {
             // TODO: Create dash animation
 
             nextState = DASHING;
 
-            dashingCd.Reset();
+            dashAnimCd.Reset();
             dashCd.Reset();
 
             dashGroundCtrl = false;
@@ -149,13 +219,16 @@ input : {
     direction = nextDirection;
 }
 
+    PlayerState nextState = state;
+
 update : {
     if (!canMove)
     {
         attackCd.Add(0.1f * gameTime);
+        attackAnimCd.Add(0.1f * gameTime);
         fireballCd.Add(0.1f * gameTime);
-        dashingCd.Add(0.1f * gameTime);
         dashCd.Add(0.1f * gameTime);
+        dashAnimCd.Add(0.1f * gameTime);
         return;
     }
 
@@ -165,8 +238,6 @@ update : {
     oldBottom = self->Bottom();
     oldLeft = self->Left();
     oldRight = self->Right();
-
-    PlayerState nextState = state;
 
     switch (state)
     {
@@ -205,7 +276,7 @@ update : {
         break;
     }
     case DASHING: {
-        if (dashingCd.Ready())
+        if (dashAnimCd.Ready())
         {
             nextState = FALLING;
             ySpeed = 0.0f;
@@ -215,10 +286,20 @@ update : {
             xSpeed = dashSpeed * (direction == LEFT ? -1.0f : 1.0f);
             Translate(xSpeed * gameTime, 0.0f);
             nextState = DASHING;
+            if (dashAnimCd.Elapsed(0.075f))
+                animation->Frame(1);
         }
         break;
     }
     case ATTACKING: {
+        ySpeed += gravity * gameTime;
+        Translate(xSpeed * gameTime, ySpeed * gameTime);
+
+        if (attackAnimCd.Ready())
+            nextState = FALLING;
+        else
+            nextState = ATTACKING;
+
         break;
     }
     case CASTING: {
@@ -235,25 +316,58 @@ update : {
     }
     }
 
-    state = nextState;
-}
-
     attackCd.Add(gameTime);
+    attackAnimCd.Add(gameTime);
     fireballCd.Add(gameTime);
     dashCd.Add(gameTime);
-    dashingCd.Add(gameTime);
+    dashAnimCd.Add(gameTime);
+}
 
     // if (state == ATTACKING)
     //     animation->Select(ATTACKING * direction * attackDirection);
     // else
     //     animation->Select(state * direction);
 
-    if (xSpeed != 0.0f)
-        animation->Select(WALKING * direction);
+    uint oldAnimState = animation->Sequence();
+
+    if (state != CASTING && state != HURTING && state != DYING && state != RESPAWNING)
+    {
+        if (state == ATTACKING)
+        {
+            if (attackDirection == ATK_UP || attackDirection == ATK_DOWN)
+            {
+                if (direction == LEFT)
+                    animation->Select(ATTACKING * ATK_LEFT * LEFT);
+                else
+                    animation->Select(ATTACKING * ATK_RIGHT * RIGHT);
+            }
+            else
+            {
+                animation->Select(ATTACKING * direction * attackDirection);
+            }
+        }
+        else
+        {
+            animation->Select(state * direction);
+        }
+    }
     else
-        animation->Select(STILL * direction);
+    {
+        if (xSpeed != 0.0f)
+            animation->Select(WALKING * direction);
+        else
+            animation->Select(STILL * direction);
+    }
+
+    if (oldAnimState != animation->Sequence())
+    {
+        animation->Frame(0);
+        animation->Restart();
+    }
 
     animation->NextFrame();
+
+    state = nextState;
 }
 
 void Player::Draw()
@@ -309,7 +423,7 @@ void Player::OnCollision(Object *other)
         if (justEntered && isInside)
         {
             MoveTo(other->X() - self->right, y);
-            dashingCd.Left(0.1f);
+            dashAnimCd.Left(0.1f);
         }
         break;
     }
@@ -324,7 +438,7 @@ void Player::OnCollision(Object *other)
         if (justEntered && isInside)
         {
             MoveTo(other->X() - self->left, y);
-            dashingCd.Left(0.1f);
+            dashAnimCd.Left(0.1f);
         }
         break;
     }

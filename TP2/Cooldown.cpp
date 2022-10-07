@@ -6,11 +6,6 @@ Cooldown::Cooldown(float duration)
     time = 0.0f;
 }
 
-float Cooldown::Duration()
-{
-    return time;
-}
-
 void Cooldown::Add(float dt)
 {
     time += dt;
@@ -19,6 +14,11 @@ void Cooldown::Add(float dt)
 bool Cooldown::Ready()
 {
     return time >= duration;
+}
+
+bool Cooldown::Elapsed(float time)
+{
+    return this->time >= time;
 }
 
 void Cooldown::Reset()
