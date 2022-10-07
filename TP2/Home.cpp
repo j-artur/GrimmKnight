@@ -1,5 +1,6 @@
 #include "Home.h"
 #include "Level0.h"
+#include "TestLevel.h"
 #include "TP2.h"
 
 void Home::Init()
@@ -11,6 +12,9 @@ void Home::Update()
 {
     if (window->KeyDown(VK_SPACE))
         TP2::NextLevel<Level0>();
+
+    if (window->KeyDown('T'))
+        TP2::NextLevel<TestLevel>();
 }
 
 void Home::Draw()

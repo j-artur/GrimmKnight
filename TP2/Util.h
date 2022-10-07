@@ -21,6 +21,8 @@ enum Objects
     WALL_BOTTOM,
     WALL_LEFT,
     WALL_RIGHT,
+    ENEMY,
+    BOSS,
 };
 
 #endif

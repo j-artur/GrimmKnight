@@ -147,12 +147,13 @@ input:
             attackKeyCtrl = true;
 
         // FIREBALL
-        if (window->KeyDown('S') && fireballCd.Ready() && fireballKeyCtrl)
+        if (window->KeyDown('S') && fireballCd.Ready() && fireballKeyCtrl && HasMana())
         {
             // TODO: Create fireball animation
 
             // nextState = CASTING;
 
+            UseMana();
             fireballCd.Reset();
 
             fireballKeyCtrl = false;

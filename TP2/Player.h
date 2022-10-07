@@ -48,6 +48,8 @@ private:
     Direction direction = RIGHT;
     AttackDirection attackDirection = ATK_RIGHT;
 
+    uint mana = 0;
+
     Cooldown attackCd{0.7f};
     Cooldown attackAnimCd{0.2f};
     Cooldown fireballCd{0.5f};
@@ -72,15 +74,33 @@ private:
     float gravity = 768.0f;
     float dashSpeed = 720.0f;
 
-public:
+    bool HasMana();
+    void UseMana();
+
+  public:
     bool canMove = true;
 
     Player();
     ~Player();
 
+    void AddMana();
+
     void Update();
     void Draw();
     void OnCollision(Object *other);
 };
+
+bool inline Player::HasMana() {
+    return mana >= 3;
+}
+
+void inline Player::UseMana() {
+    mana -= 3;
+}
+
+void inline Player::AddMana() {
+    if (mana < 9)
+        mana++;
+}
 
 #endif
