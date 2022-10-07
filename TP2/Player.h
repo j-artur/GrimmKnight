@@ -38,7 +38,7 @@ enum AttackDirection
 
 class Player : public Object
 {
-private:
+  private:
     TileSet *tileSet;
     Animation *animation;
     Sprite *light;
@@ -50,9 +50,10 @@ private:
 
     uint mana = 0;
 
-    Cooldown attackCd{0.7f};
+    Cooldown attackCd{0.5f};
     Cooldown attackAnimCd{0.2f};
-    Cooldown fireballCd{0.5f};
+    Cooldown fireballCd{0.4f};
+    Cooldown fireballAnimCd{0.2f};
     Cooldown dashAnimCd{0.25f};
     Cooldown dashCd{0.9f};
 
@@ -90,15 +91,18 @@ private:
     void OnCollision(Object *other);
 };
 
-bool inline Player::HasMana() {
+bool inline Player::HasMana()
+{
     return mana >= 3;
 }
 
-void inline Player::UseMana() {
+void inline Player::UseMana()
+{
     mana -= 3;
 }
 
-void inline Player::AddMana() {
+void inline Player::AddMana()
+{
     if (mana < 9)
         mana++;
 }

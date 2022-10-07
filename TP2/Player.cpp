@@ -9,23 +9,29 @@ Player::Player()
 {
     type = PLAYER;
 
-    tileSet = new TileSet("Resources/Player.png", 100, 68, 5, 40);
+    tileSet = new TileSet("Resources/Player.png", 100, 68, 8, 48);
     animation = new Animation(tileSet, 0.20f, true);
 
-    attackTileSet = new TileSet("Resources/Attack.png", 80, 80, 4, 8);
+    attackTileSet = new TileSet("Resources/Attack.png", 120, 120, 4, 8);
 
-    uint idleRight[4] = {0, 5, 10, 15};
-    uint idleLeft[4] = {20, 25, 30, 35};
-    uint walkRight[2] = {1, 6};
-    uint walkLeft[2] = {21, 26};
-    uint jumpRight[1] = {2};
-    uint jumpLeft[2] = {22};
-    uint fallRight[2] = {7, 12};
-    uint fallLeft[2] = {27, 32};
-    uint attackRight[1] = {17};
-    uint attackLeft[1] = {37};
-    uint dashRight[2] = {11, 16};
-    uint dashLeft[2] = {31, 36};
+    uint idleRight[4] = {0, 1, 2, 3};
+    uint idleLeft[4] = {24, 25, 26, 27};
+    uint walkRight[2] = {8, 9};
+    uint walkLeft[2] = {32, 33};
+    uint jumpRight[1] = {4};
+    uint jumpLeft[1] = {28};
+    uint fallRight[2] = {16, 17};
+    uint fallLeft[2] = {40, 41};
+    uint attackRight[2] = {18, 19};
+    uint attackLeft[2] = {42, 43};
+    uint attackUpRight[2] = {20, 21};
+    uint attackUpLeft[2] = {44, 45};
+    uint attackDownRight[2] = {22, 23};
+    uint attackDownLeft[2] = {46, 47};
+    uint dashRight[2] = {10, 11};
+    uint dashLeft[2] = {34, 35};
+    uint castRight[1] = {12};
+    uint castLeft[1] = {36};
 
     animation->Add(STILL * RIGHT, idleRight, 4);
     animation->Add(STILL * LEFT, idleLeft, 4);
@@ -35,10 +41,18 @@ Player::Player()
     animation->Add(JUMPING * LEFT, jumpLeft, 1);
     animation->Add(FALLING * RIGHT, fallRight, 2);
     animation->Add(FALLING * LEFT, fallLeft, 2);
-    animation->Add(ATTACKING * ATK_RIGHT * RIGHT, attackRight, 1);
-    animation->Add(ATTACKING * ATK_LEFT * LEFT, attackLeft, 1);
+    animation->Add(ATTACKING * ATK_RIGHT * LEFT, attackRight, 2);
+    animation->Add(ATTACKING * ATK_RIGHT * RIGHT, attackRight, 2);
+    animation->Add(ATTACKING * ATK_LEFT * LEFT, attackLeft, 2);
+    animation->Add(ATTACKING * ATK_LEFT * RIGHT, attackLeft, 2);
+    animation->Add(ATTACKING * ATK_UP * LEFT, attackUpLeft, 2);
+    animation->Add(ATTACKING * ATK_UP * RIGHT, attackUpRight, 2);
+    animation->Add(ATTACKING * ATK_DOWN * LEFT, attackDownLeft, 2);
+    animation->Add(ATTACKING * ATK_DOWN * RIGHT, attackDownRight, 2);
     animation->Add(DASHING * RIGHT, dashRight, 2);
     animation->Add(DASHING * LEFT, dashLeft, 2);
+    animation->Add(CASTING * RIGHT, castRight, 1);
+    animation->Add(CASTING * LEFT, castLeft, 1);
 
     light = new Sprite("Resources/Light.png");
 
@@ -60,8 +74,14 @@ Player::~Player()
 
 void Player::Update()
 {
-input:
-{
+    if (!canMove)
+    {
+        dashCd.Add(0.1f * gameTime);
+        dashAnimCd.Add(0.1f * gameTime);
+        return;
+    }
+
+input : {
     PlayerState nextState = state;
     Direction nextDirection = direction;
 
@@ -140,21 +160,24 @@ input:
             else
                 attackDirection = ATK_RIGHT;
 
-            Attack *atk = new Attack(attackTileSet, this, attackDirection);
+            Attack *atk = new Attack(attackTileSet, this, direction, attackDirection);
             TP2::scene->Add(atk, MOVING);
         }
         if (window->KeyUp('X'))
             attackKeyCtrl = true;
 
         // FIREBALL
-        if (window->KeyDown('S') && fireballCd.Ready() && fireballKeyCtrl && HasMana())
+        if (window->KeyDown('S') && fireballCd.Ready() && fireballKeyCtrl /* && HasMana() */)
         {
             // TODO: Create fireball animation
 
-            // nextState = CASTING;
+            xSpeed = 0.0f;
+            ySpeed = 0.0f;
+            nextState = CASTING;
 
-            UseMana();
+            // UseMana();
             fireballCd.Reset();
+            fireballAnimCd.Reset();
 
             fireballKeyCtrl = false;
 
@@ -221,17 +244,7 @@ input:
 
     PlayerState nextState = state;
 
-update:
-{
-    if (!canMove)
-    {
-        attackCd.Add(0.1f * gameTime);
-        attackAnimCd.Add(0.1f * gameTime);
-        fireballCd.Add(0.1f * gameTime);
-        dashCd.Add(0.1f * gameTime);
-        dashAnimCd.Add(0.1f * gameTime);
-        return;
-    }
+update : {
 
     // update old position
     Rect *self = (Rect *)BBox();
@@ -242,15 +255,13 @@ update:
 
     switch (state)
     {
-    case STILL:
-    {
+    case STILL: {
         dashGroundCtrl = true;
 
         nextState = FALLING;
         break;
     }
-    case WALKING:
-    {
+    case WALKING: {
 
         dashGroundCtrl = true;
 
@@ -259,8 +270,7 @@ update:
         nextState = FALLING;
         break;
     }
-    case JUMPING:
-    {
+    case JUMPING: {
         ySpeed += gravity * gameTime;
 
         Translate(xSpeed * gameTime, ySpeed * gameTime);
@@ -268,8 +278,7 @@ update:
         nextState = ySpeed >= 0.0f ? FALLING : JUMPING;
         break;
     }
-    case FALLING:
-    {
+    case FALLING: {
         ySpeed += gravity * gameTime;
 
         if (ySpeed > gravity * 2.0f)
@@ -282,12 +291,16 @@ update:
             animation->Restart();
             animation->Frame(1);
         }
+        else
+        {
+            animation->Restart();
+            animation->Frame(0);
+        }
 
         nextState = FALLING;
         break;
     }
-    case DASHING:
-    {
+    case DASHING: {
         if (dashAnimCd.Ready())
         {
             nextState = FALLING;
@@ -298,12 +311,12 @@ update:
             xSpeed = dashSpeed * (direction == LEFT ? -1.0f : 1.0f);
             Translate(xSpeed * gameTime, 0.0f);
             nextState = DASHING;
-            if (dashAnimCd.Elapsed(0.2f))
+            if (dashAnimCd.Elapsed(0.225f))
             {
                 animation->Restart();
                 animation->Frame(0);
             }
-            else if (dashAnimCd.Elapsed(0.05f))
+            else if (dashAnimCd.Elapsed(0.025f))
             {
                 animation->Restart();
                 animation->Frame(1);
@@ -316,32 +329,53 @@ update:
         }
         break;
     }
-    case ATTACKING:
-    {
+    case ATTACKING: {
         ySpeed += gravity * gameTime;
         Translate(xSpeed * gameTime, ySpeed * gameTime);
 
         if (attackAnimCd.Ready())
             nextState = FALLING;
         else
+        {
             nextState = ATTACKING;
+            if (attackAnimCd.Elapsed(0.075f))
+            {
+                animation->Restart();
+                animation->Frame(1);
+            }
+            else
+            {
+                animation->Restart();
+                animation->Frame(0);
+            }
+        }
 
         break;
     }
-    case CASTING:
-    {
+    case CASTING: {
+        if (fireballAnimCd.Ready())
+        {
+            ySpeed += gravity * gameTime;
+            nextState = FALLING;
+        }
+        else
+        {
+            if (direction == LEFT)
+                Translate(48.0f * gameTime, ySpeed * gameTime);
+            else
+                Translate(-48.0f * gameTime, ySpeed * gameTime);
+            nextState = CASTING;
+        }
+
         break;
     }
-    case HURTING:
-    {
+    case HURTING: {
         break;
     }
-    case DYING:
-    {
+    case DYING: {
         break;
     }
-    case RESPAWNING:
-    {
+    case RESPAWNING: {
         break;
     }
     }
@@ -349,48 +383,49 @@ update:
     attackCd.Add(gameTime);
     attackAnimCd.Add(gameTime);
     fireballCd.Add(gameTime);
+    fireballAnimCd.Add(gameTime);
     dashCd.Add(gameTime);
     dashAnimCd.Add(gameTime);
 }
 
-    // if (state == ATTACKING)
-    //     animation->Select(ATTACKING * direction * attackDirection);
-    // else
-    //     animation->Select(state * direction);
+    if (state == ATTACKING)
+        animation->Select(ATTACKING * direction * attackDirection);
+    else
+        animation->Select(state * direction);
 
     uint oldAnimState = animation->Sequence();
 
-    if (state != CASTING && state != HURTING && state != DYING && state != RESPAWNING)
-    {
-        if (state == ATTACKING)
-        {
-            if (attackDirection == ATK_UP || attackDirection == ATK_DOWN)
-            {
-                if (direction == LEFT)
-                    animation->Select(ATTACKING * ATK_LEFT * LEFT);
-                else
-                    animation->Select(ATTACKING * ATK_RIGHT * RIGHT);
-            }
-            else
-            {
-                if (direction == LEFT)
-                    animation->Select(ATTACKING * ATK_LEFT * LEFT);
-                else
-                    animation->Select(ATTACKING * ATK_RIGHT * RIGHT);
-            }
-        }
-        else
-        {
-            animation->Select(state * direction);
-        }
-    }
-    else
-    {
-        if (xSpeed != 0.0f)
-            animation->Select(WALKING * direction);
-        else
-            animation->Select(STILL * direction);
-    }
+    // if (state != HURTING && state != DYING && state != RESPAWNING)
+    // {
+    //     if (state == ATTACKING)
+    //     {
+    //         if (attackDirection == ATK_UP || attackDirection == ATK_DOWN)
+    //         {
+    //             if (direction == LEFT)
+    //                 animation->Select(ATTACKING * ATK_LEFT * LEFT);
+    //             else
+    //                 animation->Select(ATTACKING * ATK_RIGHT * RIGHT);
+    //         }
+    //         else
+    //         {
+    //             if (direction == LEFT)
+    //                 animation->Select(ATTACKING * ATK_LEFT * LEFT);
+    //             else
+    //                 animation->Select(ATTACKING * ATK_RIGHT * RIGHT);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         animation->Select(state * direction);
+    //     }
+    // }
+    // else
+    // {
+    //     if (xSpeed != 0.0f)
+    //         animation->Select(WALKING * direction);
+    //     else
+    //         animation->Select(STILL * direction);
+    // }
 
     if (oldAnimState != animation->Sequence())
     {
@@ -412,8 +447,7 @@ void Player::OnCollision(Object *other)
 {
     switch (other->Type())
     {
-    case WALL_TOP:
-    {
+    case WALL_TOP: {
         Rect *self = (Rect *)BBox();
         Wall *wall = (Wall *)other;
         Rect *wallBBox = (Rect *)wall->BBox();
@@ -430,8 +464,7 @@ void Player::OnCollision(Object *other)
         }
         break;
     }
-    case WALL_BOTTOM:
-    {
+    case WALL_BOTTOM: {
         Rect *self = (Rect *)BBox();
         Wall *wall = (Wall *)other;
         Rect *wallBBox = (Rect *)wall->BBox();
@@ -446,8 +479,7 @@ void Player::OnCollision(Object *other)
         }
         break;
     }
-    case WALL_LEFT:
-    {
+    case WALL_LEFT: {
         Rect *self = (Rect *)BBox();
         Wall *wall = (Wall *)other;
         Rect *wallBBox = (Rect *)wall->BBox();
@@ -462,8 +494,7 @@ void Player::OnCollision(Object *other)
         }
         break;
     }
-    case WALL_RIGHT:
-    {
+    case WALL_RIGHT: {
         Rect *self = (Rect *)BBox();
         Wall *wall = (Wall *)other;
         Rect *wallBBox = (Rect *)wall->BBox();

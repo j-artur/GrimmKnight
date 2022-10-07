@@ -15,7 +15,7 @@ class Attack : public Object
     AttackDirection direction;
 
   public:
-    Attack(TileSet *tileSet, Player *player, AttackDirection direction);
+    Attack(TileSet *tileSet, Player *player, Direction dir, AttackDirection atkDir);
     ~Attack();
 
     void Update();
