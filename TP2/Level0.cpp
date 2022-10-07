@@ -1,4 +1,5 @@
 #include "Level0.h"
+#include "Wall.h"
 
 Scene *Level0::scene = nullptr;
 

@@ -1,6 +1,7 @@
 #include "ScreenTransition.h"
 #include "TP2.h"
 #include "Util.h"
+#include "Wall.h"
 
 const float ScreenTransition::DURATION = 1.0f;
 const float ScreenTransition::DISTANCE = 128.0f;

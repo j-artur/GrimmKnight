@@ -7,8 +7,6 @@
 #include "Object.h"
 #include "Sprite.h"
 #include "Util.h"
-#include "Vector.h"
-#include "Wall.h"
 
 enum PlayerState
 {
@@ -40,28 +38,32 @@ enum AttackDirection
 
 class Player : public Object
 {
-  private:
+private:
     TileSet *tileSet;
     Animation *animation;
     Sprite *light;
-	TileSet *attackTileSet;
+    TileSet *attackTileSet;
 
     PlayerState state = FALLING;
     Direction direction = RIGHT;
     AttackDirection attackDirection = ATK_RIGHT;
+
     Cooldown attackCd{0.7f};
     Cooldown attackAnimCd{0.2f};
     Cooldown fireballCd{0.5f};
     Cooldown dashAnimCd{0.25f};
     Cooldown dashCd{0.9f};
 
+    bool jumpKeyCtrl = true;
+    bool attackKeyCtrl = true;
+    bool fireballKeyCtrl = true;
+    bool dashKeyCtrl = true;
+    bool dashGroundCtrl = true;
+
     float oldTop;
     float oldBottom;
     float oldLeft;
     float oldRight;
-
-    bool dashKeyCtrl = false;
-    bool dashGroundCtrl = false;
 
     float xSpeed = 0.0f;
     float ySpeed = 0.0f;
@@ -70,7 +72,7 @@ class Player : public Object
     float gravity = 768.0f;
     float dashSpeed = 720.0f;
 
-  public:
+public:
     bool canMove = true;
 
     Player();
