@@ -209,8 +209,6 @@ input : {
         // ATTACK
         if (window->KeyDown('X') && attackCd.Up() && attackKeyCtrl)
         {
-            // TODO: Create attack animation
-
             nextState = ATTACKING;
 
             attackCd.Restart();
@@ -234,42 +232,45 @@ input : {
             attackKeyCtrl = true;
 
         // FIREBALL
-        if (window->KeyDown('S') && fireballCd.Up() && fireballKeyCtrl /* && HasMana() */)
+        if (fireball)
         {
-            // TODO: Create fireball animation
+            if (window->KeyDown('S') && fireballCd.Up() && fireballKeyCtrl && HasMana())
+            {
+                // TODO: Create fireball animation
 
-            xSpeed = 0.0f;
-            ySpeed = 0.0f;
-            nextState = CASTING;
+                xSpeed = 0.0f;
+                ySpeed = 0.0f;
+                nextState = CASTING;
 
-            UseMana();
-            fireballCd.Restart();
-            fireballAnimCd.Restart();
+                UseMana();
+                fireballCd.Restart();
+                fireballAnimCd.Restart();
 
-            fireballKeyCtrl = false;
+                fireballKeyCtrl = false;
 
-            Fireball *fb = new Fireball(this, direction);
-            TP2::scene->Add(fb, MOVING);
+                Fireball *fb = new Fireball(this, direction);
+                TP2::scene->Add(fb, MOVING);
+            }
+            if (window->KeyUp('S'))
+                fireballKeyCtrl = true;
         }
-        if (window->KeyUp('S'))
-            fireballKeyCtrl = true;
 
         // DASH
-        if (window->KeyDown('C') && dashCd.Up() && dashKeyCtrl && dashGroundCtrl)
+        if (dash)
         {
-            // TODO: Create dash animation
+            if (window->KeyDown('C') && dashCd.Up() && dashKeyCtrl && dashGroundCtrl)
+            {
+                nextState = DASHING;
 
-            nextState = DASHING;
+                dashAnimCd.Restart();
+                dashCd.Restart();
 
-            dashAnimCd.Restart();
-            dashCd.Restart();
-
-            dashGroundCtrl = false;
-            dashKeyCtrl = false;
+                dashGroundCtrl = false;
+                dashKeyCtrl = false;
+            }
+            if (window->KeyUp('C'))
+                dashKeyCtrl = true;
         }
-
-        if (window->KeyUp('C'))
-            dashKeyCtrl = true;
     }
     else if (state == ATTACKING)
     {

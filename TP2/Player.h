@@ -34,21 +34,25 @@ class Player : public Entity
     Direction direction = RIGHT;
     AttackDirection attackDirection = ATK_RIGHT;
 
-    int mana = 0;
-
     Cooldown attackCd{0.5f};
     Cooldown attackAnimCd{0.2f};
-    Cooldown fireballCd{0.4f};
-    Cooldown fireballAnimCd{0.2f};
-    Cooldown dashAnimCd{0.25f};
-    Cooldown dashCd{0.9f};
+
     Cooldown hurtCd{0.9f};
     Cooldown hurtAnimCd{0.2f};
     Cooldown knockbackCd{0.15f};
 
     bool jumpKeyCtrl = true;
     bool attackKeyCtrl = true;
+
+    int mana = 0;
+    bool fireball = false;
+    Cooldown fireballCd{0.4f};
+    Cooldown fireballAnimCd{0.2f};
     bool fireballKeyCtrl = true;
+
+    bool dash = false;
+    Cooldown dashCd{0.9f};
+    Cooldown dashAnimCd{0.25f};
     bool dashKeyCtrl = true;
     bool dashGroundCtrl = true;
 
@@ -74,6 +78,12 @@ class Player : public Entity
     int Hp();
     int Mana();
 
+    bool HasFireball();
+    void LearnFireball();
+
+    bool HasDash();
+    void LearnDash();
+
     bool TakeDamage(uint damage, AttackDirection dir);
     void AddMana();
     void AddCooldowns(float dt);
@@ -93,6 +103,26 @@ inline int Player::Hp()
 inline int Player::Mana()
 {
     return mana;
+}
+
+inline bool Player::HasFireball()
+{
+    return fireball;
+}
+
+inline void Player::LearnFireball()
+{
+    fireball = true;
+}
+
+inline bool Player::HasDash()
+{
+    return dash;
+}
+
+inline void Player::LearnDash()
+{
+    dash = true;
 }
 
 #endif
