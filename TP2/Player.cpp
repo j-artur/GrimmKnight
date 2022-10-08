@@ -2,8 +2,8 @@
 #include "Attack.h"
 #include "Fireball.h"
 #include "TP2.h"
+#include "Util.h"
 #include "Wall.h"
-#include <cmath>
 
 Player::Player()
 {
@@ -72,15 +72,65 @@ Player::~Player()
     delete light;
 }
 
+void Player::TakeDamage(uint damage, AttackDirection dir)
+{
+    if (invincibilityCd.Ready())
+    {
+        hp = max(0, hp - damage);
+        invincibilityCd.Reset();
+
+        if (dir == ATK_RIGHT)
+        {
+            xSpeed = 64.0f;
+            ySpeed = -64.0f;
+        }
+        else if (dir == ATK_LEFT)
+        {
+            xSpeed = -64.0f;
+            ySpeed = -64.0f;
+        }
+        else if (dir == ATK_UP)
+        {
+            ySpeed = -64.0f;
+            xSpeed = direction == RIGHT ? 64.0f : -64.0f;
+        }
+        else if (dir == ATK_DOWN)
+        {
+            ySpeed = 64.0f;
+            xSpeed = direction == RIGHT ? 64.0f : -64.0f;
+        }
+    }
+}
+
+bool Player::HasMana()
+{
+    return mana >= 3;
+}
+
+void Player::UseMana()
+{
+    mana -= 3;
+}
+
+void Player::AddMana()
+{
+    if (mana < 9)
+        mana++;
+}
+
+void Player::AddCooldowns(float dt)
+{
+    attackCd.Add(dt);
+    attackAnimCd.Add(dt);
+    fireballCd.Add(dt);
+    fireballAnimCd.Add(dt);
+    dashAnimCd.Add(dt);
+    dashCd.Add(dt);
+    invincibilityCd.Add(dt);
+}
+
 void Player::Update()
 {
-    if (!canMove)
-    {
-        dashCd.Add(0.1f * gameTime);
-        dashAnimCd.Add(0.1f * gameTime);
-        return;
-    }
-
 input : {
     PlayerState nextState = state;
     Direction nextDirection = direction;
@@ -380,52 +430,15 @@ update : {
     }
     }
 
-    attackCd.Add(gameTime);
-    attackAnimCd.Add(gameTime);
-    fireballCd.Add(gameTime);
-    fireballAnimCd.Add(gameTime);
-    dashCd.Add(gameTime);
-    dashAnimCd.Add(gameTime);
+    AddCooldowns(gameTime);
 }
+
+    uint oldAnimState = animation->Sequence();
 
     if (state == ATTACKING)
         animation->Select(ATTACKING * direction * attackDirection);
     else
         animation->Select(state * direction);
-
-    uint oldAnimState = animation->Sequence();
-
-    // if (state != HURTING && state != DYING && state != RESPAWNING)
-    // {
-    //     if (state == ATTACKING)
-    //     {
-    //         if (attackDirection == ATK_UP || attackDirection == ATK_DOWN)
-    //         {
-    //             if (direction == LEFT)
-    //                 animation->Select(ATTACKING * ATK_LEFT * LEFT);
-    //             else
-    //                 animation->Select(ATTACKING * ATK_RIGHT * RIGHT);
-    //         }
-    //         else
-    //         {
-    //             if (direction == LEFT)
-    //                 animation->Select(ATTACKING * ATK_LEFT * LEFT);
-    //             else
-    //                 animation->Select(ATTACKING * ATK_RIGHT * RIGHT);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         animation->Select(state * direction);
-    //     }
-    // }
-    // else
-    // {
-    //     if (xSpeed != 0.0f)
-    //         animation->Select(WALKING * direction);
-    //     else
-    //         animation->Select(STILL * direction);
-    // }
 
     if (oldAnimState != animation->Sequence())
     {
@@ -449,10 +462,9 @@ void Player::OnCollision(Object *other)
     {
     case WALL_TOP: {
         Rect *self = (Rect *)BBox();
-        Wall *wall = (Wall *)other;
-        Rect *wallBBox = (Rect *)wall->BBox();
+        Rect *wallBBox = (Rect *)other->BBox();
 
-        bool justEntered = oldBottom <= wall->Y() && self->Bottom() >= wall->Y();
+        bool justEntered = oldBottom <= other->Y() && self->Bottom() >= other->Y();
         bool isInside = self->Right() != wallBBox->Left() && self->Left() != wallBBox->Right();
 
         if (justEntered && isInside)
@@ -466,10 +478,9 @@ void Player::OnCollision(Object *other)
     }
     case WALL_BOTTOM: {
         Rect *self = (Rect *)BBox();
-        Wall *wall = (Wall *)other;
-        Rect *wallBBox = (Rect *)wall->BBox();
+        Rect *wallBBox = (Rect *)other->BBox();
 
-        bool justEntered = oldTop >= wall->Y() && self->Top() <= wall->Y();
+        bool justEntered = oldTop >= other->Y() && self->Top() <= other->Y();
         bool isInside = self->Right() != wallBBox->Left() && self->Left() != wallBBox->Right();
 
         if (justEntered && isInside)
@@ -481,10 +492,9 @@ void Player::OnCollision(Object *other)
     }
     case WALL_LEFT: {
         Rect *self = (Rect *)BBox();
-        Wall *wall = (Wall *)other;
-        Rect *wallBBox = (Rect *)wall->BBox();
+        Rect *wallBBox = (Rect *)other->BBox();
 
-        bool justEntered = oldRight <= wall->X() && self->Right() >= wall->X();
+        bool justEntered = oldRight <= other->X() && self->Right() >= other->X();
         bool isInside = self->Bottom() != wallBBox->Top() && self->Top() != wallBBox->Bottom();
 
         if (justEntered && isInside)
@@ -496,10 +506,9 @@ void Player::OnCollision(Object *other)
     }
     case WALL_RIGHT: {
         Rect *self = (Rect *)BBox();
-        Wall *wall = (Wall *)other;
-        Rect *wallBBox = (Rect *)wall->BBox();
+        Rect *wallBBox = (Rect *)other->BBox();
 
-        bool justEntered = oldLeft >= wall->X() && self->Left() <= wall->X();
+        bool justEntered = oldLeft >= other->X() && self->Left() <= other->X();
         bool isInside = self->Bottom() != wallBBox->Top() && self->Top() != wallBBox->Bottom();
 
         if (justEntered && isInside)
@@ -508,6 +517,14 @@ void Player::OnCollision(Object *other)
             dashAnimCd.Left(0.1f);
         }
         break;
+    }
+    case ENEMY: {
+        AttackDirection dir = other->X() > x ? ATK_RIGHT : ATK_LEFT;
+        TakeDamage(1, dir);
+    }
+    case ENEMY_ATTACK: {
+        AttackDirection dir = other->X() > x ? ATK_RIGHT : ATK_LEFT;
+        TakeDamage(1, dir);
     }
     }
 }

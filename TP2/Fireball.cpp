@@ -1,19 +1,17 @@
 #include "Fireball.h"
 #include "TP2.h"
-#include "Util.h"
 
 Fireball::Fireball(Player *player, Direction direction)
 {
     type = FIREBALL;
+
+    this->direction = direction;
 
     ts = new TileSet("Resources/attack.png", 64, 64, 5, 10);
     anim = new Animation(ts, 0.1f, true);
 
     int width = 32;
     int height = 32;
-
-    speed = 800.0f;
-    distance = 14.0f;
 
     if (direction == LEFT)
     {

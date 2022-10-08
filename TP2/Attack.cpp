@@ -29,7 +29,7 @@ Attack::Attack(TileSet *tileSet, Player *player, Direction dir, AttackDirection 
     this->player = player;
     this->direction = atkDir;
 
-    switch (dir)
+    switch (atkDir)
     {
     case ATK_LEFT:
         BBox(new Rect(-60.0f, -40.0f, 40.0f, 40.0f));
@@ -76,4 +76,18 @@ void Attack::Update()
     anim->NextFrame();
     if (anim->Inactive())
         TP2::scene->Delete();
+}
+
+// ---------------------------------------------------------------------------------
+
+void Attack::OnCollision(Object *other)
+{
+    if (other->Type() == ENEMY)
+    {
+        if (find(enemiesHit.begin(), enemiesHit.end(), other) == enemiesHit.end())
+        {
+            enemiesHit.push_back(other);
+            TP2::player->AddMana();
+        }
+    }
 }

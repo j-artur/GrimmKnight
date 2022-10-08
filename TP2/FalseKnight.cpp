@@ -1,6 +1,7 @@
 #include "FalseKnight.h"
 #include "Shockwave.h"
 #include "TP2.h"
+#include "Wall.h"
 
 FalseKnight::FalseKnight()
 {
@@ -13,9 +14,9 @@ FalseKnight::FalseKnight()
     shockwaveTileSet = new TileSet("Resources/attack.png", 64, 64, 5, 10);
     animation = new Animation(tileSet, 0.2f, true);
 
-    uint idle[5] = { 0,1,2,3,4 };
-    uint prepSlam[6] = { 15,16,17,18,19,20 };
-    uint attack[8] = { 21,22,23,24,25,26,27,28 };
+    uint idle[5] = {0, 1, 2, 3, 4};
+    uint prepSlam[6] = {15, 16, 17, 18, 19, 20};
+    uint attack[8] = {21, 22, 23, 24, 25, 26, 27, 28};
 
     animation->Add(FK_IDLE, idle, 5);
     animation->Add(FK_PREP_SLAM, prepSlam, 6);
@@ -36,7 +37,6 @@ void FalseKnight::Update()
     ySpeed += gravity * gameTime;
     Translate(0, ySpeed * gameTime);
     mace->MoveTo(x - 120.0f, y);
-
 
     // testing slamming
     if (window->KeyDown('K') && keyCtrl)
@@ -76,7 +76,7 @@ void FalseKnight::Update()
                 mace->MoveTo(x + 160.0f, y + 50.0f);
                 if (!spawnedShockwave)
                 {
-                    Shockwave* shockwave = new Shockwave(RIGHT, shockwaveTileSet);
+                    Shockwave *shockwave = new Shockwave(RIGHT, shockwaveTileSet);
                     shockwave->MoveTo(mace->X(), mace->Y());
                     TP2::scene->Add(shockwave, MOVING);
                     spawnedShockwave = true;
@@ -124,22 +124,22 @@ void FalseKnight::Update()
         animation->Select(state);
     }
 
-    animation->NextFrame();    
+    animation->NextFrame();
 }
 
 void FalseKnight::Draw()
 {
-    animation->Draw(x,y, Layer::MIDDLE);
+    animation->Draw(round(x), round(y), Layer::MIDDLE);
 }
 
-void FalseKnight::OnCollision(Object* other)
+void FalseKnight::OnCollision(Object *other)
 {
     switch (other->Type())
     {
     case WALL_TOP: {
-        Rect* self = (Rect*)BBox();
-        Wall* wall = (Wall*)other;
-        Rect* wallBBox = (Rect*)wall->BBox();
+        Rect *self = (Rect *)BBox();
+        Wall *wall = (Wall *)other;
+        Rect *wallBBox = (Rect *)wall->BBox();
 
         bool justEntered = self->Bottom() >= wall->Y();
         bool isInside = self->Left() != wallBBox->Right();
@@ -152,9 +152,9 @@ void FalseKnight::OnCollision(Object* other)
         break;
     }
     case WALL_LEFT: {
-        Rect* self = (Rect*)BBox();
-        Wall* wall = (Wall*)other;
-        Rect* wallBBox = (Rect*)wall->BBox();
+        Rect *self = (Rect *)BBox();
+        Wall *wall = (Wall *)other;
+        Rect *wallBBox = (Rect *)wall->BBox();
 
         bool justEntered = self->Right() >= wall->X();
         bool isInside = self->Top() != wallBBox->Bottom();
@@ -166,9 +166,9 @@ void FalseKnight::OnCollision(Object* other)
         break;
     }
     case WALL_RIGHT: {
-        Rect* self = (Rect*)BBox();
-        Wall* wall = (Wall*)other;
-        Rect* wallBBox = (Rect*)wall->BBox();
+        Rect *self = (Rect *)BBox();
+        Wall *wall = (Wall *)other;
+        Rect *wallBBox = (Rect *)wall->BBox();
 
         bool justEntered = self->Left() <= wall->X();
         bool isInside = self->Top() != wallBBox->Bottom();
@@ -181,4 +181,3 @@ void FalseKnight::OnCollision(Object* other)
     }
     }
 }
-

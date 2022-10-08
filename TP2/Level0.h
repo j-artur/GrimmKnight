@@ -13,6 +13,7 @@ class Level0 : public Game
     Sprite *foreground = nullptr;
     Camera *camera = nullptr;
     ScreenTransition *screenTransition = nullptr;
+    TileSet *tiktikTileSet = nullptr;
 
     static Scene *scene;
 

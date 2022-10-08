@@ -1,8 +1,8 @@
-#include "Wall.h"
+#include "EntityBlock.h"
 
-TopWall::TopWall(int iX, int iY, int iWidth)
+EntityBlockTop::EntityBlockTop(int iX, int iY, int iWidth)
 {
-    type = WALL_TOP;
+    type = ENTITY_BLOCK_TOP;
 
     float x1 = iX * 32.0f;
     float width = iWidth * 32.0f;
@@ -16,9 +16,9 @@ TopWall::TopWall(int iX, int iY, int iWidth)
     MoveTo(absX, absY);
 }
 
-BottomWall::BottomWall(int iX, int iY, int iWidth)
+EntityBlockBottom::EntityBlockBottom(int iX, int iY, int iWidth)
 {
-    type = WALL_BOTTOM;
+    type = ENTITY_BLOCK_BOTTOM;
 
     float x1 = iX * 32.0f;
     float width = iWidth * 32.0f;
@@ -32,9 +32,9 @@ BottomWall::BottomWall(int iX, int iY, int iWidth)
     MoveTo(absX, absY);
 }
 
-LeftWall::LeftWall(int iX, int iY, int iHeight)
+EntityBlockLeft::EntityBlockLeft(int iX, int iY, int iHeight)
 {
-    type = WALL_LEFT;
+    type = ENTITY_BLOCK_LEFT;
 
     float y1 = iY * 32.0f;
     float height = iHeight * 32.0f;
@@ -48,9 +48,9 @@ LeftWall::LeftWall(int iX, int iY, int iHeight)
     MoveTo(absX, absY);
 }
 
-RightWall::RightWall(int iX, int iY, int iHeight)
+EntityBlockRight::EntityBlockRight(int iX, int iY, int iHeight)
 {
-    type = WALL_RIGHT;
+    type = ENTITY_BLOCK_RIGHT;
 
     float y1 = iY * 32.0f;
     float height = iHeight * 32.0f;
@@ -62,17 +62,4 @@ RightWall::RightWall(int iX, int iY, int iHeight)
     BBox(new Rect(0.0f, -height / 2.0f, 0.0f, height / 2.0f));
 
     MoveTo(absX, absY);
-}
-
-void AddWalls(Scene *scene, int iX, int iY, int iWidth, int iHeight)
-{
-    Wall *top = new TopWall(iX, iY, iWidth);
-    Wall *bottom = new BottomWall(iX, iY + iHeight - 1, iWidth);
-    Wall *left = new LeftWall(iX, iY, iHeight);
-    Wall *right = new RightWall(iX + iWidth - 1, iY, iHeight);
-
-    scene->Add(top, STATIC);
-    scene->Add(bottom, STATIC);
-    scene->Add(left, STATIC);
-    scene->Add(right, STATIC);
 }

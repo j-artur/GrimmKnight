@@ -9,8 +9,8 @@
 class Wall : public Object
 {
   public:
-	float absX;
-	float absY;
+    float absX;
+    float absY;
     void Update(){};
     void Draw(){};
 };
@@ -37,20 +37,6 @@ class RightWall : public Wall
 {
   public:
     RightWall(int x, int y, int height);
-};
-
-class Block
-{
-  private:
-    Wall *top;
-    Wall *bottom;
-    Wall *left;
-    Wall *right;
-
-  public:
-    Block(int x, int y, int width, int height);
-
-    void AddWalls(Scene *scene);
 };
 
 void AddWalls(Scene *scene, int x, int y, int width, int height);

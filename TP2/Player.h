@@ -4,7 +4,7 @@
 
 #include "Animation.h"
 #include "Cooldown.h"
-#include "Object.h"
+#include "Entity.h"
 #include "Sprite.h"
 #include "Util.h"
 
@@ -22,15 +22,7 @@ enum PlayerState
     RESPAWNING = 512,
 };
 
-enum AttackDirection
-{
-    ATK_UP = 1,
-    ATK_DOWN = 3,
-    ATK_LEFT = 9,
-    ATK_RIGHT = 27,
-};
-
-class Player : public Object
+class Player : public Entity
 {
   private:
     TileSet *tileSet;
@@ -42,7 +34,8 @@ class Player : public Object
     Direction direction = RIGHT;
     AttackDirection attackDirection = ATK_RIGHT;
 
-    uint mana = 0;
+    int hp = 5;
+    int mana = 0;
 
     Cooldown attackCd{0.5f};
     Cooldown attackAnimCd{0.2f};
@@ -50,6 +43,7 @@ class Player : public Object
     Cooldown fireballAnimCd{0.2f};
     Cooldown dashAnimCd{0.25f};
     Cooldown dashCd{0.9f};
+    Cooldown invincibilityCd{0.9f};
 
     bool jumpKeyCtrl = true;
     bool attackKeyCtrl = true;
@@ -73,32 +67,30 @@ class Player : public Object
     void UseMana();
 
   public:
-    bool canMove = true;
-
     Player();
     ~Player();
 
+    int Hp();
+    int Mana();
+
+    void TakeDamage(uint damage, AttackDirection dir);
     void AddMana();
+    void AddCooldowns(float dt);
+    void RefreshCooldowns();
 
     void Update();
     void Draw();
     void OnCollision(Object *other);
 };
 
-bool inline Player::HasMana()
+inline int Player::Hp()
 {
-    return mana >= 3;
+    return hp;
 }
 
-void inline Player::UseMana()
+inline int Player::Mana()
 {
-    mana -= 3;
-}
-
-void inline Player::AddMana()
-{
-    if (mana < 9)
-        mana++;
+    return mana;
 }
 
 #endif

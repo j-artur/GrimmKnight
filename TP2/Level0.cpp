@@ -1,4 +1,6 @@
 #include "Level0.h"
+#include "EntityBlock.h"
+#include "Tiktik.h"
 #include "Wall.h"
 
 Scene *Level0::scene = nullptr;
@@ -7,6 +9,7 @@ void Level0::Init()
 {
     background = new Sprite("Resources/Level0Bg.png");
     foreground = new Sprite("Resources/Level0Fg.png");
+    tiktikTileSet = new TileSet("Resources/Tiktik.png", 2, 4);
 
     scene = new Scene();
     TP2::scene = scene;
@@ -59,17 +62,29 @@ void Level0::Init()
     AddWalls(scene, 70, 18, 2, 4);
     AddWalls(scene, 78, 2, 2, 16);
     AddWalls(scene, 66, 12, 12, 2);
+
+    scene->Add(new EntityBlockRight(11, 2, 6), STATIC);
+    scene->Add(new EntityBlockLeft(20, 2, 6), STATIC);
+    scene->Add(new EntityBlockRight(47, 2, 4), STATIC);
+    scene->Add(new EntityBlockLeft(74, 2, 4), STATIC);
+
+    scene->Add(new Tiktik(tiktikTileSet, 16, 7), MOVING);
+    scene->Add(new Tiktik(tiktikTileSet, 55, 5), MOVING);
+    scene->Add(new Tiktik(tiktikTileSet, 67, 5), MOVING);
 }
 
 void Level0::Update()
 {
     if (screenTransition->Transitioning())
-        TP2::player->canMove = false;
+    {
+        screenTransition->Update();
+        TP2::player->AddCooldowns(0.1f * gameTime);
+    }
     else
-        TP2::player->canMove = true;
-
-    scene->Update();
-    scene->CollisionDetection();
+    {
+        scene->Update();
+        scene->CollisionDetection();
+    }
 }
 
 void Level0::Draw()

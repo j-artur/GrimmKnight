@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "TileSet.h"
 #include "Types.h"
+#include "Util.h"
 
 class Fireball : public Object
 {
@@ -14,13 +15,16 @@ class Fireball : public Object
     TileSet *ts;
     Animation *anim;
     Cooldown fireballCd{2.0f};
+    Direction direction;
 
     float speed = 800.0f;
-    float distance;
+    float distance = 14.0f;
 
   public:
     Fireball(Player *player, Direction direction);
     ~Fireball();
+
+    AttackDirection Dir();
 
     void Update();
     void Draw();
@@ -29,7 +33,12 @@ class Fireball : public Object
 
 inline void Fireball::Draw()
 {
-    anim->Draw(x, y, z);
+    anim->Draw(round(x), round(y), z);
+}
+
+inline AttackDirection Fireball::Dir()
+{
+    return direction == LEFT ? ATK_LEFT : ATK_RIGHT;
 }
 
 #endif

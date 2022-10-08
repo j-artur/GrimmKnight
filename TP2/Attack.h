@@ -6,6 +6,8 @@
 #include "Player.h"
 #include "TileSet.h"
 #include "Types.h"
+#include "Util.h"
+#include <vector>
 
 class Attack : public Object
 {
@@ -13,18 +15,27 @@ class Attack : public Object
     Animation *anim;
     Player *player;
     AttackDirection direction;
+    std::vector<Object *> enemiesHit;
 
   public:
     Attack(TileSet *tileSet, Player *player, Direction dir, AttackDirection atkDir);
     ~Attack();
 
+    AttackDirection Dir();
+
     void Update();
     void Draw();
+    void OnCollision(Object *other);
 };
 
 inline void Attack::Draw()
 {
-    anim->Draw(x, y, Layer::UPPER);
+    anim->Draw(round(x), round(y), Layer::UPPER);
+}
+
+inline AttackDirection Attack::Dir()
+{
+    return direction;
 }
 
 #endif

@@ -4,6 +4,7 @@
 #include "Audio.h"
 #include "Engine.h"
 #include "Game.h"
+#include "HUD.h"
 #include "Home.h"
 #include "Player.h"
 #include "Resources.h"
@@ -13,6 +14,7 @@ class TP2 : public Game
 {
   private:
     static Game *level;
+    HUD *hud;
     Sprite *pauseScreen = nullptr;
     bool pauseKeyCtrl = false;
     bool bBoxKeyCtrl = false;
@@ -23,7 +25,6 @@ class TP2 : public Game
     static Scene *scene;
     static bool viewBBox;
     static bool paused;
-    static Sprite *solidTile;
 
     void Init();
     void Update();

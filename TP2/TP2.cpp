@@ -1,5 +1,6 @@
 
 #include "TP2.h"
+#include "Util.h"
 
 Game *TP2::level = nullptr;
 Player *TP2::player = nullptr;
@@ -7,12 +8,12 @@ Audio *TP2::audio = nullptr;
 Scene *TP2::scene = nullptr;
 bool TP2::viewBBox = false;
 bool TP2::paused = false;
-Sprite *TP2::solidTile = nullptr;
 
 void TP2::Init()
 {
     pauseScreen = new Sprite("Resources/PauseScreen.png");
-    solidTile = new Sprite("Resources/SolidTile.png");
+
+    hud = new HUD();
 
     audio = new Audio();
     player = new Player();
@@ -22,34 +23,27 @@ void TP2::Init()
 
 void TP2::Update()
 {
-    if (window->KeyDown('B'))
+    if (window->KeyDown('B') && !bBoxKeyCtrl)
     {
-        if (!bBoxKeyCtrl)
-        {
-            viewBBox = !viewBBox;
-            bBoxKeyCtrl = true;
-        }
+        viewBBox = !viewBBox;
+        bBoxKeyCtrl = true;
     }
-    else
-    {
+    if (window->KeyUp('B'))
         bBoxKeyCtrl = false;
-    }
 
-    if (window->KeyDown(VK_ESCAPE))
+    if (window->KeyDown(VK_ESCAPE) && !pauseKeyCtrl)
     {
-        if (!pauseKeyCtrl)
-        {
-            pauseKeyCtrl = true;
-            paused = !paused;
-        }
+        pauseKeyCtrl = true;
+        paused = !paused;
     }
-    else
-    {
+    if (window->KeyUp(VK_ESCAPE))
         pauseKeyCtrl = false;
-    }
 
     if (!paused)
+    {
         level->Update();
+        hud->Update();
+    }
 }
 
 void TP2::Draw()
@@ -60,13 +54,14 @@ void TP2::Draw()
         scene->DrawBBox();
 
     if (paused)
-    {
         pauseScreen->Draw(window->CenterX(), window->CenterY(), 0.0f);
-    }
+
+    hud->Draw();
 }
 
 void TP2::Finalize()
 {
+    delete hud;
     delete audio;
     delete player;
     delete level;
@@ -80,7 +75,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
     engine->window->Color(0, 0, 0);
     engine->window->Mode(WINDOWED);
-    engine->window->Size(1280, 768);
+    engine->window->Size(SCREEN_WIDTH, SCREEN_HEIGHT);
     engine->window->Title("TP2");
     engine->window->Icon(IDI_ICON);
     engine->window->Cursor(IDC_CURSOR);
