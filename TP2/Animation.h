@@ -69,6 +69,7 @@ public:
     void Frame(uint aFrame);                        // define o quadro atual da animação
     uint Frame();                                   // retorna o quadro de animação ativo
     void Delay(float delay);                        // define o tempo entre quadros
+    void Loop();                                    // liga/desliga loop
 
     uint Sequence();
     bool Inactive();                                // verifica se a animação já encerrou
@@ -89,10 +90,13 @@ inline void Animation::Frame(uint aFrame)
 
 // retorna o frame de animação ativo
 inline unsigned Animation::Frame()
-{ return (sequence ? sequence[frame] : frame); }
+{ return frame; }
 
 inline void Animation::Delay(float delay)
 { animDelay = delay; }
+
+inline void Animation::Loop()
+{ animLoop = !animLoop; }
 
 inline uint Animation::Sequence()
 { return sequence ? *sequence : 0; }

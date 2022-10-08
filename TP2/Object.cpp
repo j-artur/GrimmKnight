@@ -53,7 +53,7 @@ void Object::BBox(Geometry* bb)
     bbox = bb;
     bbox->MoveTo(x, y);
     bbox->ScaleTo(scaleFactor);
-    bbox->RotateTo(rotationAngle);    
+    bbox->RotateTo(rotationAngle); 
 }
 
 // -------------------------------------------------------------------------------

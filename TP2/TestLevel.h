@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "TP2.h"
 #include "FalseKnight.h"
+#include "Mace.h"
 
 class TestLevel : public Game
 {
@@ -12,6 +13,7 @@ private:
 	Sprite* foreground = nullptr;
 
 	FalseKnight* boss;
+	Mace* mace;
 
 	static Scene* scene;
 

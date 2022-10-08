@@ -22,12 +22,6 @@ enum PlayerState
     RESPAWNING = 512,
 };
 
-enum Direction
-{
-    LEFT = 1,
-    RIGHT = 5,
-};
-
 enum AttackDirection
 {
     ATK_UP = 1,

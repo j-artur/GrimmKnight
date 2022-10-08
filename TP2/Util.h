@@ -22,7 +22,12 @@ enum Objects
     WALL_LEFT,
     WALL_RIGHT,
     ENEMY,
-    BOSS,
+};
+
+enum Direction
+{
+    LEFT = 1,
+    RIGHT = 5,
 };
 
 #endif
