@@ -54,7 +54,7 @@ void TP2::Draw()
         scene->DrawBBox();
 
     if (paused)
-        pauseScreen->Draw(window->CenterX(), window->CenterY(), 0.0f);
+        pauseScreen->Draw(window->CenterX(), window->CenterY(), LAYER_PAUSE_SCREEN);
 
     hud->Draw();
 }

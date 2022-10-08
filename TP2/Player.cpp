@@ -9,6 +9,8 @@ Player::Player()
 {
     type = PLAYER;
 
+    hp = 5;
+
     tileSet = new TileSet("Resources/Player.png", 100, 68, 8, 48);
     animation = new Animation(tileSet, 0.20f, true);
 
@@ -32,6 +34,10 @@ Player::Player()
     uint dashLeft[2] = {34, 35};
     uint castRight[1] = {12};
     uint castLeft[1] = {36};
+    uint hurtRight[1] = {5};
+    uint hurtLeft[1] = {29};
+    uint dieRight[3] = {13, 14, 15};
+    uint dieLeft[3] = {37, 38, 39};
 
     animation->Add(STILL * RIGHT, idleRight, 4);
     animation->Add(STILL * LEFT, idleLeft, 4);
@@ -53,6 +59,10 @@ Player::Player()
     animation->Add(DASHING * LEFT, dashLeft, 2);
     animation->Add(CASTING * RIGHT, castRight, 1);
     animation->Add(CASTING * LEFT, castLeft, 1);
+    animation->Add(HURTING * RIGHT, hurtRight, 1);
+    animation->Add(HURTING * LEFT, hurtLeft, 1);
+    animation->Add(DYING * RIGHT, dieRight, 3);
+    animation->Add(DYING * LEFT, dieLeft, 3);
 
     light = new Sprite("Resources/Light.png");
 
@@ -72,34 +82,35 @@ Player::~Player()
     delete light;
 }
 
-void Player::TakeDamage(uint damage, AttackDirection dir)
+bool Player::TakeDamage(uint damage, AttackDirection dir)
 {
-    if (invincibilityCd.Ready())
-    {
-        hp = max(0, hp - damage);
-        invincibilityCd.Reset();
+    if (hurtCd.Down())
+        return false;
 
-        if (dir == ATK_RIGHT)
-        {
-            xSpeed = 64.0f;
-            ySpeed = -64.0f;
-        }
-        else if (dir == ATK_LEFT)
-        {
-            xSpeed = -64.0f;
-            ySpeed = -64.0f;
-        }
-        else if (dir == ATK_UP)
-        {
-            ySpeed = -64.0f;
-            xSpeed = direction == RIGHT ? 64.0f : -64.0f;
-        }
-        else if (dir == ATK_DOWN)
-        {
-            ySpeed = 64.0f;
-            xSpeed = direction == RIGHT ? 64.0f : -64.0f;
-        }
+    state = HURTING;
+
+    hp = max(0, hp - damage);
+    hurtCd.Restart();
+    hurtAnimCd.Restart();
+
+    if (dir == ATK_RIGHT)
+    {
+        direction = RIGHT;
+        xSpeed = KNOCKBACK_SPEED;
+        ySpeed = KNOCKBACK_UP_SPEED;
     }
+    else if (dir == ATK_LEFT)
+    {
+        direction = LEFT;
+        xSpeed = -KNOCKBACK_SPEED;
+        ySpeed = KNOCKBACK_UP_SPEED;
+    }
+    else
+    {
+        xSpeed = direction == RIGHT ? KNOCKBACK_SPEED : -KNOCKBACK_SPEED;
+        ySpeed = dir == ATK_UP ? KNOCKBACK_UP_SPEED : -KNOCKBACK_UP_SPEED;
+    }
+    return true;
 }
 
 bool Player::HasMana()
@@ -124,9 +135,15 @@ void Player::AddCooldowns(float dt)
     attackAnimCd.Add(dt);
     fireballCd.Add(dt);
     fireballAnimCd.Add(dt);
-    dashAnimCd.Add(dt);
     dashCd.Add(dt);
-    invincibilityCd.Add(dt);
+    dashAnimCd.Add(dt);
+    hurtCd.Add(dt);
+    hurtAnimCd.Add(dt);
+}
+
+void Player::Knockback()
+{
+    knockbackCd.Restart();
 }
 
 void Player::Update()
@@ -190,14 +207,14 @@ input : {
         }
 
         // ATTACK
-        if (window->KeyDown('X') && attackCd.Ready() && attackKeyCtrl)
+        if (window->KeyDown('X') && attackCd.Up() && attackKeyCtrl)
         {
             // TODO: Create attack animation
 
             nextState = ATTACKING;
 
-            attackCd.Reset();
-            attackAnimCd.Reset();
+            attackCd.Restart();
+            attackAnimCd.Restart();
 
             attackKeyCtrl = false;
 
@@ -217,7 +234,7 @@ input : {
             attackKeyCtrl = true;
 
         // FIREBALL
-        if (window->KeyDown('S') && fireballCd.Ready() && fireballKeyCtrl /* && HasMana() */)
+        if (window->KeyDown('S') && fireballCd.Up() && fireballKeyCtrl /* && HasMana() */)
         {
             // TODO: Create fireball animation
 
@@ -225,9 +242,9 @@ input : {
             ySpeed = 0.0f;
             nextState = CASTING;
 
-            // UseMana();
-            fireballCd.Reset();
-            fireballAnimCd.Reset();
+            UseMana();
+            fireballCd.Restart();
+            fireballAnimCd.Restart();
 
             fireballKeyCtrl = false;
 
@@ -238,14 +255,14 @@ input : {
             fireballKeyCtrl = true;
 
         // DASH
-        if (window->KeyDown('C') && dashCd.Ready() && dashKeyCtrl && dashGroundCtrl)
+        if (window->KeyDown('C') && dashCd.Up() && dashKeyCtrl && dashGroundCtrl)
         {
             // TODO: Create dash animation
 
             nextState = DASHING;
 
-            dashAnimCd.Reset();
-            dashCd.Reset();
+            dashAnimCd.Restart();
+            dashCd.Restart();
 
             dashGroundCtrl = false;
             dashKeyCtrl = false;
@@ -351,7 +368,7 @@ update : {
         break;
     }
     case DASHING: {
-        if (dashAnimCd.Ready())
+        if (dashAnimCd.Up())
         {
             nextState = FALLING;
             ySpeed = 0.0f;
@@ -361,12 +378,12 @@ update : {
             xSpeed = dashSpeed * (direction == LEFT ? -1.0f : 1.0f);
             Translate(xSpeed * gameTime, 0.0f);
             nextState = DASHING;
-            if (dashAnimCd.Elapsed(0.225f))
+            if (dashAnimCd.Over(0.225f))
             {
                 animation->Restart();
                 animation->Frame(0);
             }
-            else if (dashAnimCd.Elapsed(0.025f))
+            else if (dashAnimCd.Over(0.025f))
             {
                 animation->Restart();
                 animation->Frame(1);
@@ -380,15 +397,56 @@ update : {
         break;
     }
     case ATTACKING: {
-        ySpeed += gravity * gameTime;
-        Translate(xSpeed * gameTime, ySpeed * gameTime);
+        if (knockbackCd.Down())
+        {
+            float dx = xSpeed;
+            float dy = ySpeed;
 
-        if (attackAnimCd.Ready())
+            if (attackDirection == ATK_DOWN)
+            {
+                dy = -1.5f * walkingSpeed;
+                ySpeed = 0.0f;
+            }
+            else if (attackDirection == ATK_UP)
+            {
+                dy += 0.5f * walkingSpeed + gravity * gameTime;
+                ySpeed = 0.75f * walkingSpeed;
+            }
+            else
+            {
+                ySpeed += gravity * gameTime;
+
+                if (xSpeed == 0.0f)
+                {
+                    if (attackDirection == ATK_LEFT)
+                        dx = 0.25f * walkingSpeed;
+                    else if (attackDirection == ATK_RIGHT)
+                        dx = -0.25f * walkingSpeed;
+                }
+                else
+                {
+                    if (attackDirection == ATK_LEFT)
+                        dx += 1.25f * walkingSpeed;
+                    else if (attackDirection == ATK_RIGHT)
+                        dx -= 1.25f * walkingSpeed;
+                }
+            }
+
+            Translate(dx * gameTime, dy * gameTime);
+            knockbackCd.Add(gameTime);
+        }
+        else
+        {
+            ySpeed += gravity * gameTime;
+            Translate(xSpeed * gameTime, ySpeed * gameTime);
+        }
+
+        if (attackAnimCd.Up())
             nextState = FALLING;
         else
         {
             nextState = ATTACKING;
-            if (attackAnimCd.Elapsed(0.075f))
+            if (attackAnimCd.Over(0.075f))
             {
                 animation->Restart();
                 animation->Frame(1);
@@ -399,11 +457,10 @@ update : {
                 animation->Frame(0);
             }
         }
-
         break;
     }
     case CASTING: {
-        if (fireballAnimCd.Ready())
+        if (fireballAnimCd.Up())
         {
             ySpeed += gravity * gameTime;
             nextState = FALLING;
@@ -416,11 +473,23 @@ update : {
                 Translate(-48.0f * gameTime, ySpeed * gameTime);
             nextState = CASTING;
         }
-
         break;
     }
     case HURTING: {
-        break;
+        if (hurtAnimCd.Up())
+        {
+            ySpeed = 0.0f;
+
+            if (hp <= 0)
+                nextState = DYING;
+            else
+                nextState = FALLING;
+        }
+        else
+        {
+            nextState = HURTING;
+            Translate(xSpeed * gameTime, ySpeed * gameTime);
+        }
     }
     case DYING: {
         break;
@@ -452,8 +521,8 @@ update : {
 
 void Player::Draw()
 {
-    light->Draw(round(x), round(y), 0.95f);
-    animation->Draw(round(x), round(y), Layer::MIDDLE);
+    light->Draw(round(x), round(y), LAYER_LIGHT);
+    animation->Draw(round(x), round(y), LAYER_PLAYER);
 }
 
 void Player::OnCollision(Object *other)
@@ -470,7 +539,6 @@ void Player::OnCollision(Object *other)
         if (justEntered && isInside)
         {
             MoveTo(x, other->Y() - self->bottom);
-            ySpeed = 0.0f;
             if (state == FALLING)
                 state = STILL;
         }
@@ -500,7 +568,7 @@ void Player::OnCollision(Object *other)
         if (justEntered && isInside)
         {
             MoveTo(other->X() - self->right, y);
-            dashAnimCd.Left(0.1f);
+            dashAnimCd.Leave(0.1f);
         }
         break;
     }
@@ -514,17 +582,19 @@ void Player::OnCollision(Object *other)
         if (justEntered && isInside)
         {
             MoveTo(other->X() - self->left, y);
-            dashAnimCd.Left(0.1f);
+            dashAnimCd.Leave(0.1f);
         }
         break;
     }
     case ENEMY: {
-        AttackDirection dir = other->X() > x ? ATK_RIGHT : ATK_LEFT;
-        TakeDamage(1, dir);
+        Entity *enemy = (Entity *)other;
+        if (enemy->Alive())
+            TakeDamage(1, enemy->X() > x ? ATK_LEFT : ATK_RIGHT);
+        break;
     }
     case ENEMY_ATTACK: {
-        AttackDirection dir = other->X() > x ? ATK_RIGHT : ATK_LEFT;
-        TakeDamage(1, dir);
+        TakeDamage(1, other->X() > x ? ATK_LEFT : ATK_RIGHT);
+        break;
     }
     }
 }

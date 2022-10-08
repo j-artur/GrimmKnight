@@ -26,7 +26,7 @@ class Shockwave : public Object
 
 inline void Shockwave::Draw()
 {
-    anim->Draw(round(x), round(y), z);
+    anim->Draw(round(x), round(y), LAYER_BOSS_ATTACK);
 }
 
 #endif

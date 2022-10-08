@@ -1,5 +1,5 @@
-#include "Util.h"
 #include "Mace.h"
+#include "Util.h"
 
 Mace::Mace()
 {

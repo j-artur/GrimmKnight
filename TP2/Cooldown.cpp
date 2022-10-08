@@ -1,9 +1,9 @@
 #include "Cooldown.h"
 
-Cooldown::Cooldown(float duration)
+Cooldown::Cooldown(float duration, bool up)
 {
     this->duration = duration;
-    time = 0.0f;
+    time = up ? duration : 0.0f;
 }
 
 void Cooldown::Add(float dt)
@@ -11,22 +11,27 @@ void Cooldown::Add(float dt)
     time += dt;
 }
 
-bool Cooldown::Ready()
+bool Cooldown::Up()
 {
     return time >= duration;
 }
 
-bool Cooldown::Elapsed(float time)
+bool Cooldown::Down()
+{
+    return time < duration;
+}
+
+bool Cooldown::Over(float time)
 {
     return this->time >= time;
 }
 
-void Cooldown::Reset()
+void Cooldown::Restart()
 {
     time = 0.0f;
 }
 
-void Cooldown::Left(float time)
+void Cooldown::Leave(float time)
 {
     if (duration - this->time > time)
         this->time = duration - time;

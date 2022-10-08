@@ -89,8 +89,8 @@ void Level0::Update()
 
 void Level0::Draw()
 {
-    background->Draw(camera->X(), camera->Y(), Layer::BACK);
-    foreground->Draw(camera->X(), camera->Y(), 0.9f);
+    background->Draw(camera->X(), camera->Y(), LAYER_BG);
+    foreground->Draw(camera->X(), camera->Y(), LAYER_FG);
     scene->Draw();
 }
 

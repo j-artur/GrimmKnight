@@ -38,7 +38,7 @@ void Fireball::Update()
 {
     Translate(speed * gameTime, 0);
 
-    if (fireballCd.Ready())
+    if (fireballCd.Up())
         TP2::scene->Delete();
 
     fireballCd.Add(gameTime);

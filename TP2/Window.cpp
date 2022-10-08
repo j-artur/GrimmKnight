@@ -229,14 +229,6 @@ LRESULT CALLBACK Window::WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
         windowKeys[VK_RBUTTON] = false;
         return 0;
 
-        // mudança de foco da janela
-    case WM_SETFOCUS:
-        Engine::Resume();
-        return 0;
-    case WM_KILLFOCUS:
-        Engine::Pause();
-        return 0;
-
         // a janela foi destruida
     case WM_DESTROY:
         PostQuitMessage(0);

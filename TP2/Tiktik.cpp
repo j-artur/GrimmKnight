@@ -9,6 +9,8 @@ Tiktik::Tiktik(TileSet *tileSet, int iX, int iY)
 {
     type = ENEMY;
 
+    hp = 8;
+
     animation = new Animation(tileSet, 0.3f, true);
 
     uint seqWalkRight[2] = {0, 1};
@@ -37,43 +39,45 @@ Tiktik::~Tiktik()
     delete animation;
 }
 
-void Tiktik::TakeDamage(uint damage, AttackDirection atkDir)
+bool Tiktik::TakeDamage(uint damage, AttackDirection atkDir)
 {
     if (state == TIKTIK_DEAD || state == TIKTIK_HURTING)
-        return;
+        return false;
 
     if (atkDir == ATK_LEFT)
     {
-        xSpeed = -walkSpeed;
-        ySpeed = -walkSpeed;
+        xSpeed = -KNOCKBACK_SPEED;
+        ySpeed = KNOCKBACK_SPEED;
         direction = RIGHT;
     }
     else if (atkDir == ATK_RIGHT)
     {
-        xSpeed = walkSpeed;
-        ySpeed = -walkSpeed;
+        xSpeed = KNOCKBACK_SPEED;
+        ySpeed = KNOCKBACK_SPEED;
         direction = LEFT;
     }
     else if (atkDir == ATK_UP)
-        ySpeed = 2 * -walkSpeed;
+        ySpeed = KNOCKBACK_UP_SPEED;
     else if (atkDir == ATK_DOWN)
-        ySpeed = 2 * walkSpeed;
+        ySpeed = 2 * KNOCKBACK_SPEED;
 
     hp -= damage;
 
     if (hp <= 0)
     {
-        dieCd.Reset();
+        dieCd.Restart();
         state = TIKTIK_DEAD;
         animation->Select(TIKTIK_DEAD * direction);
         xSpeed = 0.0f;
     }
     else
     {
-        hurtCd.Reset();
+        hurtCd.Restart();
         state = TIKTIK_HURTING;
         animation->Select(TIKTIK_HURTING * direction);
     }
+
+    return true;
 }
 
 void Tiktik::Update()
@@ -81,11 +85,11 @@ void Tiktik::Update()
     switch (state)
     {
     case TIKTIK_HURTING:
-        if (hurtCd.Ready())
+        if (hurtCd.Up())
             state = TIKTIK_WALKING;
         break;
     case TIKTIK_DEAD:
-        if (dieCd.Ready())
+        if (dieCd.Up())
             TP2::scene->Delete();
         break;
     case TIKTIK_WALKING:
@@ -109,7 +113,7 @@ void Tiktik::Update()
 
 void Tiktik::Draw()
 {
-    animation->Draw(round(x), round(y), Layer::LOWER);
+    animation->Draw(round(x), round(y), LAYER_ENEMY);
 }
 
 void Tiktik::OnCollision(Object *other)
@@ -143,12 +147,6 @@ void Tiktik::OnCollision(Object *other)
     case WALL_RIGHT:
         MoveTo(other->X() - self->left, y);
         direction = RIGHT;
-        break;
-    case ATTACK:
-        TakeDamage(5, ((Attack *)other)->Dir());
-        break;
-    case FIREBALL:
-        TakeDamage(15, ((Fireball *)other)->Dir());
         break;
     }
 }

@@ -7,6 +7,8 @@ FalseKnight::FalseKnight()
 {
     type = ENEMY;
 
+    hp = armorHealth;
+
     mace = new Mace();
     TP2::scene->Add(mace, MOVING);
 
@@ -32,6 +34,11 @@ FalseKnight::~FalseKnight()
     delete animation;
 }
 
+bool FalseKnight::TakeDamage(uint damage, AttackDirection dir)
+{
+    return true;
+}
+
 void FalseKnight::Update()
 {
     ySpeed += gravity * gameTime;
@@ -42,8 +49,8 @@ void FalseKnight::Update()
     if (window->KeyDown('K') && keyCtrl)
     {
         keyCtrl = false;
-        slamCd.Reset();
-        prepSlamCd.Reset();
+        slamCd.Restart();
+        prepSlamCd.Restart();
         state = FK_SLAM;
     }
     else if (window->KeyUp('K'))
@@ -55,7 +62,7 @@ void FalseKnight::Update()
     if (state == FK_SLAMMING)
     {
         uint oldAnimState = animation->Sequence();
-        if (!prepSlamCd.Ready())
+        if (!prepSlamCd.Up())
         {
             animation->Select(FK_PREP_SLAM);
             mace->MoveTo(x - 150.0f, y + 50.0f);
@@ -103,7 +110,7 @@ void FalseKnight::Update()
             }
         }
 
-        if (slamCd.Ready())
+        if (slamCd.Up())
         {
             spawnedShockwave = false;
             animation->Delay(0.2f);
@@ -129,7 +136,7 @@ void FalseKnight::Update()
 
 void FalseKnight::Draw()
 {
-    animation->Draw(round(x), round(y), Layer::MIDDLE);
+    animation->Draw(round(x), round(y), LAYER_BOSS);
 }
 
 void FalseKnight::OnCollision(Object *other)

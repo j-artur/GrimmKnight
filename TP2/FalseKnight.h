@@ -3,13 +3,14 @@
 
 #include "Animation.h"
 #include "Cooldown.h"
+#include "Entity.h"
+#include "Mace.h"
 #include "Object.h"
 #include "Sprite.h"
 #include "Util.h"
 #include "Wall.h"
-#include "Mace.h"
 
-enum FK_State 
+enum FK_State
 {
     FK_IDLE = 1,
     FK_LEAP = 2,
@@ -29,42 +30,41 @@ enum FK_Animation
     FK_RAGING
 };
 
-class FalseKnight : public Object
+class FalseKnight : public Entity
 {
-private:
-    TileSet* tileSet;
-    TileSet* shockwaveTileSet;
-    Animation* animation;
+  private:
+    TileSet *tileSet;
+    TileSet *shockwaveTileSet;
+    Animation *animation;
 
     FK_State state = FK_IDLE;
     Direction direction = RIGHT;
-    Mace* mace;
+    Mace *mace;
 
     uint armorHealth = 65;
     uint headHealth = 40;
 
-    Cooldown slamCd{ 2.0f };
-    Cooldown prepSlamCd{ 1.2f };
+    Cooldown slamCd{2.0f};
+    Cooldown prepSlamCd{1.2f};
 
     float directionMult = 1.0f; // going to use to invert x axis on left/right attacks
     float ySpeed = 0.0f;
     float jumpingSpeed = -464.0f;
     float gravity = 768.0f;
 
-    bool keyCtrl = true; 
+    bool keyCtrl = true;
     bool spawnedShockwave = false;
     bool canKill = false;
 
-public:
-    
-
+  public:
     FalseKnight();
     ~FalseKnight();
 
+    bool TakeDamage(uint damage, AttackDirection dir);
+
     void Update();
     void Draw();
-    void OnCollision(Object* other);
+    void OnCollision(Object *other);
 };
-
 
 #endif

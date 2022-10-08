@@ -86,8 +86,13 @@ void Attack::OnCollision(Object *other)
     {
         if (find(enemiesHit.begin(), enemiesHit.end(), other) == enemiesHit.end())
         {
-            enemiesHit.push_back(other);
-            TP2::player->AddMana();
+            Entity *enemy = (Entity *)other;
+            if (enemy->TakeDamage(5, direction))
+            {
+                enemiesHit.push_back(other);
+                TP2::player->AddMana();
+                TP2::player->Knockback();
+            }
         }
     }
 }

@@ -34,7 +34,6 @@ class Player : public Entity
     Direction direction = RIGHT;
     AttackDirection attackDirection = ATK_RIGHT;
 
-    int hp = 5;
     int mana = 0;
 
     Cooldown attackCd{0.5f};
@@ -43,7 +42,9 @@ class Player : public Entity
     Cooldown fireballAnimCd{0.2f};
     Cooldown dashAnimCd{0.25f};
     Cooldown dashCd{0.9f};
-    Cooldown invincibilityCd{0.9f};
+    Cooldown hurtCd{0.9f};
+    Cooldown hurtAnimCd{0.2f};
+    Cooldown knockbackCd{0.15f};
 
     bool jumpKeyCtrl = true;
     bool attackKeyCtrl = true;
@@ -73,10 +74,11 @@ class Player : public Entity
     int Hp();
     int Mana();
 
-    void TakeDamage(uint damage, AttackDirection dir);
+    bool TakeDamage(uint damage, AttackDirection dir);
     void AddMana();
     void AddCooldowns(float dt);
     void RefreshCooldowns();
+    void Knockback();
 
     void Update();
     void Draw();

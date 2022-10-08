@@ -52,11 +52,11 @@ void HUD::Update()
 
 void HUD::Draw()
 {
-    bg->Draw(78.0f, 49.0f, Layer::MIDDLE);
+    bg->Draw(78.0f, 49.0f, LAYER_HUD_BG);
 
     for (int i = 0; i < 5; i++)
-        hpBar[i]->Draw(34.0f + (22.0f * i), 34.0f, Layer::UPPER);
+        hpBar[i]->Draw(34.0f + (22.0f * i), 34.0f, LAYER_HUD_FG);
 
     for (int i = 0; i < 3; i++)
-        manaBar[i]->Draw(34.0f + (22.0f * i), 64.0f, Layer::UPPER);
+        manaBar[i]->Draw(34.0f + (22.0f * i), 64.0f, LAYER_HUD_FG);
 }

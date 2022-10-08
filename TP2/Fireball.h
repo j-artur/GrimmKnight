@@ -33,7 +33,7 @@ class Fireball : public Object
 
 inline void Fireball::Draw()
 {
-    anim->Draw(round(x), round(y), z);
+    anim->Draw(round(x), round(y), LAYER_FIREBALL);
 }
 
 inline AttackDirection Fireball::Dir()

@@ -20,8 +20,6 @@ class Tiktik : public Entity
     TiktikState state = TIKTIK_WALKING;
     Direction direction = RIGHT;
 
-    int hp = 8;
-
     Cooldown hurtCd{0.3f};
     Cooldown dieCd{1.0f};
 
@@ -34,7 +32,7 @@ class Tiktik : public Entity
     Tiktik(TileSet *tileSet, int x, int y);
     ~Tiktik();
 
-    void TakeDamage(uint damage, AttackDirection dir);
+    bool TakeDamage(uint damage, AttackDirection dir);
 
     void Update();
     void Draw();

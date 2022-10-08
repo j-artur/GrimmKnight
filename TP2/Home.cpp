@@ -1,7 +1,7 @@
 #include "Home.h"
 #include "Level0.h"
-#include "TestLevel.h"
 #include "TP2.h"
+#include "TestLevel.h"
 
 void Home::Init()
 {
@@ -19,7 +19,7 @@ void Home::Update()
 
 void Home::Draw()
 {
-    background->Draw(window->CenterX(), window->CenterY());
+    background->Draw(window->CenterX(), window->CenterY(), LAYER_BG);
 }
 
 void Home::Finalize()

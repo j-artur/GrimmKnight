@@ -6,18 +6,24 @@
 
 class Entity : public Object
 {
-  private:
+  protected:
     int hp;
 
   public:
-    virtual void TakeDamage(uint damage, AttackDirection dir) = 0;
+    virtual bool TakeDamage(uint damage, AttackDirection dir) = 0;
 
     int Hp();
+    bool Alive();
 };
 
 inline int Entity::Hp()
 {
     return hp;
+}
+
+inline bool Entity::Alive()
+{
+    return hp > 0;
 }
 
 #endif

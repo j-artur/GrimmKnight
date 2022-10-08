@@ -30,7 +30,7 @@ class Attack : public Object
 
 inline void Attack::Draw()
 {
-    anim->Draw(round(x), round(y), Layer::UPPER);
+    anim->Draw(round(x), round(y), LAYER_ATTACK);
 }
 
 inline AttackDirection Attack::Dir()

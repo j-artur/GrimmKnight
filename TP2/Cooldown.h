@@ -8,13 +8,15 @@ class Cooldown
     float duration;
 
   public:
-    Cooldown(float duration);
+    Cooldown(float duration, bool up = true);
+
+    bool Up();
+    bool Down();
+    bool Over(float time);
 
     void Add(float dt);
-    bool Ready();
-    bool Elapsed(float time);
-    void Reset();
-    void Left(float time);
+    void Restart();
+    void Leave(float time);
 };
 
 #endif
