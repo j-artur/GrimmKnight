@@ -21,7 +21,7 @@ class Tiktik : public Entity
     Direction direction = RIGHT;
 
     Cooldown hurtCd{0.3f};
-    Cooldown dieCd{1.0f};
+    Cooldown dieCd{2.0f};
 
     float walkSpeed = 64.0f;
     float gravity = 768.0f;

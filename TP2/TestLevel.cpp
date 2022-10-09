@@ -41,3 +41,7 @@ void TestLevel::Finalize()
     delete background;
     delete scene;
 }
+
+void TestLevel::EnterFrom(LevelId id)
+{
+}

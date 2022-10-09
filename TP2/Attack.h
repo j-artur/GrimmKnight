@@ -15,7 +15,7 @@ class Attack : public Object
     Animation *anim;
     Player *player;
     AttackDirection direction;
-    std::vector<Object *> enemiesHit;
+    std::vector<Object *> objectsHit;
 
   public:
     Attack(TileSet *tileSet, Player *player, Direction dir, AttackDirection atkDir);

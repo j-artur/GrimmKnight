@@ -2,7 +2,7 @@
 #include "TP2.h"
 #include "Util.h"
 
-Game *TP2::level = nullptr;
+Level *TP2::level = nullptr;
 Player *TP2::player = nullptr;
 Audio *TP2::audio = nullptr;
 Scene *TP2::scene = nullptr;
@@ -13,10 +13,10 @@ void TP2::Init()
 {
     pauseScreen = new Sprite("Resources/PauseScreen.png");
 
-    hud = new HUD();
-
-    audio = new Audio();
     player = new Player();
+    hud = new HUD();
+    audio = new Audio();
+
     level = new Home();
     level->Init();
 }

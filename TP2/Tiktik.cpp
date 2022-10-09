@@ -47,35 +47,24 @@ bool Tiktik::TakeDamage(uint damage, AttackDirection atkDir)
     if (atkDir == ATK_LEFT)
     {
         xSpeed = -KNOCKBACK_SPEED;
-        ySpeed = KNOCKBACK_SPEED;
+        ySpeed = -KNOCKBACK_SPEED;
         direction = RIGHT;
     }
     else if (atkDir == ATK_RIGHT)
     {
         xSpeed = KNOCKBACK_SPEED;
-        ySpeed = KNOCKBACK_SPEED;
+        ySpeed = -KNOCKBACK_SPEED;
         direction = LEFT;
     }
     else if (atkDir == ATK_UP)
         ySpeed = KNOCKBACK_UP_SPEED;
     else if (atkDir == ATK_DOWN)
-        ySpeed = 2 * KNOCKBACK_SPEED;
+        ySpeed = KNOCKBACK_SPEED;
 
     hp -= damage;
 
-    if (hp <= 0)
-    {
-        dieCd.Restart();
-        state = TIKTIK_DEAD;
-        animation->Select(TIKTIK_DEAD * direction);
-        xSpeed = 0.0f;
-    }
-    else
-    {
-        hurtCd.Restart();
-        state = TIKTIK_HURTING;
-        animation->Select(TIKTIK_HURTING * direction);
-    }
+    hurtCd.Restart();
+    state = TIKTIK_HURTING;
 
     return true;
 }
@@ -86,9 +75,18 @@ void Tiktik::Update()
     {
     case TIKTIK_HURTING:
         if (hurtCd.Up())
-            state = TIKTIK_WALKING;
+        {
+            if (hp <= 0)
+            {
+                dieCd.Restart();
+                state = TIKTIK_DEAD;
+            }
+            else
+                state = TIKTIK_WALKING;
+        }
         break;
     case TIKTIK_DEAD:
+        xSpeed = 0.0f;
         if (dieCd.Up())
             TP2::scene->Delete();
         break;
@@ -113,7 +111,13 @@ void Tiktik::Update()
 
 void Tiktik::Draw()
 {
-    animation->Draw(round(x), round(y), LAYER_ENEMY);
+    if (state == TIKTIK_DEAD)
+    {
+        float f = 1.0f - dieCd.Ratio();
+        animation->Draw(round(x), round(y), LAYER_ENEMY, 1.0f, 0.0f, {f, f, f, f});
+    }
+    else
+        animation->Draw(round(x), round(y), LAYER_ENEMY);
 }
 
 void Tiktik::OnCollision(Object *other)
@@ -122,31 +126,46 @@ void Tiktik::OnCollision(Object *other)
 
     switch (other->Type())
     {
-    case ENTITY_BLOCK_TOP:
-    case WALL_TOP:
-        if (ySpeed >= 0.0f)
+    case ENTITY_BLOCK_BOTTOM:
+    case WALL_TOP: {
+        Rect *wallBBox = (Rect *)other->BBox();
+        if (ySpeed > 0.0f && self->Right() != wallBBox->Left() && self->Left() != wallBBox->Right())
         {
             ySpeed = 0.0f;
             MoveTo(x, other->Y() - self->bottom);
         }
         break;
-    case ENTITY_BLOCK_BOTTOM:
-    case WALL_BOTTOM:
-        if (ySpeed <= 0.0f)
+    }
+    case ENTITY_BLOCK_TOP:
+    case WALL_BOTTOM: {
+        Rect *wallBBox = (Rect *)other->BBox();
+        if (ySpeed < 0.0f && self->Right() != wallBBox->Left() && self->Left() != wallBBox->Right())
         {
             ySpeed = 0.0f;
             MoveTo(x, other->Y() - self->top);
         }
         break;
-    case ENTITY_BLOCK_LEFT:
-    case WALL_LEFT:
-        MoveTo(other->X() - self->right, y);
-        direction = LEFT;
-        break;
+    }
     case ENTITY_BLOCK_RIGHT:
-    case WALL_RIGHT:
-        MoveTo(other->X() - self->left, y);
-        direction = RIGHT;
+    case WALL_LEFT: {
+        Rect *wallBBox = (Rect *)other->BBox();
+        if (self->Bottom() != wallBBox->Top() && self->Top() != wallBBox->Bottom())
+        {
+            MoveTo(other->X() - self->right, y);
+            direction = LEFT;
+        }
         break;
+    }
+    case ENTITY_BLOCK_LEFT:
+    case WALL_RIGHT: {
+        Rect *wallBBox = (Rect *)other->BBox();
+        if (self->Bottom() != wallBBox->Top() && self->Top() != wallBBox->Bottom())
+        {
+
+            MoveTo(other->X() - self->left, y);
+            direction = RIGHT;
+        }
+        break;
+    }
     }
 }

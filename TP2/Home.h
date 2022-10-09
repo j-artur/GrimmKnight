@@ -1,10 +1,10 @@
 #ifndef _HOME_H_
 #define _HOME_H_
 
-#include "Game.h"
+#include "Level.h"
 #include "Sprite.h"
 
-class Home : public Game
+class Home : public Level
 {
   private:
     Sprite *background = nullptr;
@@ -14,6 +14,8 @@ class Home : public Game
     void Update();
     void Draw();
     void Finalize();
+
+    void EnterFrom(LevelId id);
 };
 
 #endif

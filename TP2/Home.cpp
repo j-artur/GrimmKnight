@@ -5,6 +5,8 @@
 
 void Home::Init()
 {
+    id = TITLESCREEN;
+
     background = new Sprite("Resources/Home.png");
 }
 
@@ -25,4 +27,8 @@ void Home::Draw()
 void Home::Finalize()
 {
     delete background;
+}
+
+void Home::EnterFrom(LevelId id)
+{
 }

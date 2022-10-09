@@ -1,27 +1,25 @@
-#ifndef _LEVEL0_H_
-#define _LEVEL0_H_
+#ifndef _LEVEL1_H_
+#define _LEVEL1_H_
 
 #include "Camera.h"
-#include "Level.h"
 #include "LevelTransition.h"
 #include "Scene.h"
 #include "ScreenTransition.h"
 #include "TP2.h"
 
-class Level0 : public Level
+class Level1 : public Level
 {
   private:
     Sprite *background = nullptr;
     Sprite *foreground = nullptr;
-    TileSet *tiktikTileSet = nullptr;
 
     Scene *scene = nullptr;
 
     Camera *camera = nullptr;
     ScreenTransition *screenTransition = nullptr;
-    LevelTransition *level1Transition = nullptr;
 
     Cooldown enteringCd{LevelTransition::DURATION};
+    LevelId enteringFrom;
 
   public:
     void Init();

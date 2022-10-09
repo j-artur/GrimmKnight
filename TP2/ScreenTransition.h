@@ -3,12 +3,7 @@
 
 #include "Object.h"
 #include "Scene.h"
-
-enum Orientation
-{
-    VERTICAL,
-    HORIZONTAL,
-};
+#include "Util.h"
 
 class ScreenTransition : public Object
 {
@@ -31,5 +26,10 @@ class ScreenTransition : public Object
     void Draw(){};
     void OnCollision(Object *other);
 };
+
+inline bool ScreenTransition::Transitioning()
+{
+    return transitioning;
+}
 
 #endif

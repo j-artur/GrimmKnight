@@ -29,6 +29,7 @@ enum Objects
     ENTITY_BLOCK_BOTTOM,
     ENTITY_BLOCK_LEFT,
     ENTITY_BLOCK_RIGHT,
+    SPIKE,
 };
 
 enum Direction
@@ -45,8 +46,14 @@ enum AttackDirection
     ATK_RIGHT = 27,
 };
 
-const float KNOCKBACK_SPEED = 96.0f;
-const float KNOCKBACK_UP_SPEED = -128.0f;
+enum Orientation
+{
+    VERTICAL,
+    HORIZONTAL,
+};
+
+const float KNOCKBACK_SPEED = 128.0f;
+const float KNOCKBACK_UP_SPEED = -196.0f;
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 768;

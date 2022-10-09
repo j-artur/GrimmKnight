@@ -1,4 +1,5 @@
 #include "Attack.h"
+#include "Spike.h"
 #include "TP2.h"
 #include "Util.h"
 
@@ -82,17 +83,24 @@ void Attack::Update()
 
 void Attack::OnCollision(Object *other)
 {
-    if (other->Type() == ENEMY)
+    if (find(objectsHit.begin(), objectsHit.end(), other) == objectsHit.end())
     {
-        if (find(enemiesHit.begin(), enemiesHit.end(), other) == enemiesHit.end())
+        objectsHit.push_back(other);
+        switch (other->Type())
         {
+        case ENEMY: {
             Entity *enemy = (Entity *)other;
             if (enemy->TakeDamage(5, direction))
             {
-                enemiesHit.push_back(other);
                 TP2::player->AddMana();
                 TP2::player->Knockback();
             }
+            break;
+        }
+        case SPIKE: {
+            TP2::player->Knockback();
+            break;
+        }
         }
     }
 }

@@ -40,6 +40,7 @@ class Player : public Entity
     Cooldown hurtCd{0.9f};
     Cooldown hurtAnimCd{0.2f};
     Cooldown knockbackCd{0.15f};
+    Cooldown knockbackUpCd{0.2f};
 
     bool jumpKeyCtrl = true;
     bool attackKeyCtrl = true;
@@ -71,6 +72,8 @@ class Player : public Entity
     bool HasMana();
     void UseMana();
 
+    void TakeKnockback();
+
   public:
     Player();
     ~Player();
@@ -89,6 +92,10 @@ class Player : public Entity
     void AddCooldowns(float dt);
     void RefreshCooldowns();
     void Knockback();
+
+    void State(PlayerState state);
+    void Dir(Direction dir);
+    void UpdateAnimation();
 
     void Update();
     void Draw();
@@ -123,6 +130,16 @@ inline bool Player::HasDash()
 inline void Player::LearnDash()
 {
     dash = true;
+}
+
+inline void Player::State(PlayerState state)
+{
+    this->state = state;
+}
+
+inline void Player::Dir(Direction dir)
+{
+    direction = dir;
 }
 
 #endif

@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "HUD.h"
 #include "Home.h"
+#include "Level.h"
 #include "Player.h"
 #include "Resources.h"
 #include "Scene.h"
@@ -13,7 +14,7 @@
 class TP2 : public Game
 {
   private:
-    static Game *level;
+    static Level *level;
     HUD *hud;
     Sprite *pauseScreen = nullptr;
     bool pauseKeyCtrl = false;
@@ -35,11 +36,13 @@ class TP2 : public Game
     {
         if (level != nullptr)
         {
+            LevelId number = level->Id();
             level->Finalize();
             delete level;
             scene = nullptr;
             level = new T();
             level->Init();
+            level->EnterFrom(number);
         }
     }
 };

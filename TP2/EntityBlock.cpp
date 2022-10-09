@@ -9,7 +9,7 @@ EntityBlockTop::EntityBlockTop(int iX, int iY, int iWidth)
     float x2 = x1 + width;
 
     absX = (x1 + x2) / 2.0f;
-    absY = iY * 32.0f;
+    absY = (iY + 1) * 32.0f;
 
     BBox(new Rect(-width / 2.0f, 0.0f, width / 2.0f, 0.0f));
 
@@ -25,7 +25,7 @@ EntityBlockBottom::EntityBlockBottom(int iX, int iY, int iWidth)
     float x2 = x1 + width;
 
     absX = (x1 + x2) / 2.0f;
-    absY = (iY + 1) * 32.0f;
+    absY = iY * 32.0f;
 
     BBox(new Rect(-width / 2.0f, 0.0f, width / 2.0f, 0.0f));
 
@@ -40,7 +40,7 @@ EntityBlockLeft::EntityBlockLeft(int iX, int iY, int iHeight)
     float height = iHeight * 32.0f;
     float y2 = y1 + height;
 
-    absX = iX * 32.0f;
+    absX = (iX + 1) * 32.0f;
     absY = (y1 + y2) / 2.0f;
 
     BBox(new Rect(0.0f, -height / 2.0f, 0.0f, height / 2.0f));
@@ -56,7 +56,7 @@ EntityBlockRight::EntityBlockRight(int iX, int iY, int iHeight)
     float height = iHeight * 32.0f;
     float y2 = y1 + height;
 
-    absX = (iX + 1) * 32.0f;
+    absX = iX * 32.0f;
     absY = (y1 + y2) / 2.0f;
 
     BBox(new Rect(0.0f, -height / 2.0f, 0.0f, height / 2.0f));
