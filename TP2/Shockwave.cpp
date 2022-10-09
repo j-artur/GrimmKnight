@@ -4,7 +4,7 @@
 
 Shockwave::Shockwave(Direction direction, TileSet* tileset)
 {
-    type = ENEMY;
+    type = ENEMY_ATTACK;
 
     ts = tileset;
     anim = new Animation(ts, 0.1f, true);

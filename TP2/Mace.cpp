@@ -3,7 +3,7 @@
 
 Mace::Mace()
 {
-    type = ENEMY;
+    type = ENEMY_ATTACK;
 
     BBox(new Rect(-36, -36, 36, 36));
 }
