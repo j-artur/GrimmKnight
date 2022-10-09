@@ -1,0 +1,25 @@
+ ← | → - Move
+   Z   - Jump
+   X   - Attack
+ ↑ + X - Attack Up
+ ↓ + X - Attack Down
+   S   - Fireball
+   C   - Dash
+  Esc  - Pause
+
+
+
+Debug Mode:
+
+ B - Show BBoxes
+F1 - Level 0
+F2 - Level 1
+F3 - Level 2
+F4 - Level 3
+F5 - Level 4
+F6 - Title Screen
+F7 - Learn Fireball
+F8 - Learn Dash
+
+
+

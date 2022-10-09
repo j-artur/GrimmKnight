@@ -4,12 +4,21 @@
 #include "Object.h"
 #include "Scene.h"
 #include "Util.h"
+#include <unordered_map>
+
+struct Coord
+{
+    float x;
+    float y;
+};
 
 class ScreenTransition : public Object
 {
   private:
     Scene *scene;
+    std::unordered_map<Object *, Coord> positions;
     Orientation orientation;
+    AttackDirection dir;
     bool positive;
     float timer;
     bool transitioning = false;

@@ -2,6 +2,7 @@
 #define _TP2_H_
 
 #include "Audio.h"
+#include "Cooldown.h"
 #include "Engine.h"
 #include "Game.h"
 #include "HUD.h"
@@ -17,8 +18,12 @@ class TP2 : public Game
     static Level *level;
     HUD *hud;
     Sprite *pauseScreen = nullptr;
+    Sprite *transitionScreen = nullptr;
     bool pauseKeyCtrl = false;
     bool bBoxKeyCtrl = false;
+
+    static bool transitioning;
+    static Cooldown levelTransition;
 
   public:
     static Player *player;
@@ -31,6 +36,8 @@ class TP2 : public Game
     void Update();
     void Draw();
     void Finalize();
+
+    static void StartTransition();
 
     template <class T> static void NextLevel()
     {

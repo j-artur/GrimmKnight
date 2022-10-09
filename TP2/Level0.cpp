@@ -73,7 +73,7 @@ void Level0::Init()
 
     scene->Add(new EntityBlockLeft(11, 2, 6), STATIC);
     scene->Add(new EntityBlockRight(20, 2, 6), STATIC);
-    scene->Add(new EntityBlockLeft(47, 2, 6), STATIC);
+    scene->Add(new EntityBlockLeft(45, 2, 6), STATIC);
     scene->Add(new EntityBlockRight(74, 2, 6), STATIC);
 
     scene->Add(new Tiktik(tiktikTileSet, 16, 7), MOVING);
@@ -139,8 +139,9 @@ void Level0::EnterFrom(LevelId id)
         TP2::player->Dir(LEFT);
         enteringCd.Restart();
         break;
+    case TITLESCREEN:
     default:
-        TP2::player->MoveTo(256.0f, -32.0f);
+        TP2::player->MoveTo(256.0f, -34.0f);
         break;
     }
 }

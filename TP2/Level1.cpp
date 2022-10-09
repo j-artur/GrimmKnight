@@ -1,6 +1,10 @@
 #include "Level1.h"
+#include "Level0.h"
 #include "LevelTransition.h"
 #include "TP2.h"
+#include "Wall.h"
+// #include "Level2.h"
+// #include "Level3.h"
 
 void Level1::Init()
 {
@@ -21,11 +25,77 @@ void Level1::Init()
     screenTransition = new ScreenTransition(VERTICAL, scene);
     screenTransition->MoveTo(384.0f, 768.0f);
     scene->Add(screenTransition, STATIC);
+
+    level0Transition = new LevelTransition(ATK_LEFT);
+    level0Transition->MoveTo(0.0f, 1408.0f);
+    scene->Add(level0Transition, STATIC);
+
+    level2Transition = new LevelTransition(ATK_RIGHT);
+    level2Transition->MoveTo(2560.0f, 1408.0f);
+    scene->Add(level2Transition, STATIC);
+
+    level3Transition = new LevelTransition(ATK_LEFT);
+    level3Transition->MoveTo(0.0f, 672.0f);
+    scene->Add(level3Transition, STATIC);
+
+    AddWalls(scene, 0, 0, 40, 10);
+    AddWalls(scene, 0, 10, 2, 10);
+    AddWalls(scene, 2, 10, 2, 4);
+    AddWalls(scene, 4, 10, 2, 2);
+    AddWalls(scene, 18, 10, 2, 2);
+    AddWalls(scene, 20, 10, 2, 4);
+    AddWalls(scene, 22, 10, 18, 16);
+    AddWalls(scene, 14, 22, 8, 4);
+    AddWalls(scene, 38, 26, 2, 16);
+    AddWalls(scene, 36, 34, 2, 6);
+    AddWalls(scene, 34, 36, 2, 4);
+    AddWalls(scene, 24, 38, 10, 2);
+    AddWalls(scene, 0, 22, 10, 12);
+    AddWalls(scene, 10, 28, 2, 6);
+    AddWalls(scene, 12, 30, 2, 4);
+    AddWalls(scene, 14, 32, 18, 2);
+    AddWalls(scene, 0, 34, 2, 8);
+    AddWalls(scene, 0, 46, 40, 2);
+    AddWalls(scene, 6, 44, 18, 2);
+    AddWalls(scene, 8, 42, 14, 2);
 }
 
 void Level1::Update()
 {
-    if (enteringCd.Down())
+    if (level0Transition->Transitioning())
+    {
+        TP2::player->AddCooldowns(gameTime);
+        TP2::player->Translate(-LevelTransition::DISTANCE * gameTime, 0.0f);
+        TP2::player->UpdateAnimation();
+        level0Transition->Update();
+    }
+    else if (level0Transition->Done())
+    {
+        TP2::NextLevel<Level0>();
+    }
+    // else if (level2Transition->Transitioning())
+    // {
+    //     TP2::player->AddCooldowns(gameTime);
+    //     TP2::player->Translate(LevelTransition::DISTANCE * gameTime, 0.0f);
+    //     TP2::player->UpdateAnimation();
+    //     level2Transition->Update();
+    // }
+    // else if (level2Transition->Done())
+    // {
+    //     TP2::NextLevel<Level2>();
+    // }
+    // else if (level3Transition->Transitioning())
+    // {
+    //     TP2::player->AddCooldowns(gameTime);
+    //     TP2::player->Translate(-LevelTransition::DISTANCE * gameTime, 0.0f);
+    //     TP2::player->UpdateAnimation();
+    //     level3Transition->Update();
+    // }
+    // else if (level3Transition->Done())
+    // {
+    //     TP2::NextLevel<Level3>();
+    // }
+    else if (enteringCd.Down())
     {
         TP2::player->AddCooldowns(gameTime);
         TP2::player->UpdateAnimation();
@@ -68,13 +138,6 @@ void Level1::EnterFrom(LevelId id)
 
     switch (id)
     {
-    case LEVEL0:
-        TP2::player->MoveTo(0.0f, 1442.0f);
-        scene->Apply([&](Object *obj) { obj->Translate(0.0f, float(-window->Height())); });
-        TP2::player->State(WALKING);
-        TP2::player->Dir(RIGHT);
-        enteringCd.Restart();
-        break;
     case LEVEL2:
         TP2::player->MoveTo(1280.0f, 1442.0f);
         scene->Apply([&](Object *obj) { obj->Translate(0.0f, float(-window->Height())); });
@@ -88,7 +151,13 @@ void Level1::EnterFrom(LevelId id)
         TP2::player->Dir(RIGHT);
         enteringCd.Restart();
         break;
+    case LEVEL0:
     default:
+        TP2::player->MoveTo(0.0f, 1442.0f);
+        scene->Apply([&](Object *obj) { obj->Translate(0.0f, float(-window->Height())); });
+        TP2::player->State(WALKING);
+        TP2::player->Dir(RIGHT);
+        enteringCd.Restart();
         break;
     }
 }

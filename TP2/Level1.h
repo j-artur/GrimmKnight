@@ -17,6 +17,9 @@ class Level1 : public Level
 
     Camera *camera = nullptr;
     ScreenTransition *screenTransition = nullptr;
+    LevelTransition *level0Transition = nullptr;
+    LevelTransition *level2Transition = nullptr;
+    LevelTransition *level3Transition = nullptr;
 
     Cooldown enteringCd{LevelTransition::DURATION};
     LevelId enteringFrom;

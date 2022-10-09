@@ -62,6 +62,7 @@ void LevelTransition::OnCollision(Object *other)
         {
             transitioning = true;
             timer = 0.0f;
+            TP2::StartTransition();
         }
     }
 }

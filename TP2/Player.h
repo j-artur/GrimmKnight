@@ -95,6 +95,7 @@ class Player : public Entity
 
     void State(PlayerState state);
     void Dir(Direction dir);
+    void AtkDir(AttackDirection dir);
     void UpdateAnimation();
 
     void Update();
@@ -140,6 +141,11 @@ inline void Player::State(PlayerState state)
 inline void Player::Dir(Direction dir)
 {
     direction = dir;
+}
+
+inline void Player::AtkDir(AttackDirection dir)
+{
+    attackDirection = dir;
 }
 
 #endif

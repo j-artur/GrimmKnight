@@ -24,90 +24,62 @@ ScreenTransition::ScreenTransition(Orientation orientation, Scene *scene)
 
 void ScreenTransition::Update()
 {
-    if (transitioning)
+    if (!transitioning)
+        return;
+
+    timer += gameTime;
+    float time = gameTime;
+    if (timer >= DURATION)
     {
-        timer += gameTime;
+        transitioning = false;
+        time = gameTime - (timer - DURATION);
+        timer = 0.0f;
+    }
 
-        float time = gameTime;
-
-        if (timer >= DURATION)
+    if (transitioning)
+        switch (dir)
         {
-            transitioning = false;
-            time = gameTime - (timer - DURATION);
-            timer = 0.0f;
-        }
-
-        switch (orientation)
-        {
-        case HORIZONTAL:
-            if (positive)
-            {
-                scene->Apply([&](Object *obj) {
-                    if (!transitioning && (obj->Type() == WALL_TOP || obj->Type() == WALL_BOTTOM ||
-                                           obj->Type() == WALL_LEFT || obj->Type() == WALL_RIGHT))
-                    {
-                        Wall *wall = (Wall *)obj;
-                        float newX = wall->absX - window->Width();
-                        wall->MoveTo(newX, wall->absY);
-                        wall->absX = newX;
-                    }
-                    else
-                        obj->Translate(-window->Width() * time, 0.0f);
-                });
-                TP2::player->Translate(DISTANCE * time, 0.0f);
-            }
-            else
-            {
-                scene->Apply([&](Object *obj) {
-                    if (!transitioning && (obj->Type() == WALL_TOP || obj->Type() == WALL_BOTTOM ||
-                                           obj->Type() == WALL_LEFT || obj->Type() == WALL_RIGHT))
-                    {
-                        Wall *wall = (Wall *)obj;
-                        float newX = wall->absX + window->Width();
-                        wall->MoveTo(newX, wall->absY);
-                        wall->absX = newX;
-                    }
-                    else
-                        obj->Translate(window->Width() * time, 0.0f);
-                });
-                TP2::player->Translate(-DISTANCE * time, 0.0f);
-            }
+        case ATK_RIGHT:
+            scene->Apply([&](Object *obj) { obj->Translate(-window->Width() * time, 0.0f); });
+            TP2::player->Translate(DISTANCE * time, 0.0f);
             break;
-        case VERTICAL:
-            if (positive)
-            {
-                scene->Apply([&](Object *obj) {
-                    if (!transitioning && (obj->Type() == WALL_TOP || obj->Type() == WALL_BOTTOM ||
-                                           obj->Type() == WALL_LEFT || obj->Type() == WALL_RIGHT))
-                    {
-                        Wall *wall = (Wall *)obj;
-                        float newY = wall->absY - window->Height();
-                        wall->MoveTo(wall->absX, newY);
-                        wall->absY = newY;
-                    }
-                    else
-                        obj->Translate(0.0f, -window->Height() * time);
-                });
-                TP2::player->Translate(0.0f, DISTANCE * time);
-            }
-            else
-            {
-                scene->Apply([&](Object *obj) {
-                    if (!transitioning && (obj->Type() == WALL_TOP || obj->Type() == WALL_BOTTOM ||
-                                           obj->Type() == WALL_LEFT || obj->Type() == WALL_RIGHT))
-                    {
-                        Wall *wall = (Wall *)obj;
-                        float newY = wall->absY + window->Height();
-                        wall->MoveTo(wall->absX, newY);
-                        wall->absY = newY;
-                    }
-                    else
-                        obj->Translate(0.0f, window->Height() * time);
-                });
-                TP2::player->Translate(0.0f, -DISTANCE * time);
-            }
+        case ATK_LEFT:
+            scene->Apply([&](Object *obj) { obj->Translate(window->Width() * time, 0.0f); });
+            TP2::player->Translate(-DISTANCE * time, 0.0f);
+            break;
+        case ATK_DOWN:
+            scene->Apply([&](Object *obj) { obj->Translate(0.0f, -window->Height() * time); });
+            TP2::player->Translate(0.0f, DISTANCE * time);
+            break;
+        case ATK_UP:
+            scene->Apply([&](Object *obj) { obj->Translate(0.0f, window->Height() * time); });
+            TP2::player->Translate(0.0f, -DISTANCE * time);
             break;
         }
+    else
+    {
+        switch (dir)
+        {
+        case ATK_RIGHT:
+            scene->Apply([&](Object *obj) { obj->MoveTo(positions[obj].x - window->Width(), positions[obj].y); });
+            TP2::player->Translate(DISTANCE * DURATION, 0.0f);
+            break;
+        case ATK_LEFT:
+            scene->Apply([&](Object *obj) { obj->MoveTo(positions[obj].x + window->Width(), positions[obj].y); });
+            TP2::player->Translate(-DISTANCE * DURATION, 0.0f);
+            break;
+        case ATK_DOWN:
+            scene->Apply([&](Object *obj) { obj->MoveTo(positions[obj].x, positions[obj].y - window->Height()); });
+            TP2::player->Translate(0.0f, DISTANCE * DURATION);
+            break;
+        case ATK_UP:
+            scene->Apply([&](Object *obj) { obj->MoveTo(positions[obj].x, positions[obj].y + window->Height()); });
+            TP2::player->Translate(0.0f, -DISTANCE * DURATION);
+            TP2::player->AtkDir(ATK_DOWN);
+            TP2::player->Knockback();
+            break;
+        }
+        positions.clear();
     }
 }
 
@@ -117,18 +89,14 @@ void ScreenTransition::OnCollision(Object *other)
     {
         if (!transitioning)
         {
+            scene->Apply([&](Object *obj) { positions[obj] = {obj->X(), obj->Y()}; });
             transitioning = true;
             timer = 0.0f;
 
-            switch (orientation)
-            {
-            case HORIZONTAL:
-                positive = TP2::player->X() < X();
-                break;
-            case VERTICAL:
-                positive = TP2::player->Y() < Y();
-                break;
-            }
+            if (orientation == HORIZONTAL)
+                dir = TP2::player->X() < X() ? ATK_RIGHT : ATK_LEFT;
+            else
+                dir = TP2::player->Y() < Y() ? ATK_DOWN : ATK_UP;
         }
     }
 }
