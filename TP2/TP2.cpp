@@ -35,6 +35,12 @@ void TP2::Update()
         NextLevel<Level0>();
     if (window->KeyDown(VK_F2))
         NextLevel<Level1>();
+    if (window->KeyDown(VK_F6))
+        NextLevel<Home>();
+    if (window->KeyDown(VK_F7))
+        player->LearnFireball();
+    if (window->KeyDown(VK_F8))
+        player->LearnDash();
 
     if (window->KeyDown('B') && !bBoxKeyCtrl)
     {
