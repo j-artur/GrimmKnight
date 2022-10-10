@@ -92,12 +92,14 @@ void Attack::OnCollision(Object *other)
             Entity *enemy = (Entity *)other;
             if (enemy->TakeDamage(5, direction))
             {
+                TP2::audio->Play(ENEMY_DAMAGE);
                 TP2::player->AddMana();
                 TP2::player->Knockback();
             }
             break;
         }
         case SPIKE: {
+            TP2::audio->Play(PLAYER_SPIKE_ATTACK);
             TP2::player->Knockback();
             break;
         }

@@ -44,6 +44,8 @@ class Player : public Entity
 
     bool jumpKeyCtrl = true;
     bool attackKeyCtrl = true;
+    bool walkingCtrl = true;
+    bool landingCtrl = true;
 
     int mana = 0;
     bool fireball = false;

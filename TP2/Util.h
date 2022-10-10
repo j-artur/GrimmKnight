@@ -10,7 +10,20 @@ enum Sounds
     JETDOWN,
     LOOPDOWN,
     FIRE,
-    EXPLOSION
+    EXPLOSION,
+    
+    PLAYER_ATTACK,
+    PLAYER_SPIKE_ATTACK,
+    PLAYER_JUMP,
+    PLAYER_LAND,
+    PLAYER_DASH,
+    PLAYER_FIREBALL,
+    PLAYER_HURT,
+    PLAYER_WALK,
+
+    ENEMY_DAMAGE,
+    ENEMY_CRAWLER,
+
 };
 
 enum Objects
@@ -29,6 +42,7 @@ enum Objects
     ENTITY_BLOCK_BOTTOM,
     ENTITY_BLOCK_LEFT,
     ENTITY_BLOCK_RIGHT,
+    ENTITY_ACTION_AREA,
     SPIKE,
 };
 

@@ -111,6 +111,9 @@ bool Player::TakeDamage(uint damage, AttackDirection dir)
         xSpeed = direction == RIGHT ? KNOCKBACK_SPEED : -KNOCKBACK_SPEED;
         ySpeed = dir == ATK_UP ? KNOCKBACK_UP_SPEED : -KNOCKBACK_UP_SPEED;
     }
+
+    TP2::audio->Play(PLAYER_HURT);
+
     return true;
 }
 
@@ -248,6 +251,12 @@ input : {
 
         if (window->KeyDown('Z'))
         {
+            //achei feio
+            if (jumpKeyCtrl && state != FALLING)
+                TP2::audio->Play(PLAYER_JUMP);
+
+
+
             if ((state == STILL || state == WALKING) && jumpKeyCtrl)
             {
                 nextState = JUMPING;
@@ -271,6 +280,8 @@ input : {
         if (window->KeyDown('X') && attackCd.Up() && attackKeyCtrl)
         {
             nextState = ATTACKING;
+
+            TP2::audio->Play(PLAYER_ATTACK);
 
             attackCd.Restart();
             attackAnimCd.Restart();
@@ -299,6 +310,8 @@ input : {
             {
                 // TODO: Create fireball animation
 
+                TP2::audio->Play(PLAYER_FIREBALL);
+
                 xSpeed = 0.0f;
                 ySpeed = 0.0f;
                 nextState = CASTING;
@@ -322,6 +335,8 @@ input : {
             if (window->KeyDown('C') && dashCd.Up() && dashKeyCtrl && dashGroundCtrl)
             {
                 nextState = DASHING;
+
+                TP2::audio->Play(PLAYER_DASH);
 
                 dashAnimCd.Restart();
                 dashCd.Restart();
@@ -420,6 +435,8 @@ update : {
         break;
     }
     case FALLING: {
+        landingCtrl = true;
+
         if (knockbackCd.Down() || knockbackUpCd.Down())
             TakeKnockback();
         else
@@ -542,6 +559,19 @@ update : {
     }
     }
 
+    switch (state)
+    {
+    case WALKING:
+        if (walkingCtrl)
+            TP2::audio->Play(PLAYER_WALK);
+        walkingCtrl = false;
+        break;
+    default:
+        TP2::audio->Stop(PLAYER_WALK);
+        walkingCtrl = true;
+        break;
+    }
+
     AddCooldowns(gameTime);
 }
 
@@ -570,6 +600,12 @@ void Player::OnCollision(Object *other)
 
         if (justEntered && isInside)
         {
+            if (landingCtrl)
+            {
+                landingCtrl = false;
+                TP2::audio->Play(PLAYER_LAND);
+            }
+
             MoveTo(x, other->Y() - self->bottom);
             if (state == FALLING)
             {
@@ -577,6 +613,7 @@ void Player::OnCollision(Object *other)
                 ySpeed = 0.0f;
             }
         }
+
         break;
     }
     case WALL_BOTTOM: {

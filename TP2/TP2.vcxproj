@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ActionArea.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Attack.cpp" />
     <ClCompile Include="Audio.cpp" />
@@ -194,9 +195,11 @@
     <ClCompile Include="TP2.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="WanderingHusk.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActionArea.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Attack.h" />
     <ClInclude Include="Audio.h" />
@@ -241,6 +244,7 @@
     <ClInclude Include="Util.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Wall.h" />
+    <ClInclude Include="WanderingHusk.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

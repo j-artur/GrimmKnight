@@ -14,6 +14,7 @@ class Level0 : public Level
     Sprite *background = nullptr;
     Sprite *foreground = nullptr;
     TileSet *tiktikTileSet = nullptr;
+    TileSet* wanderingTileSet = nullptr;
 
     Scene *scene = nullptr;
 
@@ -23,7 +24,10 @@ class Level0 : public Level
 
     Cooldown enteringCd{LevelTransition::DURATION};
 
+
   public:
+    static int tikTikCounter;
+
     void Init();
     void Update();
     void Draw();

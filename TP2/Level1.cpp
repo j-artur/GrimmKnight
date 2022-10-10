@@ -1,8 +1,10 @@
 #include "Level1.h"
 #include "Level0.h"
+#include "EntityBlock.h"
 #include "LevelTransition.h"
 #include "TP2.h"
 #include "Wall.h"
+#include "WanderingHusk.h"
 // #include "Level2.h"
 // #include "Level3.h"
 
@@ -12,6 +14,7 @@ void Level1::Init()
 
     background = new Sprite("Resources/Level1Bg.png");
     foreground = new Sprite("Resources/Level1Fg.png");
+    wanderingTileSet = new TileSet("Resources/WIP/WanderingHusk.png", 4, 7);
 
     scene = new Scene();
     TP2::scene = scene;
@@ -58,6 +61,14 @@ void Level1::Init()
     AddWalls(scene, 0, 46, 40, 2);
     AddWalls(scene, 6, 44, 18, 2);
     AddWalls(scene, 8, 42, 14, 2);
+
+    scene->Add(new EntityBlockLeft(7, 38, 5), STATIC);
+    scene->Add(new EntityBlockRight(22, 38, 4), STATIC);
+    scene->Add(new EntityBlockLeft(13, 26, 6), STATIC);
+    scene->Add(new EntityBlockRight(32, 26, 6), STATIC);
+
+    scene->Add(new WanderingHusk(wanderingTileSet, 13, 41), MOVING);
+    scene->Add(new WanderingHusk(wanderingTileSet, 16, 28), MOVING);
 }
 
 void Level1::Update()

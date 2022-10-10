@@ -25,6 +25,18 @@ void TP2::Init()
     hud = new HUD();
     audio = new Audio();
 
+    audio->Add(PLAYER_ATTACK, "Resources/Audio/Player/hero_attack.wav");
+    audio->Add(PLAYER_SPIKE_ATTACK, "Resources/Audio/Player/hero_spike_attack.wav");
+    audio->Add(PLAYER_JUMP, "Resources/Audio/Player/hero_jump.wav");
+    audio->Add(PLAYER_LAND, "Resources/Audio/Player/hero_land.wav");
+    audio->Add(PLAYER_DASH, "Resources/Audio/Player/hero_dash.wav");
+    audio->Add(PLAYER_FIREBALL, "Resources/Audio/Player/hero_fireball.wav");
+    audio->Add(PLAYER_HURT, "Resources/Audio/Player/hero_damage.wav");
+    audio->Add(PLAYER_WALK, "Resources/Audio/Player/hero_walk_footsteps_stone.wav");
+
+    audio->Add(ENEMY_DAMAGE, "Resources/Audio/enemy_damage.wav");
+    audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav");
+
     level = new Home();
     level->Init();
 }

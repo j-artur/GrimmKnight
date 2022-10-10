@@ -12,6 +12,7 @@ class Level1 : public Level
   private:
     Sprite *background = nullptr;
     Sprite *foreground = nullptr;
+    TileSet* wanderingTileSet = nullptr;
 
     Scene *scene = nullptr;
 
