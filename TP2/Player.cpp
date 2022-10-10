@@ -37,8 +37,10 @@ Player::Player()
     uint castLeft[1] = {36};
     uint hurtRight[1] = {5};
     uint hurtLeft[1] = {29};
-    uint dieRight[3] = {13, 14, 15};
-    uint dieLeft[3] = {37, 38, 39};
+    uint dyingRight[2] = {13, 14};
+    uint dyingLeft[2] = {37, 38};
+    uint deadRight[1] = {15};
+    uint deadLeft[1] = {39};
 
     animation->Add(STILL * H_RIGHT, idleRight, 4);
     animation->Add(STILL * H_LEFT, idleLeft, 4);
@@ -62,8 +64,10 @@ Player::Player()
     animation->Add(CASTING * H_LEFT, castLeft, 1);
     animation->Add(HURTING * H_RIGHT, hurtRight, 1);
     animation->Add(HURTING * H_LEFT, hurtLeft, 1);
-    animation->Add(DYING * H_RIGHT, dieRight, 3);
-    animation->Add(DYING * H_LEFT, dieLeft, 3);
+    animation->Add(DYING * H_RIGHT, dyingRight, 2);
+    animation->Add(DYING * H_LEFT, dyingLeft, 2);
+    animation->Add(DEAD * H_RIGHT, deadRight, 1);
+    animation->Add(DEAD * H_LEFT, deadLeft, 1);
 
     light = new Sprite("Resources/Light.png");
 
@@ -133,6 +137,14 @@ void Player::AddMana()
         mana++;
 }
 
+void Player::Knockback()
+{
+    if (attackDirection == DOWN)
+        knockbackUpCd.Restart();
+    else
+        knockbackCd.Restart();
+}
+
 void Player::AddCooldowns(float dt)
 {
     attackCd.Add(dt);
@@ -143,33 +155,35 @@ void Player::AddCooldowns(float dt)
     dashAnimCd.Add(dt);
     hurtCd.Add(dt);
     hurtAnimCd.Add(dt);
-    knockbackCd.Add(gameTime);
-    knockbackUpCd.Add(gameTime);
+    knockbackCd.Add(dt);
+    knockbackUpCd.Add(dt);
+    dyingCd.Add(dt);
+    deadCd.Add(dt);
 }
 
-void Player::Knockback()
+void Player::Respawn()
 {
-    if (attackDirection == DOWN)
-        knockbackUpCd.Restart();
-    else
-        knockbackCd.Restart();
-}
+    xSpeed = 0.0f;
+    ySpeed = 0.0f;
 
-void Player::UpdateAnimation()
-{
-    uint oldAnimState = animation->Sequence();
+    // state = RESPAWNING;
+    state = STILL;
+    direction = H_RIGHT;
 
-    if (state == ATTACKING)
-        animation->Select(ATTACKING * direction * attackDirection);
-    else
-        animation->Select(state * direction);
+    FullHP();
 
-    if (oldAnimState != animation->Sequence())
-    {
-        animation->Restart();
-    }
-
-    animation->NextFrame();
+    attackCd.Restart();
+    attackAnimCd.Restart();
+    fireballCd.Restart();
+    fireballAnimCd.Restart();
+    dashCd.Restart();
+    dashAnimCd.Restart();
+    hurtCd.Restart();
+    hurtAnimCd.Restart();
+    knockbackCd.Restart();
+    knockbackUpCd.Restart();
+    dyingCd.Restart();
+    deadCd.Restart();
 }
 
 void Player::TakeKnockback()
@@ -208,6 +222,93 @@ void Player::TakeKnockback()
     }
 
     Translate(dx * gameTime, dy * gameTime);
+}
+
+void Player::UpdateAnimation()
+{
+    uint oldAnimState = animation->Sequence();
+
+    if (state == ATTACKING)
+        animation->Select(ATTACKING * direction * attackDirection);
+    else
+        animation->Select(state * direction);
+
+    if (oldAnimState != animation->Sequence())
+    {
+        animation->Restart();
+    }
+
+    switch (state)
+    {
+    case FALLING: {
+        if (ySpeed >= 224.0f)
+        {
+            animation->Restart();
+            animation->Frame(1);
+        }
+        else
+        {
+            animation->Restart();
+            animation->Frame(0);
+        }
+        break;
+    }
+    case ATTACKING: {
+        if (attackAnimCd.Over(0.075f))
+        {
+            animation->Restart();
+            animation->Frame(1);
+        }
+        else
+        {
+            animation->Restart();
+            animation->Frame(0);
+        }
+        break;
+    }
+    case DASHING: {
+        if (dashAnimCd.Over(0.225f))
+        {
+            animation->Restart();
+            animation->Frame(0);
+        }
+        else if (dashAnimCd.Over(0.025f))
+        {
+            animation->Restart();
+            animation->Frame(1);
+        }
+        else
+        {
+            animation->Restart();
+            animation->Frame(0);
+        }
+        break;
+    }
+    case DYING: {
+        if (dyingCd.Over(0.25f))
+        {
+            animation->Restart();
+            animation->Frame(1);
+        }
+        else
+        {
+            animation->Restart();
+            animation->Frame(0);
+        }
+
+        break;
+    }
+    case DEAD: {
+        break;
+    }
+    case RESPAWNING: {
+        break;
+    }
+    default: {
+        animation->NextFrame();
+        break;
+    }
+    }
 }
 
 void Player::Update()
@@ -445,17 +546,6 @@ update : {
                 ySpeed = gravity * 2.0f;
 
             Translate(xSpeed * gameTime, ySpeed * gameTime);
-
-            if (ySpeed >= 224.0f)
-            {
-                animation->Restart();
-                animation->Frame(1);
-            }
-            else
-            {
-                animation->Restart();
-                animation->Frame(0);
-            }
         }
 
         nextState = FALLING;
@@ -472,21 +562,6 @@ update : {
             xSpeed = dashSpeed * (direction == H_LEFT ? -1.0f : 1.0f);
             Translate(xSpeed * gameTime, 0.0f);
             nextState = DASHING;
-            if (dashAnimCd.Over(0.225f))
-            {
-                animation->Restart();
-                animation->Frame(0);
-            }
-            else if (dashAnimCd.Over(0.025f))
-            {
-                animation->Restart();
-                animation->Frame(1);
-            }
-            else
-            {
-                animation->Restart();
-                animation->Frame(0);
-            }
         }
         break;
     }
@@ -502,19 +577,7 @@ update : {
         if (attackAnimCd.Up())
             nextState = FALLING;
         else
-        {
             nextState = ATTACKING;
-            if (attackAnimCd.Over(0.075f))
-            {
-                animation->Restart();
-                animation->Frame(1);
-            }
-            else
-            {
-                animation->Restart();
-                animation->Frame(0);
-            }
-        }
         break;
     }
     case CASTING: {
@@ -539,7 +602,10 @@ update : {
             ySpeed = 0.0f;
 
             if (hp <= 0)
+            {
                 nextState = DYING;
+                dyingCd.Restart();
+            }
             else
                 nextState = FALLING;
         }
@@ -548,8 +614,32 @@ update : {
             nextState = HURTING;
             Translate(xSpeed * gameTime, ySpeed * gameTime);
         }
+        break;
     }
     case DYING: {
+        ySpeed += gravity * gameTime;
+        Translate(0.0f, ySpeed * gameTime);
+
+        if (dyingCd.Up())
+        {
+            nextState = DEAD;
+            deadCd.Restart();
+        }
+        else
+            nextState = DYING;
+
+        break;
+    }
+    case DEAD: {
+        ySpeed += gravity * gameTime;
+        Translate(0.0f, ySpeed * gameTime);
+        if (deadCd.Up())
+        { // nextState = RESPAWNING;
+            nextState = STILL;
+            Respawn();
+        }
+        else
+            nextState = DEAD;
         break;
     }
     case RESPAWNING: {
@@ -654,22 +744,29 @@ void Player::OnCollision(Object *other)
         break;
     }
     case ENEMY: {
-        Entity *enemy = (Entity *)other;
-        if (enemy->Alive())
-            TakeDamage(1, enemy->X() > x ? LEFT : RIGHT);
+        if (Alive())
+        {
+            Entity *enemy = (Entity *)other;
+            if (enemy->Alive())
+                TakeDamage(1, enemy->X() > x ? LEFT : RIGHT);
+        }
         break;
     }
     case ENEMY_ATTACK: {
-        TakeDamage(1, other->X() > x ? LEFT : RIGHT);
+        if (Alive())
+            TakeDamage(1, other->X() > x ? LEFT : RIGHT);
         break;
     }
     case SPIKE: {
-        Spike *spike = (Spike *)other;
-        Rect *wall = (Rect *)spike->BBox();
+        if (Alive())
+        {
+            Spike *spike = (Spike *)other;
+            Rect *wall = (Rect *)spike->BBox();
 
-        if (self->Bottom() != wall->Top() && self->Top() != wall->Bottom() && self->Right() != wall->Left() &&
-            self->Left() != wall->Right())
-            TakeDamage(1, ((Spike *)other)->Dir());
+            if (self->Bottom() != wall->Top() && self->Top() != wall->Bottom() && self->Right() != wall->Left() &&
+                self->Left() != wall->Right())
+                TakeDamage(1, ((Spike *)other)->Dir());
+        }
         break;
     }
     }

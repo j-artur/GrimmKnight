@@ -18,7 +18,14 @@ Spike::Spike(int iX, int iY, int iWidth, int iHeight, Direction dir)
     absX = (x1 + x2) / 2.0f;
     absY = (y1 + y2) / 2.0f;
 
-    BBox(new Rect(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f));
+    if (dir == UP)
+        BBox(new Rect(-width / 2.0f, -height / 2.0f + 12.0f, width / 2.0f, height / 2.0f));
+    else if (dir == DOWN)
+        BBox(new Rect(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f - 12.0f));
+    else if (dir == LEFT)
+        BBox(new Rect(-width / 2.0f + 12.0f, -height / 2.0f, width / 2.0f, height / 2.0f));
+    else if (dir == RIGHT)
+        BBox(new Rect(-width / 2.0f, -height / 2.0f, width / 2.0f - 12.0f, height / 2.0f));
 
     MoveTo(absX, absY);
 }

@@ -19,7 +19,8 @@ enum PlayerState
     DASHING = 64,
     HURTING = 128,
     DYING = 256,
-    RESPAWNING = 512,
+    DEAD = 512,
+    RESPAWNING = 1024,
 };
 
 class Player : public Entity
@@ -36,11 +37,12 @@ class Player : public Entity
 
     Cooldown attackCd{0.5f};
     Cooldown attackAnimCd{0.2f};
-
-    Cooldown hurtCd{0.9f};
+    Cooldown hurtCd{1.0f};
     Cooldown hurtAnimCd{0.2f};
     Cooldown knockbackCd{0.15f};
-    Cooldown knockbackUpCd{0.2f};
+    Cooldown knockbackUpCd{0.25f};
+    Cooldown dyingCd{0.5f};
+    Cooldown deadCd{1.5f};
 
     bool jumpKeyCtrl = true;
     bool attackKeyCtrl = true;
@@ -102,6 +104,7 @@ class Player : public Entity
 
     void FullHP();
     void FullMana();
+    void Respawn();
 
     void Update();
     void Draw();
