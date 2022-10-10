@@ -1,5 +1,6 @@
 
 #include "TP2.h"
+#include "Button.h"
 #include "Level0.h"
 #include "Level1.h"
 #include "Util.h"
@@ -16,6 +17,8 @@ bool TP2::paused = false;
 
 bool TP2::transitioning = false;
 Cooldown TP2::levelTransition{2.0f};
+LevelId TP2::currentLevel = TITLESCREEN;
+Scene *TP2::pausedScene = nullptr;
 
 void TP2::Init()
 {
@@ -38,6 +41,17 @@ void TP2::Init()
 
     audio->Add(ENEMY_DAMAGE, "Resources/Audio/enemy_damage.wav");
     audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav");
+
+    pausedScene = new Scene();
+    pausedScene->Add(cursor, MOVING);
+
+    Button *resume = new Button(new Sprite("Resources/ButtonResume.png"), [&]() { paused = false; });
+    resume->MoveTo(640.0f, 64.0f);
+    pausedScene->Add(resume, STATIC);
+
+    Button *quit = new Button(new Sprite("Resources/ButtonQuit.png"), []() { Engine::window->Close(); });
+    quit->MoveTo(640.0f, 704.0f);
+    pausedScene->Add(quit, STATIC);
 
     level = new TitleScreen();
     level->Init();
@@ -68,7 +82,7 @@ void TP2::Update()
     if (window->KeyUp('B'))
         bBoxKeyCtrl = false;
 
-    if (window->KeyDown(VK_ESCAPE) && !pauseKeyCtrl)
+    if (window->KeyDown(VK_ESCAPE) && !pauseKeyCtrl && currentLevel != TITLESCREEN && currentLevel != ENDSCREEN)
     {
         pauseKeyCtrl = true;
         paused = !paused;
@@ -76,7 +90,12 @@ void TP2::Update()
     if (window->KeyUp(VK_ESCAPE))
         pauseKeyCtrl = false;
 
-    if (!paused)
+    if (paused)
+    {
+        pausedScene->Update();
+        pausedScene->CollisionDetection();
+    }
+    else
     {
         level->Update();
         hud->Update();
@@ -90,10 +109,13 @@ void TP2::Draw()
     if (viewBBox && scene != nullptr)
         scene->DrawBBox();
 
-    if (paused)
-        pauseScreen->Draw(window->CenterX(), window->CenterY(), LAYER_PAUSE_SCREEN);
-
     hud->Draw();
+
+    if (paused)
+    {
+        pauseScreen->Draw(window->CenterX(), window->CenterY(), LAYER_PAUSE_SCREEN);
+        pausedScene->Draw();
+    }
 
     if (transitioning)
     {
@@ -131,7 +153,7 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     engine->window->Title("TP2");
     engine->window->Icon(IDI_ICON);
     engine->window->Cursor(IDC_CURSOR);
-    // engine->window->HideCursor(true);
+    engine->window->HideCursor(true);
 
     int status = engine->Start(new TP2());
 

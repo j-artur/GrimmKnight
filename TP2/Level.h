@@ -11,6 +11,7 @@ enum LevelId
     LEVEL2,
     LEVEL3,
     LEVEL4,
+    ENDSCREEN,
 };
 
 class Level : public Game
