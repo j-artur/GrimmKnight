@@ -27,6 +27,8 @@ class TP2 : public Game
     static Cooldown levelTransition;
 
   public:
+    static LevelId currentLevel;
+    static Scene *pausedScene;
     static Player *player;
     static Audio *audio;
     static Scene *scene;
@@ -45,13 +47,14 @@ class TP2 : public Game
     {
         if (level != nullptr)
         {
-            LevelId number = level->Id();
+            LevelId id = level->Id();
             level->Finalize();
             delete level;
             scene = nullptr;
             level = new T();
             level->Init();
-            level->EnterFrom(number);
+            level->EnterFrom(id);
+            currentLevel = level->Id();
         }
     }
 };

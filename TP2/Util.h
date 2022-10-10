@@ -107,5 +107,6 @@ const float LAYER_TUTORIAL = 0.35f;
 const float LAYER_TITLESCREEN = 0.30f;
 const float LAYER_PAUSE_SCREEN = 0.25f;
 const float LAYER_BUTTON = 0.20f;
+const float LAYER_CURSOR = 0.15f;
 
 #endif
