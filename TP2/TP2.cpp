@@ -3,6 +3,7 @@
 #include "Button.h"
 #include "Level0.h"
 #include "Level1.h"
+#include "Level2.h"
 #include "Util.h"
 
 #define M_PI 3.141592653589793238462643383279502884L
@@ -75,17 +76,19 @@ void TP2::Update()
 {
     if (window->KeyDown(VK_F1))
         NextLevel<Level0>();
-    if (window->KeyDown(VK_F2))
+    else if (window->KeyDown(VK_F2))
         NextLevel<Level1>();
-    if (window->KeyDown(VK_F6))
+    else if (window->KeyDown(VK_F3))
+        NextLevel<Level2>();
+    else if (window->KeyDown(VK_F6))
         NextLevel<TitleScreen>();
-    if (window->KeyDown(VK_F7))
+    else if (window->KeyDown(VK_F7))
         player->LearnFireball();
-    if (window->KeyDown(VK_F8))
+    else if (window->KeyDown(VK_F8))
         player->LearnDash();
-    if (window->KeyDown('H'))
+    else if (window->KeyDown('H'))
         player->FullHP();
-    if (window->KeyDown('M'))
+    else if (window->KeyDown('M'))
         player->FullMana();
 
     if (window->KeyDown('B') && !bBoxKeyCtrl)

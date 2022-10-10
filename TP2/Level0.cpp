@@ -299,6 +299,12 @@ void Level0::Draw()
 void Level0::Finalize()
 {
     delete background;
+    delete foreground;
+    delete tiktikTileSet;
+    delete wanderingTileSet;
+    delete tutorialMove;
+    delete tutorialJump;
+    delete tutorialAttack;
     scene->Remove(TP2::player, MOVING);
     delete scene;
 }

@@ -1,11 +1,11 @@
 #include "Level1.h"
 #include "EntityBlock.h"
 #include "Level0.h"
+#include "Level2.h"
 #include "LevelTransition.h"
 #include "TP2.h"
 #include "Wall.h"
 #include "WanderingHusk.h"
-// #include "Level2.h"
 // #include "Level3.h"
 
 void Level1::Init()
@@ -36,7 +36,7 @@ void Level1::Init()
     scene->Add(level0Transition, STATIC);
 
     level2Transition = new LevelTransition(RIGHT);
-    level2Transition->MoveTo(2560.0f, 1408.0f);
+    level2Transition->MoveTo(1280.0f, 1408.0f);
     scene->Add(level2Transition, STATIC);
 
     level3Transition = new LevelTransition(LEFT);
@@ -86,17 +86,17 @@ void Level1::Update()
     {
         TP2::NextLevel<Level0>();
     }
-    // else if (level2Transition->Transitioning())
-    // {
-    //     TP2::player->AddCooldowns(gameTime);
-    //     TP2::player->Translate(LevelTransition::DISTANCE * gameTime, 0.0f);
-    //     TP2::player->UpdateAnimation();
-    //     level2Transition->Update();
-    // }
-    // else if (level2Transition->Done())
-    // {
-    //     TP2::NextLevel<Level2>();
-    // }
+    else if (level2Transition->Transitioning())
+    {
+        TP2::player->AddCooldowns(gameTime);
+        TP2::player->Translate(LevelTransition::DISTANCE * gameTime, 0.0f);
+        TP2::player->UpdateAnimation();
+        level2Transition->Update();
+    }
+    else if (level2Transition->Done())
+    {
+        TP2::NextLevel<Level2>();
+    }
     // else if (level3Transition->Transitioning())
     // {
     //     TP2::player->AddCooldowns(gameTime);
@@ -140,17 +140,18 @@ void Level1::Draw()
 void Level1::Finalize()
 {
     delete background;
+    delete foreground;
+    delete wanderingTileSet;
     scene->Remove(TP2::player, MOVING);
     delete scene;
 }
 
 void Level1::EnterFrom(LevelId id)
 {
-    enteringFrom = id;
-
     switch (id)
     {
     case LEVEL2:
+        enteringFrom = LEVEL2;
         TP2::player->MoveTo(1280.0f, 1442.0f);
         scene->Apply([&](Object *obj) { obj->Translate(0.0f, float(-window->Height())); });
         TP2::player->State(WALKING);
@@ -158,6 +159,7 @@ void Level1::EnterFrom(LevelId id)
         enteringCd.Restart();
         break;
     case LEVEL3:
+        enteringFrom = LEVEL3;
         TP2::player->MoveTo(0.0f, 706.0f);
         TP2::player->State(WALKING);
         TP2::player->Dir(H_RIGHT);
@@ -165,6 +167,7 @@ void Level1::EnterFrom(LevelId id)
         break;
     case LEVEL0:
     default:
+        enteringFrom = LEVEL0;
         TP2::player->MoveTo(0.0f, 1442.0f);
         scene->Apply([&](Object *obj) { obj->Translate(0.0f, float(-window->Height())); });
         TP2::player->State(WALKING);
