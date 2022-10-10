@@ -159,6 +159,7 @@ void Player::AddCooldowns(float dt)
     knockbackUpCd.Add(dt);
     dyingCd.Add(dt);
     deadCd.Add(dt);
+    healCd.Add(dt);
 }
 
 void Player::Respawn()
@@ -350,9 +351,9 @@ input : {
             }
         }
 
+        // JUMP
         if (window->KeyDown('Z'))
         {
-            // achei feio
             if (jumpKeyCtrl && state != FALLING)
                 TP2::audio->Play(PLAYER_JUMP);
 
@@ -445,6 +446,22 @@ input : {
             }
             if (window->KeyUp('C'))
                 dashKeyCtrl = true;
+        }
+
+        // HEAL
+        if (window->KeyDown('T') && healKeyCtrl && HasMana() && healCd.Up())
+        {
+            healCd.Restart();
+
+            UseMana();
+
+            hp += 1;
+
+            healKeyCtrl = false;
+        }
+        if (window->KeyUp('T'))
+        {
+            healKeyCtrl = true;
         }
     }
     else if (state == ATTACKING)

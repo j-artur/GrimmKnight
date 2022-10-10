@@ -46,6 +46,7 @@ class Player : public Entity
 
     bool jumpKeyCtrl = true;
     bool attackKeyCtrl = true;
+    bool healKeyCtrl = true;
     bool walkingCtrl = true;
     bool landingCtrl = true;
 
@@ -54,6 +55,9 @@ class Player : public Entity
     Cooldown fireballCd{0.4f};
     Cooldown fireballAnimCd{0.2f};
     bool fireballKeyCtrl = true;
+
+
+    Cooldown healCd{ 1.0f };
 
     bool dash = false;
     Cooldown dashCd{0.9f};
