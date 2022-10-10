@@ -20,14 +20,14 @@ Tiktik::Tiktik(TileSet *tileSet, int iX, int iY)
     uint seqDeadRight[1] = {3};
     uint seqDeadLeft[1] = {7};
 
-    animation->Add(TIKTIK_WALKING * RIGHT, seqWalkRight, 2);
-    animation->Add(TIKTIK_WALKING * LEFT, seqWalkLeft, 2);
-    animation->Add(TIKTIK_HURTING * RIGHT, seqHurtRight, 1);
-    animation->Add(TIKTIK_HURTING * LEFT, seqHurtLeft, 1);
-    animation->Add(TIKTIK_DEAD * RIGHT, seqDeadRight, 1);
-    animation->Add(TIKTIK_DEAD * LEFT, seqDeadLeft, 1);
+    animation->Add(TIKTIK_WALKING * H_RIGHT, seqWalkRight, 2);
+    animation->Add(TIKTIK_WALKING * H_LEFT, seqWalkLeft, 2);
+    animation->Add(TIKTIK_HURTING * H_RIGHT, seqHurtRight, 1);
+    animation->Add(TIKTIK_HURTING * H_LEFT, seqHurtLeft, 1);
+    animation->Add(TIKTIK_DEAD * H_RIGHT, seqDeadRight, 1);
+    animation->Add(TIKTIK_DEAD * H_LEFT, seqDeadLeft, 1);
 
-    animation->Select(TIKTIK_WALKING * RIGHT);
+    animation->Select(TIKTIK_WALKING * H_RIGHT);
 
     BBox(new Rect(-14.0f, -4.0f, 14.0f, 16.0f));
 
@@ -39,26 +39,26 @@ Tiktik::~Tiktik()
     delete animation;
 }
 
-bool Tiktik::TakeDamage(uint damage, AttackDirection atkDir)
+bool Tiktik::TakeDamage(uint damage, Direction atkDir)
 {
     if (state == TIKTIK_DEAD || state == TIKTIK_HURTING)
         return false;
 
-    if (atkDir == ATK_LEFT)
+    if (atkDir == LEFT)
     {
         xSpeed = -KNOCKBACK_SPEED;
         ySpeed = -KNOCKBACK_SPEED;
-        direction = RIGHT;
+        direction = H_RIGHT;
     }
-    else if (atkDir == ATK_RIGHT)
+    else if (atkDir == RIGHT)
     {
         xSpeed = KNOCKBACK_SPEED;
         ySpeed = -KNOCKBACK_SPEED;
-        direction = LEFT;
+        direction = H_LEFT;
     }
-    else if (atkDir == ATK_UP)
+    else if (atkDir == UP)
         ySpeed = KNOCKBACK_UP_SPEED;
-    else if (atkDir == ATK_DOWN)
+    else if (atkDir == DOWN)
         ySpeed = KNOCKBACK_SPEED;
 
     hp -= damage;
@@ -91,7 +91,7 @@ void Tiktik::Update()
             TP2::scene->Delete();
         break;
     case TIKTIK_WALKING:
-        if (direction == LEFT)
+        if (direction == H_LEFT)
             xSpeed = -walkSpeed;
         else
             xSpeed = walkSpeed;
@@ -152,7 +152,7 @@ void Tiktik::OnCollision(Object *other)
         if (self->Bottom() != wallBBox->Top() && self->Top() != wallBBox->Bottom())
         {
             MoveTo(other->X() - self->right, y);
-            direction = LEFT;
+            direction = H_LEFT;
         }
         break;
     }
@@ -163,7 +163,7 @@ void Tiktik::OnCollision(Object *other)
         {
 
             MoveTo(other->X() - self->left, y);
-            direction = RIGHT;
+            direction = H_RIGHT;
         }
         break;
     }

@@ -31,8 +31,8 @@ class Player : public Entity
     TileSet *attackTileSet;
 
     PlayerState state = FALLING;
-    Direction direction = RIGHT;
-    AttackDirection attackDirection = ATK_RIGHT;
+    HDirection direction = H_RIGHT;
+    Direction attackDirection = RIGHT;
 
     Cooldown attackCd{0.5f};
     Cooldown attackAnimCd{0.2f};
@@ -89,16 +89,19 @@ class Player : public Entity
     bool HasDash();
     void LearnDash();
 
-    bool TakeDamage(uint damage, AttackDirection dir);
+    bool TakeDamage(uint damage, Direction dir);
     void AddMana();
     void AddCooldowns(float dt);
     void RefreshCooldowns();
     void Knockback();
 
     void State(PlayerState state);
-    void Dir(Direction dir);
-    void AtkDir(AttackDirection dir);
+    void Dir(HDirection dir);
+    void AtkDir(Direction dir);
     void UpdateAnimation();
+
+    void FullHP();
+    void FullMana();
 
     void Update();
     void Draw();
@@ -140,14 +143,24 @@ inline void Player::State(PlayerState state)
     this->state = state;
 }
 
-inline void Player::Dir(Direction dir)
+inline void Player::Dir(HDirection dir)
 {
     direction = dir;
 }
 
-inline void Player::AtkDir(AttackDirection dir)
+inline void Player::AtkDir(Direction dir)
 {
     attackDirection = dir;
+}
+
+inline void Player::FullHP()
+{
+    hp = 6;
+}
+
+inline void Player::FullMana()
+{
+    mana = 9;
 }
 
 #endif

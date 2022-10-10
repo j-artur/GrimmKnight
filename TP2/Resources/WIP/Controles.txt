@@ -20,6 +20,5 @@ F5 - Level 4
 F6 - Title Screen
 F7 - Learn Fireball
 F8 - Learn Dash
-
-
-
+ H - Full HP
+ M - Full Mana

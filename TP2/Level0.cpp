@@ -26,7 +26,7 @@ void Level0::Init()
     screenTransition->MoveTo((float)window->Width(), 256.0f);
     scene->Add(screenTransition, STATIC);
 
-    level1Transition = new LevelTransition(ATK_RIGHT);
+    level1Transition = new LevelTransition(RIGHT);
     level1Transition->MoveTo(2560.0f, 640.0f);
     scene->Add(level1Transition, STATIC);
 
@@ -66,10 +66,10 @@ void Level0::Init()
     AddWalls(scene, 78, 2, 2, 16);
     AddWalls(scene, 70, 12, 8, 2);
 
-    scene->Add(new Spike(14, 21, 8, 1, ATK_UP), STATIC);
-    scene->Add(new Spike(28, 19, 6, 1, ATK_UP), STATIC);
-    scene->Add(new Spike(50, 16, 4, 1, ATK_UP), STATIC);
-    scene->Add(new Spike(50, 10, 4, 1, ATK_DOWN), STATIC);
+    scene->Add(new Spike(14, 21, 8, 1, UP), STATIC);
+    scene->Add(new Spike(28, 19, 6, 1, UP), STATIC);
+    scene->Add(new Spike(50, 16, 4, 1, UP), STATIC);
+    scene->Add(new Spike(50, 10, 4, 1, DOWN), STATIC);
 
     scene->Add(new EntityBlockLeft(11, 2, 6), STATIC);
     scene->Add(new EntityBlockRight(20, 2, 6), STATIC);
@@ -136,7 +136,7 @@ void Level0::EnterFrom(LevelId id)
         scene->Apply([&](Object *obj) { obj->Translate(float(-window->Width()), 0.0f); });
         TP2::player->MoveTo(1280.0f, 674.0f);
         TP2::player->State(WALKING);
-        TP2::player->Dir(LEFT);
+        TP2::player->Dir(H_LEFT);
         enteringCd.Restart();
         break;
     case TITLESCREEN:

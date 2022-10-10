@@ -16,7 +16,7 @@ class Shockwave : public Object
     float speed = 800.0f;
 
   public:
-    Shockwave(Direction direction, TileSet *tileset);
+    Shockwave(HDirection direction, TileSet *tileset);
     ~Shockwave();
 
     void Update();

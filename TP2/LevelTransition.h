@@ -9,7 +9,7 @@
 class LevelTransition : public Object
 {
   private:
-    AttackDirection dir;
+    Direction dir;
     float timer;
     bool transitioning = false;
     bool done = false;
@@ -18,7 +18,7 @@ class LevelTransition : public Object
     static const float DURATION;
     static const float DISTANCE;
 
-    LevelTransition(AttackDirection dir);
+    LevelTransition(Direction dir);
 
     bool Transitioning();
     bool Done();

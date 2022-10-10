@@ -14,14 +14,14 @@ class Attack : public Object
   private:
     Animation *anim;
     Player *player;
-    AttackDirection direction;
+    Direction direction;
     std::vector<Object *> objectsHit;
 
   public:
-    Attack(TileSet *tileSet, Player *player, Direction dir, AttackDirection atkDir);
+    Attack(TileSet *tileSet, Player *player, HDirection dir, Direction atkDir);
     ~Attack();
 
-    AttackDirection Dir();
+    Direction Dir();
 
     void Update();
     void Draw();
@@ -33,7 +33,7 @@ inline void Attack::Draw()
     anim->Draw(round(x), round(y), LAYER_ATTACK);
 }
 
-inline AttackDirection Attack::Dir()
+inline Direction Attack::Dir()
 {
     return direction;
 }

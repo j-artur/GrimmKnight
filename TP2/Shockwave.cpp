@@ -2,7 +2,7 @@
 #include "TP2.h"
 #include "Util.h"
 
-Shockwave::Shockwave(Direction direction, TileSet* tileset)
+Shockwave::Shockwave(HDirection direction, TileSet *tileset)
 {
     type = ENEMY_ATTACK;
 
@@ -14,7 +14,7 @@ Shockwave::Shockwave(Direction direction, TileSet* tileset)
 
     speed = 800.0f;
 
-    if (direction == LEFT)
+    if (direction == H_LEFT)
     {
         speed = -speed;
     }
@@ -41,7 +41,7 @@ void Shockwave::Update()
 
 // ---------------------------------------------------------------------------------
 
-void Shockwave::OnCollision(Object* obj)
+void Shockwave::OnCollision(Object *obj)
 {
     if (obj->Type() == WALL_LEFT || obj->Type() == WALL_RIGHT)
     {

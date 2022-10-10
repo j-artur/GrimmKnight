@@ -3,7 +3,7 @@
 #include "TP2.h"
 #include "Util.h"
 
-Attack::Attack(TileSet *tileSet, Player *player, Direction dir, AttackDirection atkDir)
+Attack::Attack(TileSet *tileSet, Player *player, HDirection dir, Direction atkDir)
 {
     type = ATTACK;
 
@@ -16,14 +16,14 @@ Attack::Attack(TileSet *tileSet, Player *player, Direction dir, AttackDirection 
     uint seqUpLeft[2] = {8, 9};
     uint seqUpRight[2] = {10, 11};
 
-    anim->Add(ATK_LEFT * LEFT, seqLeft, 2);
-    anim->Add(ATK_LEFT * RIGHT, seqLeft, 2);
-    anim->Add(ATK_RIGHT * LEFT, seqRight, 2);
-    anim->Add(ATK_RIGHT * RIGHT, seqRight, 2);
-    anim->Add(ATK_DOWN * LEFT, seqDownLeft, 2);
-    anim->Add(ATK_DOWN * RIGHT, seqDownRight, 2);
-    anim->Add(ATK_UP * LEFT, seqUpLeft, 2);
-    anim->Add(ATK_UP * RIGHT, seqUpRight, 2);
+    anim->Add(LEFT * H_LEFT, seqLeft, 2);
+    anim->Add(LEFT * H_RIGHT, seqLeft, 2);
+    anim->Add(RIGHT * H_LEFT, seqRight, 2);
+    anim->Add(RIGHT * H_RIGHT, seqRight, 2);
+    anim->Add(DOWN * H_LEFT, seqDownLeft, 2);
+    anim->Add(DOWN * H_RIGHT, seqDownRight, 2);
+    anim->Add(UP * H_LEFT, seqUpLeft, 2);
+    anim->Add(UP * H_RIGHT, seqUpRight, 2);
 
     anim->Select(dir * atkDir);
 
@@ -32,16 +32,16 @@ Attack::Attack(TileSet *tileSet, Player *player, Direction dir, AttackDirection 
 
     switch (atkDir)
     {
-    case ATK_LEFT:
+    case LEFT:
         BBox(new Rect(-60.0f, -40.0f, 40.0f, 40.0f));
         break;
-    case ATK_RIGHT:
+    case RIGHT:
         BBox(new Rect(-40.0f, -40.0f, 60.0f, 40.0f));
         break;
-    case ATK_UP:
+    case UP:
         BBox(new Rect(-40.0f, -60.0f, 40.0f, 50.0f));
         break;
-    case ATK_DOWN:
+    case DOWN:
         BBox(new Rect(-40.0f, -50.0f, 40.0f, 60.0f));
         break;
     }
@@ -60,16 +60,16 @@ void Attack::Update()
 {
     switch (direction)
     {
-    case ATK_UP:
+    case UP:
         MoveTo(player->X(), player->Y() - 48.0f);
         break;
-    case ATK_DOWN:
+    case DOWN:
         MoveTo(player->X(), player->Y() + 48.0f);
         break;
-    case ATK_LEFT:
+    case LEFT:
         MoveTo(player->X() - 32.0f, player->Y());
         break;
-    case ATK_RIGHT:
+    case RIGHT:
         MoveTo(player->X() + 32.0f, player->Y());
         break;
     }

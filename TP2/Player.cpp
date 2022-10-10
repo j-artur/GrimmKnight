@@ -10,7 +10,7 @@ Player::Player()
 {
     type = PLAYER;
 
-    hp = 5;
+    hp = 6;
 
     tileSet = new TileSet("Resources/Player.png", 100, 68, 8, 48);
     animation = new Animation(tileSet, 0.20f, true);
@@ -40,30 +40,30 @@ Player::Player()
     uint dieRight[3] = {13, 14, 15};
     uint dieLeft[3] = {37, 38, 39};
 
-    animation->Add(STILL * RIGHT, idleRight, 4);
-    animation->Add(STILL * LEFT, idleLeft, 4);
-    animation->Add(WALKING * RIGHT, walkRight, 2);
-    animation->Add(WALKING * LEFT, walkLeft, 2);
-    animation->Add(JUMPING * RIGHT, jumpRight, 1);
-    animation->Add(JUMPING * LEFT, jumpLeft, 1);
-    animation->Add(FALLING * RIGHT, fallRight, 2);
-    animation->Add(FALLING * LEFT, fallLeft, 2);
-    animation->Add(ATTACKING * RIGHT * ATK_RIGHT, attackRight, 2);
-    animation->Add(ATTACKING * RIGHT * ATK_LEFT, attackRight, 2);
-    animation->Add(ATTACKING * LEFT * ATK_LEFT, attackLeft, 2);
-    animation->Add(ATTACKING * LEFT * ATK_RIGHT, attackLeft, 2);
-    animation->Add(ATTACKING * LEFT * ATK_UP, attackUpLeft, 2);
-    animation->Add(ATTACKING * RIGHT * ATK_UP, attackUpRight, 2);
-    animation->Add(ATTACKING * LEFT * ATK_DOWN, attackDownLeft, 2);
-    animation->Add(ATTACKING * RIGHT * ATK_DOWN, attackDownRight, 2);
-    animation->Add(DASHING * RIGHT, dashRight, 2);
-    animation->Add(DASHING * LEFT, dashLeft, 2);
-    animation->Add(CASTING * RIGHT, castRight, 1);
-    animation->Add(CASTING * LEFT, castLeft, 1);
-    animation->Add(HURTING * RIGHT, hurtRight, 1);
-    animation->Add(HURTING * LEFT, hurtLeft, 1);
-    animation->Add(DYING * RIGHT, dieRight, 3);
-    animation->Add(DYING * LEFT, dieLeft, 3);
+    animation->Add(STILL * H_RIGHT, idleRight, 4);
+    animation->Add(STILL * H_LEFT, idleLeft, 4);
+    animation->Add(WALKING * H_RIGHT, walkRight, 2);
+    animation->Add(WALKING * H_LEFT, walkLeft, 2);
+    animation->Add(JUMPING * H_RIGHT, jumpRight, 1);
+    animation->Add(JUMPING * H_LEFT, jumpLeft, 1);
+    animation->Add(FALLING * H_RIGHT, fallRight, 2);
+    animation->Add(FALLING * H_LEFT, fallLeft, 2);
+    animation->Add(ATTACKING * H_RIGHT * RIGHT, attackRight, 2);
+    animation->Add(ATTACKING * H_RIGHT * LEFT, attackRight, 2);
+    animation->Add(ATTACKING * H_LEFT * LEFT, attackLeft, 2);
+    animation->Add(ATTACKING * H_LEFT * RIGHT, attackLeft, 2);
+    animation->Add(ATTACKING * H_LEFT * UP, attackUpLeft, 2);
+    animation->Add(ATTACKING * H_RIGHT * UP, attackUpRight, 2);
+    animation->Add(ATTACKING * H_LEFT * DOWN, attackDownLeft, 2);
+    animation->Add(ATTACKING * H_RIGHT * DOWN, attackDownRight, 2);
+    animation->Add(DASHING * H_RIGHT, dashRight, 2);
+    animation->Add(DASHING * H_LEFT, dashLeft, 2);
+    animation->Add(CASTING * H_RIGHT, castRight, 1);
+    animation->Add(CASTING * H_LEFT, castLeft, 1);
+    animation->Add(HURTING * H_RIGHT, hurtRight, 1);
+    animation->Add(HURTING * H_LEFT, hurtLeft, 1);
+    animation->Add(DYING * H_RIGHT, dieRight, 3);
+    animation->Add(DYING * H_LEFT, dieLeft, 3);
 
     light = new Sprite("Resources/Light.png");
 
@@ -83,7 +83,7 @@ Player::~Player()
     delete light;
 }
 
-bool Player::TakeDamage(uint damage, AttackDirection dir)
+bool Player::TakeDamage(uint damage, Direction dir)
 {
     if (hurtCd.Down())
         return false;
@@ -94,22 +94,22 @@ bool Player::TakeDamage(uint damage, AttackDirection dir)
     hurtCd.Restart();
     hurtAnimCd.Restart();
 
-    if (dir == ATK_RIGHT)
+    if (dir == RIGHT)
     {
-        direction = RIGHT;
+        direction = H_RIGHT;
         xSpeed = KNOCKBACK_SPEED;
         ySpeed = KNOCKBACK_UP_SPEED;
     }
-    else if (dir == ATK_LEFT)
+    else if (dir == LEFT)
     {
-        direction = LEFT;
+        direction = H_LEFT;
         xSpeed = -KNOCKBACK_SPEED;
         ySpeed = KNOCKBACK_UP_SPEED;
     }
     else
     {
-        xSpeed = direction == RIGHT ? KNOCKBACK_SPEED : -KNOCKBACK_SPEED;
-        ySpeed = dir == ATK_UP ? KNOCKBACK_UP_SPEED : -KNOCKBACK_UP_SPEED;
+        xSpeed = direction == H_RIGHT ? KNOCKBACK_SPEED : -KNOCKBACK_SPEED;
+        ySpeed = dir == UP ? KNOCKBACK_UP_SPEED : -KNOCKBACK_UP_SPEED;
     }
 
     TP2::audio->Play(PLAYER_HURT);
@@ -149,7 +149,7 @@ void Player::AddCooldowns(float dt)
 
 void Player::Knockback()
 {
-    if (attackDirection == ATK_DOWN)
+    if (attackDirection == DOWN)
         knockbackUpCd.Restart();
     else
         knockbackCd.Restart();
@@ -177,12 +177,12 @@ void Player::TakeKnockback()
     float dx = xSpeed;
     float dy = ySpeed;
 
-    if (attackDirection == ATK_DOWN)
+    if (attackDirection == DOWN)
     {
         dy = -1.0f * walkingSpeed;
         ySpeed = 0.0f;
     }
-    else if (attackDirection == ATK_UP)
+    else if (attackDirection == UP)
     {
         dy += 0.5f * walkingSpeed + gravity * gameTime;
         ySpeed = 0.75f * walkingSpeed;
@@ -193,16 +193,16 @@ void Player::TakeKnockback()
 
         if (xSpeed == 0.0f)
         {
-            if (attackDirection == ATK_LEFT)
+            if (attackDirection == LEFT)
                 dx = 0.25f * walkingSpeed;
-            else if (attackDirection == ATK_RIGHT)
+            else if (attackDirection == RIGHT)
                 dx = -0.25f * walkingSpeed;
         }
         else
         {
-            if (attackDirection == ATK_LEFT)
+            if (attackDirection == LEFT)
                 dx += 1.25f * walkingSpeed;
-            else if (attackDirection == ATK_RIGHT)
+            else if (attackDirection == RIGHT)
                 dx -= 1.25f * walkingSpeed;
         }
     }
@@ -214,31 +214,31 @@ void Player::Update()
 {
 input : {
     PlayerState nextState = state;
-    Direction nextDirection = direction;
+    HDirection nextDirection = direction;
 
     if (state == STILL || state == WALKING || state == JUMPING || state == FALLING)
     {
         if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_RIGHT))
         {
             xSpeed = 0.0f;
-            if (direction == LEFT)
-                nextDirection = LEFT;
-            else if (direction == RIGHT)
-                nextDirection = RIGHT;
+            if (direction == H_LEFT)
+                nextDirection = H_LEFT;
+            else if (direction == H_RIGHT)
+                nextDirection = H_RIGHT;
         }
         else if (window->KeyDown(VK_LEFT))
         {
             xSpeed = -walkingSpeed;
             if (state == STILL || state == WALKING)
                 nextState = WALKING;
-            nextDirection = LEFT;
+            nextDirection = H_LEFT;
         }
         else if (window->KeyDown(VK_RIGHT))
         {
             xSpeed = walkingSpeed;
             if (state == STILL || state == WALKING)
                 nextState = WALKING;
-            nextDirection = RIGHT;
+            nextDirection = H_RIGHT;
         }
         else
         {
@@ -251,11 +251,9 @@ input : {
 
         if (window->KeyDown('Z'))
         {
-            //achei feio
+            // achei feio
             if (jumpKeyCtrl && state != FALLING)
                 TP2::audio->Play(PLAYER_JUMP);
-
-
 
             if ((state == STILL || state == WALKING) && jumpKeyCtrl)
             {
@@ -289,13 +287,13 @@ input : {
             attackKeyCtrl = false;
 
             if ((state == JUMPING || state == FALLING) && window->KeyDown(VK_DOWN))
-                attackDirection = ATK_DOWN;
+                attackDirection = DOWN;
             else if (window->KeyDown(VK_UP))
-                attackDirection = ATK_UP;
-            else if (direction == LEFT)
-                attackDirection = ATK_LEFT;
+                attackDirection = UP;
+            else if (direction == H_LEFT)
+                attackDirection = LEFT;
             else
-                attackDirection = ATK_RIGHT;
+                attackDirection = RIGHT;
 
             Attack *atk = new Attack(attackTileSet, this, direction, attackDirection);
             TP2::scene->Add(atk, MOVING);
@@ -353,20 +351,20 @@ input : {
         if (window->KeyDown(VK_LEFT) && window->KeyDown(VK_RIGHT))
         {
             xSpeed = 0.0f;
-            if (direction == LEFT)
-                nextDirection = LEFT;
-            else if (direction == RIGHT)
-                nextDirection = RIGHT;
+            if (direction == H_LEFT)
+                nextDirection = H_LEFT;
+            else if (direction == H_RIGHT)
+                nextDirection = H_RIGHT;
         }
         else if (window->KeyDown(VK_LEFT))
         {
             xSpeed = -walkingSpeed;
-            nextDirection = LEFT;
+            nextDirection = H_LEFT;
         }
         else if (window->KeyDown(VK_RIGHT))
         {
             xSpeed = walkingSpeed;
-            nextDirection = RIGHT;
+            nextDirection = H_RIGHT;
         }
         else
         {
@@ -471,7 +469,7 @@ update : {
         }
         else
         {
-            xSpeed = dashSpeed * (direction == LEFT ? -1.0f : 1.0f);
+            xSpeed = dashSpeed * (direction == H_LEFT ? -1.0f : 1.0f);
             Translate(xSpeed * gameTime, 0.0f);
             nextState = DASHING;
             if (dashAnimCd.Over(0.225f))
@@ -527,7 +525,7 @@ update : {
         }
         else
         {
-            if (direction == LEFT)
+            if (direction == H_LEFT)
                 Translate(48.0f * gameTime, ySpeed * gameTime);
             else
                 Translate(-48.0f * gameTime, ySpeed * gameTime);
@@ -658,11 +656,11 @@ void Player::OnCollision(Object *other)
     case ENEMY: {
         Entity *enemy = (Entity *)other;
         if (enemy->Alive())
-            TakeDamage(1, enemy->X() > x ? ATK_LEFT : ATK_RIGHT);
+            TakeDamage(1, enemy->X() > x ? LEFT : RIGHT);
         break;
     }
     case ENEMY_ATTACK: {
-        TakeDamage(1, other->X() > x ? ATK_LEFT : ATK_RIGHT);
+        TakeDamage(1, other->X() > x ? LEFT : RIGHT);
         break;
     }
     case SPIKE: {

@@ -1,7 +1,7 @@
 #include "Spike.h"
 #include "Util.h"
 
-Spike::Spike(int iX, int iY, int iWidth, int iHeight, AttackDirection dir)
+Spike::Spike(int iX, int iY, int iWidth, int iHeight, Direction dir)
 {
     type = SPIKE;
 

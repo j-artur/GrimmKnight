@@ -37,25 +37,25 @@ enum FK_Animation
 
 enum FK_JumpTo
 {
-    J_PLAYER, 
+    J_PLAYER,
     J_MIDDLE,
 };
 
 class FalseKnight : public Entity
 {
   private:
-    TileSet* tileSet;
-    TileSet* shockwaveTileSet;
-    Sprite* barrelSprite;
-    Animation* animation;
+    TileSet *tileSet;
+    TileSet *shockwaveTileSet;
+    Sprite *barrelSprite;
+    Animation *animation;
 
-    mt19937 rng;                        
+    mt19937 rng;
     uniform_int_distribution<int> cd;
     uniform_int_distribution<int> move;
 
     FK_State state = FK_IDLE;
-    Direction direction = LEFT;
-    Mace* mace;
+    HDirection direction = H_LEFT;
+    Mace *mace;
 
     uint armorHealth = 65;
     uint headHealth = 40;
@@ -64,11 +64,10 @@ class FalseKnight : public Entity
 
     Cooldown slamCd{2.0f};
     Cooldown prepSlamCd{1.2f};
-    Cooldown jumpCd{ 2.0f };
-    Cooldown rageCd{ 3.2f };
-    Cooldown attackRageCd{ 0.8f };
-    Cooldown betweenAttacksCd{ 5.0f };
-
+    Cooldown jumpCd{2.0f};
+    Cooldown rageCd{3.2f};
+    Cooldown attackRageCd{0.8f};
+    Cooldown betweenAttacksCd{5.0f};
 
     float directionMult = 1.0f;
     float attackDirection = 1.0f;
@@ -90,7 +89,7 @@ class FalseKnight : public Entity
     FalseKnight();
     ~FalseKnight();
 
-    bool TakeDamage(uint damage, AttackDirection dir);
+    bool TakeDamage(uint damage, Direction dir);
 
     void Update();
     void Draw();

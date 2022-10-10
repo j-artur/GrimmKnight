@@ -10,7 +10,7 @@ class Entity : public Object
     int hp;
 
   public:
-    virtual bool TakeDamage(uint damage, AttackDirection dir) = 0;
+    virtual bool TakeDamage(uint damage, Direction dir) = 0;
 
     int Hp();
     bool Alive();

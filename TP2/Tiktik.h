@@ -18,7 +18,7 @@ class Tiktik : public Entity
   private:
     Animation *animation;
     TiktikState state = TIKTIK_WALKING;
-    Direction direction = RIGHT;
+    HDirection direction = H_RIGHT;
 
     Cooldown hurtCd{0.3f};
     Cooldown dieCd{2.0f};
@@ -32,7 +32,7 @@ class Tiktik : public Entity
     Tiktik(TileSet *tileSet, int x, int y);
     ~Tiktik();
 
-    bool TakeDamage(uint damage, AttackDirection dir);
+    bool TakeDamage(uint damage, Direction dir);
 
     void Update();
     void Draw();

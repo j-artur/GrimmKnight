@@ -9,18 +9,18 @@ class Spike : public Object
   private:
     float absX;
     float absY;
-    AttackDirection dir;
+    Direction dir;
 
   public:
-    Spike(int x, int y, int width, int height, AttackDirection dir);
+    Spike(int x, int y, int width, int height, Direction dir);
 
-    AttackDirection Dir();
+    Direction Dir();
 
     void Update(){};
     void Draw(){};
 };
 
-inline AttackDirection Spike::Dir()
+inline Direction Spike::Dir()
 {
     return dir;
 }

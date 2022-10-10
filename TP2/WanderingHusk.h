@@ -1,11 +1,11 @@
 #ifndef _WANDERING_HUSK_H_
 #define _WANDERING_HUSK_H_
 
+#include "ActionArea.h"
 #include "Animation.h"
 #include "Cooldown.h"
 #include "Entity.h"
 #include "Util.h"
-#include "ActionArea.h"
 
 enum WH_State
 {
@@ -18,17 +18,17 @@ enum WH_State
 
 class WanderingHusk : public Entity
 {
-private:
-    Animation* animation;
+  private:
+    Animation *animation;
     WH_State state = WH_WALKING;
-    Direction direction = RIGHT;
+    HDirection direction = H_RIGHT;
 
-    Cooldown hurtCd{ 0.3f };
-    Cooldown chargeRunCd{ 1.0f };
-    Cooldown runCd{ 3.0f };
-    Cooldown dieCd{ 2.0f };
+    Cooldown hurtCd{0.3f};
+    Cooldown chargeRunCd{1.0f};
+    Cooldown runCd{3.0f};
+    Cooldown dieCd{2.0f};
 
-    ActionArea* actionArea;
+    ActionArea *actionArea;
 
     bool playerInside = false;
 
@@ -38,15 +38,15 @@ private:
     float xSpeed = 0.0f;
     float ySpeed = 0.0f;
 
-public:
-    WanderingHusk(TileSet* tileSet, int x, int y);
+  public:
+    WanderingHusk(TileSet *tileSet, int x, int y);
     ~WanderingHusk();
 
-    bool TakeDamage(uint damage, AttackDirection dir);
+    bool TakeDamage(uint damage, Direction dir);
 
     void Update();
     void Draw();
-    void OnCollision(Object* other);
+    void OnCollision(Object *other);
 };
 
 #endif

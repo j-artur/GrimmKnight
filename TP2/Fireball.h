@@ -15,16 +15,16 @@ class Fireball : public Object
     TileSet *ts;
     Animation *anim;
     Cooldown fireballCd{2.0f};
-    Direction direction;
+    HDirection direction;
 
     float speed = 800.0f;
     float distance = 14.0f;
 
   public:
-    Fireball(Player *player, Direction direction);
+    Fireball(Player *player, HDirection direction);
     ~Fireball();
 
-    AttackDirection Dir();
+    Direction Dir();
 
     void Update();
     void Draw();
@@ -36,9 +36,9 @@ inline void Fireball::Draw()
     anim->Draw(round(x), round(y), LAYER_FIREBALL);
 }
 
-inline AttackDirection Fireball::Dir()
+inline Direction Fireball::Dir()
 {
-    return direction == LEFT ? ATK_LEFT : ATK_RIGHT;
+    return direction == H_LEFT ? LEFT : RIGHT;
 }
 
 #endif

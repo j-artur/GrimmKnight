@@ -6,14 +6,11 @@
 class HUD
 {
   private:
-    TileSet *bgTileSet;
+    Sprite *bg;
     TileSet *hpTileSet;
     TileSet *manaTileSet;
-    Animation *bg;
-    Animation *hpBar[5];
+    Animation *hpBar[6];
     Animation *manaBar[3];
-
-    bool manaBarVisible = false;
 
   public:
     HUD();

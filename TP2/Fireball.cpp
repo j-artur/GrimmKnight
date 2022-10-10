@@ -1,7 +1,7 @@
 #include "Fireball.h"
 #include "TP2.h"
 
-Fireball::Fireball(Player *player, Direction direction)
+Fireball::Fireball(Player *player, HDirection direction)
 {
     type = FIREBALL;
 
@@ -13,7 +13,7 @@ Fireball::Fireball(Player *player, Direction direction)
     int width = 32;
     int height = 32;
 
-    if (direction == LEFT)
+    if (direction == H_LEFT)
     {
         speed = -speed;
         distance = -distance;

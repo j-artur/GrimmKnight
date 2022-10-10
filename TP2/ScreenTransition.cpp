@@ -39,19 +39,19 @@ void ScreenTransition::Update()
     if (transitioning)
         switch (dir)
         {
-        case ATK_RIGHT:
+        case RIGHT:
             scene->Apply([&](Object *obj) { obj->Translate(-window->Width() * time, 0.0f); });
             TP2::player->Translate(DISTANCE * time, 0.0f);
             break;
-        case ATK_LEFT:
+        case LEFT:
             scene->Apply([&](Object *obj) { obj->Translate(window->Width() * time, 0.0f); });
             TP2::player->Translate(-DISTANCE * time, 0.0f);
             break;
-        case ATK_DOWN:
+        case DOWN:
             scene->Apply([&](Object *obj) { obj->Translate(0.0f, -window->Height() * time); });
             TP2::player->Translate(0.0f, DISTANCE * time);
             break;
-        case ATK_UP:
+        case UP:
             scene->Apply([&](Object *obj) { obj->Translate(0.0f, window->Height() * time); });
             TP2::player->Translate(0.0f, -DISTANCE * time);
             break;
@@ -60,22 +60,22 @@ void ScreenTransition::Update()
     {
         switch (dir)
         {
-        case ATK_RIGHT:
+        case RIGHT:
             scene->Apply([&](Object *obj) { obj->MoveTo(positions[obj].x - window->Width(), positions[obj].y); });
             TP2::player->Translate(DISTANCE * DURATION, 0.0f);
             break;
-        case ATK_LEFT:
+        case LEFT:
             scene->Apply([&](Object *obj) { obj->MoveTo(positions[obj].x + window->Width(), positions[obj].y); });
             TP2::player->Translate(-DISTANCE * DURATION, 0.0f);
             break;
-        case ATK_DOWN:
+        case DOWN:
             scene->Apply([&](Object *obj) { obj->MoveTo(positions[obj].x, positions[obj].y - window->Height()); });
             TP2::player->Translate(0.0f, DISTANCE * DURATION);
             break;
-        case ATK_UP:
+        case UP:
             scene->Apply([&](Object *obj) { obj->MoveTo(positions[obj].x, positions[obj].y + window->Height()); });
             TP2::player->Translate(0.0f, -DISTANCE * DURATION);
-            TP2::player->AtkDir(ATK_DOWN);
+            TP2::player->AtkDir(DOWN);
             TP2::player->Knockback();
             break;
         }
@@ -94,9 +94,9 @@ void ScreenTransition::OnCollision(Object *other)
             timer = 0.0f;
 
             if (orientation == HORIZONTAL)
-                dir = TP2::player->X() < X() ? ATK_RIGHT : ATK_LEFT;
+                dir = TP2::player->X() < X() ? RIGHT : LEFT;
             else
-                dir = TP2::player->Y() < Y() ? ATK_DOWN : ATK_UP;
+                dir = TP2::player->Y() < Y() ? DOWN : UP;
         }
     }
 }

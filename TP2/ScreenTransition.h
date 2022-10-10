@@ -18,7 +18,7 @@ class ScreenTransition : public Object
     Scene *scene;
     std::unordered_map<Object *, Coord> positions;
     Orientation orientation;
-    AttackDirection dir;
+    Direction dir;
     bool positive;
     float timer;
     bool transitioning = false;

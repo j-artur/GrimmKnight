@@ -11,7 +11,7 @@ enum Sounds
     LOOPDOWN,
     FIRE,
     EXPLOSION,
-    
+
     PLAYER_ATTACK,
     PLAYER_SPIKE_ATTACK,
     PLAYER_JUMP,
@@ -23,7 +23,6 @@ enum Sounds
 
     ENEMY_DAMAGE,
     ENEMY_CRAWLER,
-
 };
 
 enum Objects
@@ -46,18 +45,18 @@ enum Objects
     SPIKE,
 };
 
-enum Direction
+enum HDirection
 {
-    LEFT = 1,
-    RIGHT = 5,
+    H_LEFT = 1,
+    H_RIGHT = 5,
 };
 
-enum AttackDirection
+enum Direction
 {
-    ATK_UP = 1,
-    ATK_DOWN = 3,
-    ATK_LEFT = 9,
-    ATK_RIGHT = 27,
+    UP = 1,
+    DOWN = 3,
+    LEFT = 9,
+    RIGHT = 27,
 };
 
 enum Orientation

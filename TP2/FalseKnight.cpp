@@ -1,6 +1,6 @@
 #include "FalseKnight.h"
-#include "Shockwave.h"
 #include "Barrel.h"
+#include "Shockwave.h"
 #include "TP2.h"
 #include "Wall.h"
 
@@ -25,27 +25,27 @@ FalseKnight::FalseKnight()
     barrelSprite = new Sprite("Resources/WIP/rock.png");
     animation = new Animation(tileSet, 0.2f, true);
 
-    uint idleRight[5] = { 0, 1, 2, 3, 4 };
-    uint idleLeft[5] = { 0, 1, 2, 3, 4 };
-    uint leapRight[10] = { 5,6,7,8,9,10,11,12,13,14 };
-    uint leapLeft[10] = { 5,6,7,8,9,10,11,12,13,14 };
+    uint idleRight[5] = {0, 1, 2, 3, 4};
+    uint idleLeft[5] = {0, 1, 2, 3, 4};
+    uint leapRight[10] = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
+    uint leapLeft[10] = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
     uint prepSlamRight[6] = {15, 16, 17, 18, 19, 20};
     uint prepSlamLeft[6] = {15, 16, 17, 18, 19, 20};
     uint attackRight[8] = {21, 22, 23, 24, 25, 26, 27, 28};
     uint attackLeft[8] = {21, 22, 23, 24, 25, 26, 27, 28};
-    uint bludgeonRight[10] = { 29,30,31,32,33,34,35,36,37,38 };
-    uint bludgeonLeft[10] = { 29,30,31,32,33,34,35,36,37,38 };
+    uint bludgeonRight[10] = {29, 30, 31, 32, 33, 34, 35, 36, 37, 38};
+    uint bludgeonLeft[10] = {29, 30, 31, 32, 33, 34, 35, 36, 37, 38};
 
-    animation->Add(FK_IDLE * LEFT, idleLeft, 5);
-    animation->Add(FK_IDLE * RIGHT, idleRight, 5);
-    animation->Add(FK_PREP_SLAM * LEFT, prepSlamLeft, 6);
-    animation->Add(FK_PREP_SLAM * RIGHT, prepSlamRight, 6);
-    animation->Add(FK_SLAMMING * LEFT, attackLeft, 8);
-    animation->Add(FK_SLAMMING * RIGHT, attackRight, 8);
-    animation->Add(FK_LEAPING * LEFT, leapLeft, 10);
-    animation->Add(FK_LEAPING * RIGHT, leapRight, 10);
-    animation->Add(FK_BLUDGEONING * RIGHT, bludgeonRight, 10);
-    animation->Add(FK_BLUDGEONING * LEFT, bludgeonLeft, 10);
+    animation->Add(FK_IDLE * H_LEFT, idleLeft, 5);
+    animation->Add(FK_IDLE * H_RIGHT, idleRight, 5);
+    animation->Add(FK_PREP_SLAM * H_LEFT, prepSlamLeft, 6);
+    animation->Add(FK_PREP_SLAM * H_RIGHT, prepSlamRight, 6);
+    animation->Add(FK_SLAMMING * H_LEFT, attackLeft, 8);
+    animation->Add(FK_SLAMMING * H_RIGHT, attackRight, 8);
+    animation->Add(FK_LEAPING * H_LEFT, leapLeft, 10);
+    animation->Add(FK_LEAPING * H_RIGHT, leapRight, 10);
+    animation->Add(FK_BLUDGEONING * H_RIGHT, bludgeonRight, 10);
+    animation->Add(FK_BLUDGEONING * H_LEFT, bludgeonLeft, 10);
 
     animation->Select(state * direction);
     BBox(new Rect(-80, -192 / 2, 150, 192 / 2));
@@ -57,7 +57,7 @@ FalseKnight::~FalseKnight()
     delete animation;
 }
 
-bool FalseKnight::TakeDamage(uint damage, AttackDirection dir)
+bool FalseKnight::TakeDamage(uint damage, Direction dir)
 {
     return true;
 }
@@ -65,12 +65,13 @@ bool FalseKnight::TakeDamage(uint damage, AttackDirection dir)
 void FalseKnight::Update()
 {
     // DIRECTION CONTROLS
-    direction = TP2::player->X() < x ? LEFT : RIGHT;
-    directionMult = direction == LEFT ? -1.0f : 1.0f;
+    direction = TP2::player->X() < x ? H_LEFT : H_RIGHT;
+    directionMult = direction == H_LEFT ? -1.0f : 1.0f;
 
     mace->MoveTo(x - 120.0f * directionMult, y);
 
-    if (betweenAttacksCd.Over(attackCd) && !isAttacking) {
+    if (betweenAttacksCd.Over(attackCd) && !isAttacking)
+    {
         isAttacking = true;
         switch (nextMove)
         {
@@ -99,7 +100,7 @@ void FalseKnight::Update()
         mace->MoveTo(x - 120.0f * attackDirection, y);
         if (!isJumping)
         {
-            attackDirection = direction == LEFT ? -1.0f : 1.0f;
+            attackDirection = direction == H_LEFT ? -1.0f : 1.0f;
 
             animation->Select(state == FK_LEAP ? FK_LEAPING : FK_BLUDGEONING * direction);
             animation->Restart();
@@ -133,7 +134,7 @@ void FalseKnight::Update()
                 break;
             case 10:
                 mace->MoveTo(x - 130.0f * attackDirection, y - 50.0f);
-                break;              
+                break;
             default:
                 break;
             }
@@ -242,7 +243,7 @@ void FalseKnight::Update()
         mace->MoveTo(x - 120.0f * attackDirection, y);
         if (!isJumping)
         {
-            attackDirection = direction == LEFT ? -1.0f : 1.0f;
+            attackDirection = direction == H_LEFT ? -1.0f : 1.0f;
 
             animation->Select(FK_LEAPING * direction);
             animation->Restart();
@@ -263,12 +264,12 @@ void FalseKnight::Update()
             if (attackRageCd.Up())
             {
                 attackDirection = -attackDirection;
-                direction = direction == LEFT ? LEFT : RIGHT;
+                direction = direction == H_LEFT ? H_LEFT : H_RIGHT;
                 spawnedBarrels = false;
                 attackRageCd.Restart();
             }
 
-            animation->Select(FK_SLAMMING* direction);
+            animation->Select(FK_SLAMMING * direction);
             animation->Delay(0.1f);
             // fix hitboxes when we have sprites
             switch (animation->Frame())
@@ -284,15 +285,15 @@ void FalseKnight::Update()
                 if (!spawnedBarrels)
                 {
                     spawnedBarrels = true;
-                    Sprite* sp = new Sprite("Resources/WIP/rock.png");
+                    Sprite *sp = new Sprite("Resources/WIP/rock.png");
 
-                    Barrel* b1 = new Barrel(sp);
-                    Barrel* b2 = new Barrel(sp);
-                    //Barrel* b3 = new Barrel(sp);
+                    Barrel *b1 = new Barrel(sp);
+                    Barrel *b2 = new Barrel(sp);
+                    // Barrel* b3 = new Barrel(sp);
 
                     TP2::scene->Add(b1, MOVING);
                     TP2::scene->Add(b2, MOVING);
-                    //TP2::scene->Add(b3, MOVING);
+                    // TP2::scene->Add(b3, MOVING);
                 }
                 break;
             case 3:
@@ -329,7 +330,6 @@ void FalseKnight::Update()
             }
         }
 
-
         attackRageCd.Add(gameTime);
         rageCd.Add(gameTime);
         jumpCd.Add(gameTime);
@@ -341,8 +341,6 @@ void FalseKnight::Update()
         animation->Select(state);
         // create cooldown and draft one movement every 2 seconds if not doing one
     }
-
-    
 
     // GRAVITY ACCELERATION AND MOVEMENT
     ySpeed += gravity * gameTime;

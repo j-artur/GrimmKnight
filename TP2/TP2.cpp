@@ -53,6 +53,10 @@ void TP2::Update()
         player->LearnFireball();
     if (window->KeyDown(VK_F8))
         player->LearnDash();
+    if (window->KeyDown('H'))
+        player->FullHP();
+    if (window->KeyDown('M'))
+        player->FullMana();
 
     if (window->KeyDown('B') && !bBoxKeyCtrl)
     {

@@ -4,17 +4,17 @@
 const float LevelTransition::DURATION = 1.0f;
 const float LevelTransition::DISTANCE = 80.0f;
 
-LevelTransition::LevelTransition(AttackDirection dir)
+LevelTransition::LevelTransition(Direction dir)
 {
     this->dir = dir;
     switch (dir)
     {
-    case ATK_UP:
-    case ATK_DOWN:
+    case UP:
+    case DOWN:
         BBox(new Rect(-64.0f, -32.0f, 64.0f, 32.0f));
         break;
-    case ATK_LEFT:
-    case ATK_RIGHT:
+    case LEFT:
+    case RIGHT:
         BBox(new Rect(-32.0f, -64.0f, 32.0f, 64.0f));
         break;
     }
@@ -38,16 +38,16 @@ void LevelTransition::Update()
 
         switch (dir)
         {
-        case ATK_UP:
+        case UP:
             TP2::player->Translate(0.0f, -DISTANCE * time);
             break;
-        case ATK_DOWN:
+        case DOWN:
             TP2::player->Translate(0.0f, DISTANCE * time);
             break;
-        case ATK_LEFT:
+        case LEFT:
             TP2::player->Translate(-DISTANCE * time, 0.0f);
             break;
-        case ATK_RIGHT:
+        case RIGHT:
             TP2::player->Translate(DISTANCE * time, 0.0f);
             break;
         }

@@ -1,6 +1,6 @@
 #include "Level1.h"
-#include "Level0.h"
 #include "EntityBlock.h"
+#include "Level0.h"
 #include "LevelTransition.h"
 #include "TP2.h"
 #include "Wall.h"
@@ -29,15 +29,15 @@ void Level1::Init()
     screenTransition->MoveTo(384.0f, 768.0f);
     scene->Add(screenTransition, STATIC);
 
-    level0Transition = new LevelTransition(ATK_LEFT);
+    level0Transition = new LevelTransition(LEFT);
     level0Transition->MoveTo(0.0f, 1408.0f);
     scene->Add(level0Transition, STATIC);
 
-    level2Transition = new LevelTransition(ATK_RIGHT);
+    level2Transition = new LevelTransition(RIGHT);
     level2Transition->MoveTo(2560.0f, 1408.0f);
     scene->Add(level2Transition, STATIC);
 
-    level3Transition = new LevelTransition(ATK_LEFT);
+    level3Transition = new LevelTransition(LEFT);
     level3Transition->MoveTo(0.0f, 672.0f);
     scene->Add(level3Transition, STATIC);
 
@@ -153,13 +153,13 @@ void Level1::EnterFrom(LevelId id)
         TP2::player->MoveTo(1280.0f, 1442.0f);
         scene->Apply([&](Object *obj) { obj->Translate(0.0f, float(-window->Height())); });
         TP2::player->State(WALKING);
-        TP2::player->Dir(LEFT);
+        TP2::player->Dir(H_LEFT);
         enteringCd.Restart();
         break;
     case LEVEL3:
         TP2::player->MoveTo(0.0f, 706.0f);
         TP2::player->State(WALKING);
-        TP2::player->Dir(RIGHT);
+        TP2::player->Dir(H_RIGHT);
         enteringCd.Restart();
         break;
     case LEVEL0:
@@ -167,7 +167,7 @@ void Level1::EnterFrom(LevelId id)
         TP2::player->MoveTo(0.0f, 1442.0f);
         scene->Apply([&](Object *obj) { obj->Translate(0.0f, float(-window->Height())); });
         TP2::player->State(WALKING);
-        TP2::player->Dir(RIGHT);
+        TP2::player->Dir(H_RIGHT);
         enteringCd.Restart();
         break;
     }
