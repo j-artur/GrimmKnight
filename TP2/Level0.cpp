@@ -13,6 +13,10 @@ void Level0::Init()
     foreground = new Sprite("Resources/Level0Fg.png");
     tiktikTileSet = new TileSet("Resources/Tiktik.png", 2, 4);
 
+    tutorialMove = new Sprite("Resources/TutorialMove.png");
+    tutorialJump = new Sprite("Resources/TutorialJump.png");
+    tutorialAttack = new Sprite("Resources/TutorialAttack.png");
+
     scene = new Scene();
     TP2::scene = scene;
 
@@ -83,6 +87,89 @@ void Level0::Init()
 
 void Level0::Update()
 {
+    switch (tutorial)
+    {
+    case TUTORIAL_BEGIN:
+        tutorialCd.Add(gameTime);
+        if (tutorialCd.Up())
+        {
+            tutorial = TUTORIAL_MOVE_0;
+            tutorialTransitionCd.Restart();
+        }
+        break;
+    case TUTORIAL_MOVE_0:
+        tutorialTransitionCd.Add(gameTime);
+        if (tutorialTransitionCd.Up())
+        {
+            tutorial = TUTORIAL_MOVE_1;
+            tutorialCd.Restart();
+        }
+        break;
+    case TUTORIAL_MOVE_1:
+        tutorialCd.Add(gameTime);
+        if (tutorialCd.Up())
+        {
+            tutorial = TUTORIAL_MOVE_2;
+            tutorialTransitionCd.Restart();
+        }
+        break;
+    case TUTORIAL_MOVE_2:
+        tutorialTransitionCd.Add(gameTime);
+        if (tutorialTransitionCd.Up())
+        {
+            tutorial = TUTORIAL_JUMP_0;
+            tutorialTransitionCd.Restart();
+        }
+        break;
+    case TUTORIAL_JUMP_0:
+        tutorialTransitionCd.Add(gameTime);
+        if (tutorialTransitionCd.Up())
+        {
+            tutorial = TUTORIAL_JUMP_1;
+            tutorialCd.Restart();
+        }
+        break;
+    case TUTORIAL_JUMP_1:
+        tutorialCd.Add(gameTime);
+        if (tutorialCd.Up())
+        {
+            tutorial = TUTORIAL_JUMP_2;
+            tutorialTransitionCd.Restart();
+        }
+        break;
+    case TUTORIAL_JUMP_2:
+        tutorialTransitionCd.Add(gameTime);
+        if (tutorialTransitionCd.Up())
+        {
+            tutorial = TUTORIAL_ATTACK_0;
+            tutorialTransitionCd.Restart();
+        }
+        break;
+    case TUTORIAL_ATTACK_0:
+        tutorialTransitionCd.Add(gameTime);
+        if (tutorialTransitionCd.Up())
+        {
+            tutorial = TUTORIAL_ATTACK_1;
+            tutorialCd.Restart();
+        }
+        break;
+    case TUTORIAL_ATTACK_1:
+        tutorialCd.Add(gameTime);
+        if (tutorialCd.Up())
+        {
+            tutorial = TUTORIAL_ATTACK_2;
+            tutorialTransitionCd.Restart();
+        }
+        break;
+    case TUTORIAL_ATTACK_2:
+        tutorialTransitionCd.Add(gameTime);
+        if (tutorialTransitionCd.Up())
+        {
+            tutorial = TUTORIAL_OVER;
+        }
+        break;
+    }
+
     if (level1Transition->Transitioning())
     {
         TP2::player->AddCooldowns(gameTime);
@@ -119,6 +206,93 @@ void Level0::Draw()
     background->Draw(camera->X(), camera->Y(), LAYER_BG);
     foreground->Draw(camera->X(), camera->Y(), LAYER_FG);
     scene->Draw();
+    switch (tutorial)
+    {
+    case TUTORIAL_BEGIN:
+        break;
+    case TUTORIAL_MOVE_0:
+        tutorialMove->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
+                           {
+                               1.0f,
+                               1.0f,
+                               1.0f,
+                               tutorialTransitionCd.Ratio(),
+                           });
+        break;
+    case TUTORIAL_MOVE_1:
+        tutorialMove->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
+                           {
+                               1.0f,
+                               1.0f,
+                               1.0f,
+                               1.0f,
+                           });
+
+        break;
+    case TUTORIAL_MOVE_2:
+        tutorialMove->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
+                           {
+                               1.0f,
+                               1.0f,
+                               1.0f,
+                               1.0f - tutorialTransitionCd.Ratio(),
+                           });
+        break;
+    case TUTORIAL_JUMP_0:
+        tutorialJump->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
+                           {
+                               1.0f,
+                               1.0f,
+                               1.0f,
+                               tutorialTransitionCd.Ratio(),
+                           });
+        break;
+    case TUTORIAL_JUMP_1:
+        tutorialJump->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
+                           {
+                               1.0f,
+                               1.0f,
+                               1.0f,
+                               1.0f,
+                           });
+        break;
+    case TUTORIAL_JUMP_2:
+        tutorialJump->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
+                           {
+                               1.0f,
+                               1.0f,
+                               1.0f,
+                               1.0f - tutorialTransitionCd.Ratio(),
+                           });
+        break;
+    case TUTORIAL_ATTACK_0:
+        tutorialAttack->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
+                             {
+                                 1.0f,
+                                 1.0f,
+                                 1.0f,
+                                 tutorialTransitionCd.Ratio(),
+                             });
+        break;
+    case TUTORIAL_ATTACK_1:
+        tutorialAttack->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
+                             {
+                                 1.0f,
+                                 1.0f,
+                                 1.0f,
+                                 1.0f,
+                             });
+        break;
+    case TUTORIAL_ATTACK_2:
+        tutorialAttack->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
+                             {
+                                 1.0f,
+                                 1.0f,
+                                 1.0f,
+                                 1.0f - tutorialTransitionCd.Ratio(),
+                             });
+        break;
+    }
 }
 
 void Level0::Finalize()
@@ -138,10 +312,17 @@ void Level0::EnterFrom(LevelId id)
         TP2::player->State(WALKING);
         TP2::player->Dir(H_LEFT);
         enteringCd.Restart();
+        tutorial = TUTORIAL_OVER;
         break;
     case TITLESCREEN:
+        TP2::player->MoveTo(256.0f, -34.0f);
+        tutorial = TUTORIAL_BEGIN;
+        tutorialCd.Restart();
+        tutorialTransitionCd.Restart();
+        break;
     default:
         TP2::player->MoveTo(256.0f, -34.0f);
+        tutorial = TUTORIAL_OVER;
         break;
     }
 }

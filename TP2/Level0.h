@@ -8,13 +8,31 @@
 #include "ScreenTransition.h"
 #include "TP2.h"
 
+enum Tutorial
+{
+    TUTORIAL_BEGIN,
+    TUTORIAL_MOVE_0,
+    TUTORIAL_MOVE_1,
+    TUTORIAL_MOVE_2,
+    TUTORIAL_JUMP_0,
+    TUTORIAL_JUMP_1,
+    TUTORIAL_JUMP_2,
+    TUTORIAL_ATTACK_0,
+    TUTORIAL_ATTACK_1,
+    TUTORIAL_ATTACK_2,
+    TUTORIAL_OVER,
+};
+
 class Level0 : public Level
 {
   private:
     Sprite *background = nullptr;
     Sprite *foreground = nullptr;
     TileSet *tiktikTileSet = nullptr;
-    TileSet* wanderingTileSet = nullptr;
+    TileSet *wanderingTileSet = nullptr;
+    Sprite *tutorialMove = nullptr;
+    Sprite *tutorialJump = nullptr;
+    Sprite *tutorialAttack = nullptr;
 
     Scene *scene = nullptr;
 
@@ -24,6 +42,9 @@ class Level0 : public Level
 
     Cooldown enteringCd{LevelTransition::DURATION};
 
+    Tutorial tutorial = TUTORIAL_BEGIN;
+    Cooldown tutorialTransitionCd{0.25f, false};
+    Cooldown tutorialCd{1.25f, false};
 
   public:
     static int tikTikCounter;
