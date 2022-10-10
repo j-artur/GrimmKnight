@@ -171,7 +171,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Graphics.cpp" />
-    <ClCompile Include="Home.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Level0.cpp" />
@@ -192,6 +191,7 @@
     <ClCompile Include="Tiktik.cpp" />
     <ClCompile Include="TileSet.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TitleScreen.cpp" />
     <ClCompile Include="TP2.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Wall.cpp" />
@@ -216,7 +216,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Graphics.h" />
-    <ClInclude Include="Home.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Level.h" />
@@ -239,6 +238,7 @@
     <ClInclude Include="Tiktik.h" />
     <ClInclude Include="TileSet.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TitleScreen.h" />
     <ClInclude Include="TP2.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="Util.h" />

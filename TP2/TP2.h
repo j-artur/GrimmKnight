@@ -6,11 +6,11 @@
 #include "Engine.h"
 #include "Game.h"
 #include "HUD.h"
-#include "Home.h"
 #include "Level.h"
 #include "Player.h"
 #include "Resources.h"
 #include "Scene.h"
+#include "TitleScreen.h"
 
 class TP2 : public Game
 {

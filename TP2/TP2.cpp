@@ -37,7 +37,7 @@ void TP2::Init()
     audio->Add(ENEMY_DAMAGE, "Resources/Audio/enemy_damage.wav");
     audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav");
 
-    level = new Home();
+    level = new TitleScreen();
     level->Init();
 }
 
@@ -48,7 +48,7 @@ void TP2::Update()
     if (window->KeyDown(VK_F2))
         NextLevel<Level1>();
     if (window->KeyDown(VK_F6))
-        NextLevel<Home>();
+        NextLevel<TitleScreen>();
     if (window->KeyDown(VK_F7))
         player->LearnFireball();
     if (window->KeyDown(VK_F8))
