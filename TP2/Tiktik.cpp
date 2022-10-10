@@ -11,6 +11,8 @@ Tiktik::Tiktik(TileSet *tileSet, int iX, int iY)
 
     hp = 8;
 
+    TP2::audio->Play(ENEMY_CRAWLER, true);
+
     animation = new Animation(tileSet, 0.3f, true);
 
     uint seqWalkRight[2] = {0, 1};
@@ -87,6 +89,13 @@ void Tiktik::Update()
         break;
     case TIKTIK_DEAD:
         xSpeed = 0.0f;
+
+        if (audioCtrl)
+        {
+            TP2::audio->Stop(ENEMY_CRAWLER);
+            audioCtrl = false;
+        }
+
         if (dieCd.Up())
             TP2::scene->Delete();
         break;

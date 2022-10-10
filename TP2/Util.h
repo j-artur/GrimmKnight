@@ -23,6 +23,21 @@ enum Sounds
 
     ENEMY_DAMAGE,
     ENEMY_CRAWLER,
+
+    MAIN_MUSIC,
+    CAVE_NOISES,
+
+    SFK_THEME,
+    SFK_STUN,
+    SFK_ARMOR_DAMAGE,
+    SFK_HEAD_DAMAGE,
+    SFK_JUMP,
+    SFK_LAND,
+    SFK_SWING,
+    SFK_STRIKE_GROUND,
+    SFK_VOICE_ATTACK,
+    SFK_VOICE_RAGE,
+    SFK_BARREL_DEATH
 };
 
 enum Objects

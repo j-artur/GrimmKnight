@@ -8,6 +8,8 @@ void TitleScreen::Init()
 {
     id = TITLESCREEN;
 
+    TP2::audio->Play(MAIN_MUSIC, true);
+
     bgTileSet = new TileSet("Resources/TitleScreen.png", 1282, 770, 3, 6);
     bgAnimation = new Animation(bgTileSet, 0.5f, true);
 
@@ -27,9 +29,15 @@ void TitleScreen::Init()
 void TitleScreen::Update()
 {
     if (start)
+    {
         TP2::NextLevel<Level0>();
+        TP2::audio->Stop(MAIN_MUSIC);
+    }
     else if (window->KeyDown('T'))
+    {
         TP2::NextLevel<TestLevel>();
+        TP2::audio->Stop(MAIN_MUSIC);
+    }
     else
     {
         scene->Update();

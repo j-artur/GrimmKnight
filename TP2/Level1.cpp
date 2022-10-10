@@ -12,6 +12,8 @@ void Level1::Init()
 {
     id = LEVEL1;
 
+    TP2::audio->Play(CAVE_NOISES, true);
+
     background = new Sprite("Resources/Level1Bg.png");
     foreground = new Sprite("Resources/Level1Fg.png");
     wanderingTileSet = new TileSet("Resources/WIP/WanderingHusk.png", 4, 7);

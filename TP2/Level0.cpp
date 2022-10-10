@@ -9,6 +9,8 @@ void Level0::Init()
 {
     id = LEVEL0;
 
+    TP2::audio->Play(CAVE_NOISES, true);
+
     background = new Sprite("Resources/Level0Bg.png");
     foreground = new Sprite("Resources/Level0Fg.png");
     tiktikTileSet = new TileSet("Resources/Tiktik.png", 2, 4);

@@ -39,6 +39,21 @@ void TP2::Init()
     audio->Add(ENEMY_DAMAGE, "Resources/Audio/enemy_damage.wav");
     audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav");
 
+    audio->Add(CAVE_NOISES, "Resources/Audio/cave_noises.wav");
+    audio->Add(MAIN_MUSIC, "Resources/Audio/S23-11.wav");
+
+    audio->Add(SFK_THEME, "Resources/Audio/FalseKnight/false_knight_theme.wav");
+    audio->Add(SFK_STUN, "Resources/Audio/FalseKnight/false_knight_stun.wav");
+    audio->Add(SFK_ARMOR_DAMAGE, "Resources/Audio/FalseKnight/false_knight_damage_armour.wav");
+    audio->Add(SFK_HEAD_DAMAGE, "Resources/Audio/FalseKnight/false_knight_head_damage.wav");
+    audio->Add(SFK_JUMP, "Resources/Audio/FalseKnight/false_knight_jump.wav");
+    audio->Add(SFK_LAND, "Resources/Audio/FalseKnight/false_knight_land.wav");
+    audio->Add(SFK_SWING, "Resources/Audio/FalseKnight/false_knight_swing.wav");
+    audio->Add(SFK_STRIKE_GROUND, "Resources/Audio/FalseKnight/false_knight_strike_ground.wav");
+    audio->Add(SFK_VOICE_ATTACK, "Resources/Audio/FalseKnight/false_knight_attack.wav");
+    audio->Add(SFK_VOICE_RAGE, "Resources/Audio/FalseKnight/false_knight_rage.wav");
+    audio->Add(SFK_BARREL_DEATH, "Resources/Audio/FalseKnight/barrel_death.wav");
+
     level = new TitleScreen();
     level->Init();
 }

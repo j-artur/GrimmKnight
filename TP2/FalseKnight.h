@@ -58,6 +58,7 @@ class FalseKnight : public Entity
     Mace *mace;
 
     uint armorHealth = 65;
+    uint currentArmorHealth = armorHealth;
     uint headHealth = 40;
     uint attackCd = 2;
     uint nextMove;
@@ -68,6 +69,9 @@ class FalseKnight : public Entity
     Cooldown rageCd{3.2f};
     Cooldown attackRageCd{0.8f};
     Cooldown betweenAttacksCd{5.0f};
+    Cooldown hurtCd{ 0.3f };
+    Cooldown headOutCd{ 1.0f };
+    Cooldown stunCd{ 3.0f };
 
     float directionMult = 1.0f;
     float attackDirection = 1.0f;
@@ -77,9 +81,11 @@ class FalseKnight : public Entity
     float bludgeonSpeed = -537.6f;
     float gravity = 768.0f;
 
-    bool keyCtrl = true;
+    bool strikeCtrl = true;
+    bool voiceCtrl = true;
     bool isJumping = false;
     bool isAttacking = false;
+    bool isStunned = false;
     bool rageStarted = false;
     bool spawnedShockwave = false;
     bool spawnedBarrels = false;

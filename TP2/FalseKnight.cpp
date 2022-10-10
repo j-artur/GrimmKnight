@@ -8,6 +8,8 @@ FalseKnight::FalseKnight()
 {
     type = ENEMY;
 
+    TP2::audio->Play(SFK_THEME, true);
+
     hp = armorHealth;
 
     mace = new Mace();
@@ -15,8 +17,8 @@ FalseKnight::FalseKnight()
 
     random_device rd;
     rng.seed(rd());
-    cd = uniform_int_distribution<int>(2, 4);
-    move = uniform_int_distribution<int>(1, 4);
+    cd = uniform_int_distribution<int>(1, 3);
+    move = uniform_int_distribution<int>(1, 3);
     nextMove = 2;
     betweenAttacksCd.Restart();
 
@@ -35,6 +37,8 @@ FalseKnight::FalseKnight()
     uint attackLeft[8] = {21, 22, 23, 24, 25, 26, 27, 28};
     uint bludgeonRight[10] = {29, 30, 31, 32, 33, 34, 35, 36, 37, 38};
     uint bludgeonLeft[10] = {29, 30, 31, 32, 33, 34, 35, 36, 37, 38};
+    uint stunLeft[1] = { 39 };
+    uint stunRight[1] = { 39 };
 
     animation->Add(FK_IDLE * H_LEFT, idleLeft, 5);
     animation->Add(FK_IDLE * H_RIGHT, idleRight, 5);
@@ -46,6 +50,8 @@ FalseKnight::FalseKnight()
     animation->Add(FK_LEAPING * H_RIGHT, leapRight, 10);
     animation->Add(FK_BLUDGEONING * H_RIGHT, bludgeonRight, 10);
     animation->Add(FK_BLUDGEONING * H_LEFT, bludgeonLeft, 10);
+    animation->Add(FK_STUN * H_RIGHT, stunRight, 1);
+    animation->Add(FK_STUN * H_LEFT, stunLeft, 1);
 
     animation->Select(state * direction);
     BBox(new Rect(-80, -192 / 2, 150, 192 / 2));
@@ -59,7 +65,25 @@ FalseKnight::~FalseKnight()
 
 bool FalseKnight::TakeDamage(uint damage, Direction dir)
 {
-    return true;
+    if (hurtCd.Up())
+    {
+        if (isStunned)
+        {
+            hp -= damage;
+            TP2::audio->Play(SFK_HEAD_DAMAGE);
+            return true;
+        }
+        else
+        {
+            currentArmorHealth -= damage;
+            TP2::audio->Play(SFK_ARMOR_DAMAGE);
+            return false;
+        }
+
+        hurtCd.Restart();
+    }
+
+    return false;
 }
 
 void FalseKnight::Update()
@@ -70,9 +94,13 @@ void FalseKnight::Update()
 
     mace->MoveTo(x - 120.0f * directionMult, y);
 
-    if (betweenAttacksCd.Over(attackCd) && !isAttacking)
+    if (betweenAttacksCd.Over(attackCd) && !isAttacking && state == FK_IDLE)
     {
         isAttacking = true;
+
+        strikeCtrl = true;
+        voiceCtrl = true;
+
         switch (nextMove)
         {
         case 1:
@@ -100,6 +128,8 @@ void FalseKnight::Update()
         mace->MoveTo(x - 120.0f * attackDirection, y);
         if (!isJumping)
         {
+            TP2::audio->Play(SFK_JUMP);
+
             attackDirection = direction == H_LEFT ? -1.0f : 1.0f;
 
             animation->Select(state == FK_LEAP ? FK_LEAPING : FK_BLUDGEONING * direction);
@@ -121,6 +151,12 @@ void FalseKnight::Update()
                 mace->MoveTo(x - 150.0f * attackDirection, y + 50.0f);
                 break;
             case 6:
+                if (voiceCtrl)
+                {
+                    voiceCtrl = false;
+                    TP2::audio->Play(SFK_SWING);
+                    TP2::audio->Play(SFK_VOICE_ATTACK);
+                }
                 mace->MoveTo(x - 110.0f * attackDirection, y - 100.0f);
                 break;
             case 7:
@@ -130,10 +166,12 @@ void FalseKnight::Update()
                 mace->MoveTo(x - 110.0f * attackDirection, y - 100.0f);
                 break;
             case 9:
+                if (strikeCtrl)
+                {
+                    strikeCtrl = false;
+                    TP2::audio->Play(SFK_STRIKE_GROUND);
+                }
                 mace->MoveTo(x - 130.0f * attackDirection, y - 70.0f);
-                break;
-            case 10:
-                mace->MoveTo(x - 130.0f * attackDirection, y - 50.0f);
                 break;
             default:
                 break;
@@ -142,8 +180,10 @@ void FalseKnight::Update()
 
         if (jumpCd.Up())
         {
+
             if (state == FK_LEAP)
             {
+                TP2::audio->Play(SFK_LAND);
                 slamCd.Restart();
                 prepSlamCd.Restart();
                 state = FK_SLAM;
@@ -189,6 +229,7 @@ void FalseKnight::Update()
                 mace->MoveTo(x + 160.0f * directionMult, y + 50.0f);
                 if (!spawnedShockwave)
                 {
+                    TP2::audio->Play(SFK_STRIKE_GROUND);
                     Shockwave *shockwave = new Shockwave(direction, shockwaveTileSet);
                     shockwave->MoveTo(mace->X(), mace->Y());
                     TP2::scene->Add(shockwave, MOVING);
@@ -253,6 +294,7 @@ void FalseKnight::Update()
 
         if (jumpCd.Up() && !rageStarted)
         {
+            TP2::audio->Play(SFK_VOICE_RAGE);
             rageStarted = true;
             attackRageCd.Restart();
             rageCd.Restart();
@@ -335,11 +377,68 @@ void FalseKnight::Update()
         jumpCd.Add(gameTime);
     }
 
+    if (state == FK_STUN)
+    {
+        mace->MoveTo(x, y);
+        if (!isStunned)
+        {
+            headOutCd.Restart();
+            stunCd.Restart();
+
+            ySpeed = 0;
+
+            animation->Select(FK_STUN); // change to rolling and head going out of the armor?
+
+            isStunned = true;
+        }
+
+        if (headOutCd.Up() && isStunned)
+        {
+            animation->Select(FK_STUN); // stunned animation with the head out
+
+            if (stunCd.Up() || hp <= 0)
+            {
+                if (!canKill)
+                {
+                    currentArmorHealth = armorHealth;
+                    hp = headHealth;
+                    canKill = true;
+                }
+                
+                isStunned = false;
+                state = FK_RAGE;
+            }
+        }
+
+        headOutCd.Add(gameTime);
+        stunCd.Add(gameTime);
+    }
+
+    if (currentArmorHealth <= 0)
+    {
+        state = FK_STUN;
+    }
+
+    if (canKill)
+    {
+        move = uniform_int_distribution<int>(1, 4);
+        if (hp <= 0)
+        {
+            // state = FK_DEAD;
+            TP2::scene->Delete();
+            TP2::scene->Delete(mace, MOVING);
+            if (voiceCtrl)
+            {
+                TP2::audio->Stop(SFK_THEME);
+                // play boss killing music
+            }
+        }
+    }
+
     // IDLE
     if (state == FK_IDLE)
     {
         animation->Select(state);
-        // create cooldown and draft one movement every 2 seconds if not doing one
     }
 
     // GRAVITY ACCELERATION AND MOVEMENT
@@ -411,12 +510,12 @@ void FalseKnight::OnCollision(Object *other)
 
 void FalseKnight::JumpTo(FK_JumpTo jumpToLocation)
 {
-    jumpCd.Restart();
-    isJumping = true;
+        jumpCd.Restart();
+        isJumping = true;
 
-    float timeJumping = state == FK_BLUDGEON ? 1.4f : 2.0f;
-    float jumpingTo = jumpToLocation == PLAYER ? TP2::player->X() : window->CenterX();
+        float timeJumping = state == FK_BLUDGEON ? 1.4f : 2.0f;
+        float jumpingTo = jumpToLocation == PLAYER ? TP2::player->X() : window->CenterX();
 
-    ySpeed = state == FK_BLUDGEON ? bludgeonSpeed : leapSpeed;
-    xSpeed = (jumpingTo - x) / timeJumping;
+        ySpeed = state == FK_BLUDGEON ? bludgeonSpeed : leapSpeed;
+        xSpeed = (jumpingTo - x) / timeJumping;
 }

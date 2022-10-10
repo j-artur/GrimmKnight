@@ -26,6 +26,8 @@ Barrel::Barrel(Sprite* sp)
 Barrel::~Barrel()
 {
     delete sprite;
+    TP2::audio->Play(SFK_BARREL_DEATH);
+
 }
 
 // ---------------------------------------------------------------------------------
@@ -34,7 +36,7 @@ void Barrel::Update()
 {
     Translate(0, speed * gameTime);
 
-    Rotate(0.5 * gameTime);
+    Rotate(1.5);
 
     if (barrelCd.Up())
     {

@@ -28,6 +28,8 @@ class Tiktik : public Entity
     float xSpeed = 0.0f;
     float ySpeed = 0.0f;
 
+    bool audioCtrl = true;
+
   public:
     Tiktik(TileSet *tileSet, int x, int y);
     ~Tiktik();
