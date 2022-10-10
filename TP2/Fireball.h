@@ -9,13 +9,20 @@
 #include "Types.h"
 #include "Util.h"
 
+enum FireballState
+{
+    SPAWNING = 1,
+    FLYING = 2,
+};
+
 class Fireball : public Object
 {
   private:
     TileSet *ts;
     Animation *anim;
-    Cooldown fireballCd{2.0f};
+    FireballState state = SPAWNING;
     HDirection direction;
+    Cooldown spawnCd{0.6f, false};
 
     float speed = 800.0f;
     float distance = 14.0f;

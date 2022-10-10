@@ -43,6 +43,8 @@ enum Objects
     ENTITY_BLOCK_RIGHT,
     ENTITY_ACTION_AREA,
     SPIKE,
+    SCREEN_TRANSITION,
+    LEVEL_TRANSITION,
 };
 
 enum HDirection

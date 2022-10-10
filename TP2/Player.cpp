@@ -306,7 +306,7 @@ input : {
         {
             if (window->KeyDown('S') && fireballCd.Up() && fireballKeyCtrl && HasMana())
             {
-                // TODO: Create fireball animation
+                // TODO: Create fireball spawn animation
 
                 TP2::audio->Play(PLAYER_FIREBALL);
 

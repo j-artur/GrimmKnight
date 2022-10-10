@@ -29,7 +29,7 @@ Tiktik::Tiktik(TileSet *tileSet, int iX, int iY)
 
     animation->Select(TIKTIK_WALKING * H_RIGHT);
 
-    BBox(new Rect(-14.0f, -4.0f, 14.0f, 16.0f));
+    BBox(new Rect(-14.0f, -8.0f, 14.0f, 16.0f));
 
     MoveTo(iX * 32.0f + 18.0f, iY * 32.0f + 18.0f);
 }

@@ -6,6 +6,8 @@ const float LevelTransition::DISTANCE = 80.0f;
 
 LevelTransition::LevelTransition(Direction dir)
 {
+    type = LEVEL_TRANSITION;
+
     this->dir = dir;
     switch (dir)
     {

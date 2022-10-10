@@ -8,6 +8,8 @@ const float ScreenTransition::DISTANCE = 128.0f;
 
 ScreenTransition::ScreenTransition(Orientation orientation, Scene *scene)
 {
+    type = SCREEN_TRANSITION;
+
     this->orientation = orientation;
     this->scene = scene;
     switch (orientation)
