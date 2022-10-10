@@ -10,6 +10,7 @@ Level *TP2::level = nullptr;
 Player *TP2::player = nullptr;
 Audio *TP2::audio = nullptr;
 Scene *TP2::scene = nullptr;
+Cursor *TP2::cursor = nullptr;
 bool TP2::viewBBox = false;
 bool TP2::paused = false;
 
@@ -21,6 +22,7 @@ void TP2::Init()
     pauseScreen = new Sprite("Resources/PauseScreen.png");
     transitionScreen = new Sprite("Resources/TransitionScreen.png");
 
+    cursor = new Cursor();
     player = new Player();
     hud = new HUD();
     audio = new Audio();

@@ -192,7 +192,6 @@ void Level0::Update()
     {
         screenTransition->Update();
         TP2::player->AddCooldowns(0.1f * gameTime);
-        scene->CollisionDetection();
     }
     else
     {

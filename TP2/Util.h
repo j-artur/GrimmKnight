@@ -45,6 +45,8 @@ enum Objects
     SPIKE,
     SCREEN_TRANSITION,
     LEVEL_TRANSITION,
+    CURSOR,
+    BUTTON,
 };
 
 enum HDirection
@@ -88,6 +90,7 @@ const float LAYER_HUD_FG = 0.45f;
 const float LAYER_TRANSITION_SCREEN = 0.40f;
 const float LAYER_TUTORIAL = 0.35f;
 const float LAYER_TITLESCREEN = 0.30f;
-const float LAYER_PAUSE_SCREEN = 0.10f;
+const float LAYER_PAUSE_SCREEN = 0.25f;
+const float LAYER_BUTTON = 0.20f;
 
 #endif

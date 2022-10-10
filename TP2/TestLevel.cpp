@@ -24,7 +24,6 @@ void TestLevel::Init()
 
 void TestLevel::Update()
 {
-
     scene->Update();
     scene->CollisionDetection();
 }
@@ -39,6 +38,7 @@ void TestLevel::Draw()
 void TestLevel::Finalize()
 {
     delete background;
+    scene->Remove(TP2::player, MOVING);
     delete scene;
 }
 

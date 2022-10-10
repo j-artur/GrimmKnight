@@ -3,6 +3,7 @@
 
 #include "Audio.h"
 #include "Cooldown.h"
+#include "Cursor.h"
 #include "Engine.h"
 #include "Game.h"
 #include "HUD.h"
@@ -29,6 +30,7 @@ class TP2 : public Game
     static Player *player;
     static Audio *audio;
     static Scene *scene;
+    static Cursor *cursor;
     static bool viewBBox;
     static bool paused;
 
