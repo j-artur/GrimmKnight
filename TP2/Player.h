@@ -43,6 +43,7 @@ class Player : public Entity
     Cooldown knockbackUpCd{0.25f};
     Cooldown dyingCd{0.5f};
     Cooldown deadCd{1.5f};
+    Cooldown healCd{ 1.0f };
 
     bool jumpKeyCtrl = true;
     bool attackKeyCtrl = true;
@@ -55,9 +56,6 @@ class Player : public Entity
     Cooldown fireballCd{0.4f};
     Cooldown fireballAnimCd{0.2f};
     bool fireballKeyCtrl = true;
-
-
-    Cooldown healCd{ 1.0f };
 
     bool dash = false;
     Cooldown dashCd{0.9f};
