@@ -42,7 +42,6 @@ void TP2::Init()
     audio->Add(ENEMY_DAMAGE, "Resources/Audio/enemy_damage.wav");
     audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav");
 
-<<<<<<< HEAD
     audio->Add(CAVE_NOISES, "Resources/Audio/cave_noises.wav");
     audio->Add(MAIN_MUSIC, "Resources/Audio/S23-11.wav");
 
@@ -57,7 +56,6 @@ void TP2::Init()
     audio->Add(SFK_VOICE_ATTACK, "Resources/Audio/FalseKnight/false_knight_attack.wav");
     audio->Add(SFK_VOICE_RAGE, "Resources/Audio/FalseKnight/false_knight_rage.wav");
     audio->Add(SFK_BARREL_DEATH, "Resources/Audio/FalseKnight/barrel_death.wav");
-=======
     pausedScene = new Scene();
     pausedScene->Add(cursor, MOVING);
 
@@ -68,7 +66,6 @@ void TP2::Init()
     Button *quit = new Button(new Sprite("Resources/ButtonQuit.png"), []() { Engine::window->Close(); });
     quit->MoveTo(640.0f, 672.0f);
     pausedScene->Add(quit, STATIC);
->>>>>>> c5fac5f6681536b76fff97ab67ff1299f54d4ca0
 
     level = new TitleScreen();
     level->Init();
