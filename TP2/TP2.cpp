@@ -46,11 +46,11 @@ void TP2::Init()
     pausedScene->Add(cursor, MOVING);
 
     Button *resume = new Button(new Sprite("Resources/ButtonResume.png"), [&]() { paused = false; });
-    resume->MoveTo(640.0f, 64.0f);
+    resume->MoveTo(640.0f, 96.0f);
     pausedScene->Add(resume, STATIC);
 
     Button *quit = new Button(new Sprite("Resources/ButtonQuit.png"), []() { Engine::window->Close(); });
-    quit->MoveTo(640.0f, 704.0f);
+    quit->MoveTo(640.0f, 672.0f);
     pausedScene->Add(quit, STATIC);
 
     level = new TitleScreen();
