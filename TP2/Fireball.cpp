@@ -67,7 +67,7 @@ void Fireball::OnCollision(Object *obj)
     case WALL_RIGHT:
     case SCREEN_TRANSITION:
     case LEVEL_TRANSITION:
-        // anim exploding fireball
+        // TODO: Add fireball death animation
         TP2::scene->Delete(this, MOVING);
         break;
     case ENEMY: {

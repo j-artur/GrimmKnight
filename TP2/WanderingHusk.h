@@ -24,7 +24,7 @@ class WanderingHusk : public Entity
     HDirection direction = H_RIGHT;
 
     Cooldown hurtCd{0.3f};
-    Cooldown chargeRunCd{1.0f};
+    Cooldown chargeRunCd{0.5f};
     Cooldown runCd{3.0f};
     Cooldown dieCd{2.0f};
 
@@ -32,7 +32,7 @@ class WanderingHusk : public Entity
 
     bool playerInside = false;
 
-    float walkSpeed = 96.0f;
+    float walkSpeed = 64.0f;
     float runningSpeed = 144.0f;
     float gravity = 768.0f;
     float xSpeed = 0.0f;

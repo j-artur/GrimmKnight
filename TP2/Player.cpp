@@ -1,12 +1,12 @@
 #include "Player.h"
 #include "Attack.h"
+#include "EntityBlock.h"
 #include "Fireball.h"
+#include "Level2.h"
 #include "Spike.h"
 #include "TP2.h"
 #include "Util.h"
 #include "Wall.h"
-#include "EntityBlock.h"
-#include "Level2.h"
 
 Player::Player()
 {
@@ -161,7 +161,6 @@ void Player::AddCooldowns(float dt)
     knockbackUpCd.Add(dt);
     dyingCd.Add(dt);
     deadCd.Add(dt);
-    healCd.Add(dt);
 }
 
 void Player::Respawn()
@@ -451,20 +450,19 @@ input : {
         }
 
         // HEAL
-        if (window->KeyDown('T') && healKeyCtrl && HasMana() && healCd.Up())
+        if (window->KeyDown('A') && healKeyCtrl && HasMana())
         {
-            healCd.Restart();
+            // TODO: Create heal particles animation
+            // TODO: Create heal sound
 
             UseMana();
 
-            hp += 1;
+            hp = min(hp + 1, 6);
 
             healKeyCtrl = false;
         }
-        if (window->KeyUp('T'))
-        {
+        if (window->KeyUp('A'))
             healKeyCtrl = true;
-        }
     }
     else if (state == ATTACKING)
     {
@@ -788,9 +786,8 @@ void Player::OnCollision(Object *other)
         }
         break;
     }
-    case ENTITY_BLOCK_BOSS_ACTIVATOR:
-    {
-        EntityBlockBossActivator* activator = (EntityBlockBossActivator*)other;
+    case ENTITY_BLOCK_BOSS_ACTIVATOR: {
+        EntityBlockBossActivator *activator = (EntityBlockBossActivator *)other;
         if (activator->WhatBoss() == FALSE_KNIGHT)
         {
             Level2::fk->Activate();

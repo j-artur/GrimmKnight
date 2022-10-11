@@ -35,8 +35,8 @@ FalseKnight::FalseKnight(int iX, int iY)
     uint attackLeft[8] = {21, 22, 23, 24, 25, 26, 27, 28};
     uint bludgeonRight[10] = {29, 30, 31, 32, 33, 34, 35, 36, 37, 38};
     uint bludgeonLeft[10] = {29, 30, 31, 32, 33, 34, 35, 36, 37, 38};
-    uint stunLeft[1] = { 39 };
-    uint stunRight[1] = { 39 };
+    uint stunLeft[1] = {39};
+    uint stunRight[1] = {39};
 
     animation->Add(FK_IDLE * H_LEFT, idleLeft, 5);
     animation->Add(FK_IDLE * H_RIGHT, idleRight, 5);
@@ -62,6 +62,8 @@ FalseKnight::~FalseKnight()
 {
     delete tileSet;
     delete animation;
+    delete shockwaveTileSet;
+    delete barrelSprite;
 }
 
 bool FalseKnight::TakeDamage(uint damage, Direction dir)
@@ -412,7 +414,7 @@ void FalseKnight::Update()
                     hp = headHealth;
                     canKill = true;
                 }
-                
+
                 isStunned = false;
                 state = FK_RAGE;
             }
@@ -518,18 +520,18 @@ void FalseKnight::OnCollision(Object *other)
 
 void FalseKnight::JumpTo(FK_JumpTo jumpToLocation)
 {
-        jumpCd.Restart();
-        isJumping = true;
-        if (voiceCtrl && state == FK_LEAP)
-        {
-            voiceCtrl = false;
-            if (canKill)
-                TP2::audio->Play(SFK_VOICE_ATTACK);
-        }
+    jumpCd.Restart();
+    isJumping = true;
+    if (voiceCtrl && state == FK_LEAP)
+    {
+        voiceCtrl = false;
+        if (canKill)
+            TP2::audio->Play(SFK_VOICE_ATTACK);
+    }
 
-        float timeJumping = state == FK_BLUDGEON ? 1.4f : 2.0f;
-        float jumpingTo = jumpToLocation == PLAYER ? TP2::player->X() : window->CenterX();
+    float timeJumping = state == FK_BLUDGEON ? 1.4f : 2.0f;
+    float jumpingTo = jumpToLocation == PLAYER ? TP2::player->X() : window->CenterX();
 
-        ySpeed = state == FK_BLUDGEON ? bludgeonSpeed : leapSpeed;
-        xSpeed = (jumpingTo - x) / timeJumping;
+    ySpeed = state == FK_BLUDGEON ? bludgeonSpeed : leapSpeed;
+    xSpeed = (jumpingTo - x) / timeJumping;
 }

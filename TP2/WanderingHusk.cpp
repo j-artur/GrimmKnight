@@ -18,33 +18,31 @@ WanderingHusk::WanderingHusk(TileSet *tileSet, int iX, int iY)
 
     TP2::scene->Add(actionArea, MOVING);
 
-    uint seqWalkRight[7] = {0, 1, 2, 3, 4, 5, 6};
-    uint seqWalkLeft[7] = {0, 1, 2, 3, 4, 5, 6};
-    uint seqPrepRight[5] = {7, 8, 9, 10, 11};
-    uint seqPrepLeft[5] = {7, 8, 9, 10, 11};
-    uint seqRunRight[4] = {14, 15, 16, 17};
-    uint seqRunLeft[4] = {14, 15, 16, 17};
-    uint seqHurtRight[1] = {11};
-    uint seqHurtLeft[1] = {11};
-    uint seqDeadRight[7] = {21, 22, 23, 24, 25, 26, 27};
-    uint seqDeadLeft[7] = {21, 22, 23, 24, 25, 26, 27};
+    uint seqWalkLeft[2] = {0, 3};
+    uint seqWalkRight[2] = {6, 9};
+    uint seqRunLeft[2] = {1, 4};
+    uint seqRunRight[2] = {7, 10};
+    uint seqHurtLeft[1] = {2};
+    uint seqHurtRight[1] = {8};
+    uint seqDeadRight[7] = {5};
+    uint seqDeadLeft[7] = {11};
 
-    animation->Add(WH_WALKING * H_RIGHT, seqWalkRight, 2);
     animation->Add(WH_WALKING * H_LEFT, seqWalkLeft, 2);
-    animation->Add(WH_PRE_RUNNING * H_RIGHT, seqPrepRight, 2);
-    animation->Add(WH_PRE_RUNNING * H_LEFT, seqPrepLeft, 2);
-    animation->Add(WH_RUNNING * H_RIGHT, seqRunRight, 2);
+    animation->Add(WH_WALKING * H_RIGHT, seqWalkRight, 2);
+    animation->Add(WH_PRE_RUNNING * H_LEFT, seqWalkLeft, 2);
+    animation->Add(WH_PRE_RUNNING * H_RIGHT, seqWalkRight, 2);
     animation->Add(WH_RUNNING * H_LEFT, seqRunLeft, 2);
-    animation->Add(WH_HURTING * H_RIGHT, seqHurtRight, 1);
+    animation->Add(WH_RUNNING * H_RIGHT, seqRunRight, 2);
     animation->Add(WH_HURTING * H_LEFT, seqHurtLeft, 1);
-    animation->Add(WH_DEAD * H_RIGHT, seqDeadRight, 1);
+    animation->Add(WH_HURTING * H_RIGHT, seqHurtRight, 1);
     animation->Add(WH_DEAD * H_LEFT, seqDeadLeft, 1);
+    animation->Add(WH_DEAD * H_RIGHT, seqDeadRight, 1);
 
     animation->Select(WH_WALKING * H_RIGHT);
 
-    BBox(new Rect(-14.0f, -4.0f, 14.0f, 16.0f));
+    BBox(new Rect(-18.0f, -18.0f, 18.0f, 24.0f));
 
-    MoveTo(iX * 32.0f + 18.0f, iY * 32.0f + 18.0f);
+    MoveTo(iX * 32.0f + 26.0f, iY * 32.0f + 8.0f);
 }
 
 WanderingHusk::~WanderingHusk()

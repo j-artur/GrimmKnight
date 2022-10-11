@@ -17,7 +17,7 @@ void Level1::Init()
 
     background = new Sprite("Resources/Level1Bg.png");
     foreground = new Sprite("Resources/Level1Fg.png");
-    wanderingTileSet = new TileSet("Resources/WIP/WanderingHusk.png", 4, 7);
+    wanderingTileSet = new TileSet("Resources/WanderingHusk.png", 4, 3);
 
     scene = new Scene();
     TP2::scene = scene;
@@ -71,7 +71,7 @@ void Level1::Init()
     scene->Add(new EntityBlockRight(32, 26, 6), STATIC);
 
     scene->Add(new WanderingHusk(wanderingTileSet, 13, 41), MOVING);
-    scene->Add(new WanderingHusk(wanderingTileSet, 16, 28), MOVING);
+    scene->Add(new WanderingHusk(wanderingTileSet, 20, 31), MOVING);
 }
 
 void Level1::Update()

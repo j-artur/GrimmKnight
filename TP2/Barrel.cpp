@@ -2,7 +2,7 @@
 #include "TP2.h"
 #include "Util.h"
 
-Barrel::Barrel(Sprite* sp)
+Barrel::Barrel(Sprite *sp)
 {
     type = ENEMY_ATTACK;
     sprite = sp;
@@ -25,9 +25,7 @@ Barrel::Barrel(Sprite* sp)
 
 Barrel::~Barrel()
 {
-    delete sprite;
     TP2::audio->Play(SFK_BARREL_DEATH);
-
 }
 
 // ---------------------------------------------------------------------------------
@@ -42,4 +40,6 @@ void Barrel::Update()
     {
         TP2::scene->Delete(this, MOVING);
     }
+
+    barrelCd.Add(gameTime);
 }
