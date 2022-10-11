@@ -86,7 +86,7 @@ void Level2::Update()
     if (level1Transition->Transitioning())
     {
         TP2::player->AddCooldowns(gameTime);
-        TP2::player->Translate(LevelTransition::DISTANCE * gameTime, 0.0f);
+        TP2::player->Translate(-LevelTransition::DISTANCE * gameTime, 0.0f);
         TP2::player->UpdateAnimation();
         level1Transition->Update();
     }
