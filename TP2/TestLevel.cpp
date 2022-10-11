@@ -15,9 +15,10 @@ void TestLevel::Init()
     TP2::player->MoveTo(256.0f, -32.0f);
     scene->Add(TP2::player, MOVING);
 
-    boss = new FalseKnight();
-    boss->MoveTo(400.0f, -100.0f);
-    scene->Add(boss, MOVING);
+    // boss = new FalseKnight(12, 12);
+    //boss->Activate();
+    //boss->MoveTo(400.0f, -100.0f);
+    //scene->Add(boss, MOVING);
 
     AddWalls(scene, 0, 22, 40, 2);
 }

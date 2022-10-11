@@ -82,9 +82,9 @@ void Level0::Init()
     scene->Add(new EntityBlockLeft(45, 2, 6), STATIC);
     scene->Add(new EntityBlockRight(74, 2, 6), STATIC);
 
-    scene->Add(new Tiktik(tiktikTileSet, 16, 7), MOVING);
-    scene->Add(new Tiktik(tiktikTileSet, 55, 7), MOVING);
-    scene->Add(new Tiktik(tiktikTileSet, 67, 7), MOVING);
+    scene->Add(new Tiktik(tiktikTileSet, 16, 7, 0), MOVING);
+    scene->Add(new Tiktik(tiktikTileSet, 55, 7, 1), MOVING);
+    scene->Add(new Tiktik(tiktikTileSet, 67, 7, 2), MOVING);
 }
 
 void Level0::Update()
@@ -181,6 +181,7 @@ void Level0::Update()
     }
     else if (level1Transition->Done())
     {
+        TP2::audio->Stop(ENEMY_CRAWLER);
         TP2::NextLevel<Level1>();
     }
     else if (enteringCd.Down())

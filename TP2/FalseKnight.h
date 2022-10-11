@@ -9,6 +9,7 @@
 #include "Sprite.h"
 #include "Util.h"
 #include "Wall.h"
+#include "Shockwave.h"
 #include <random>
 
 using std::mt19937;
@@ -24,6 +25,7 @@ enum FK_State
     FK_RAGE,
     FK_STUN,
     FK_DEAD,
+    FK_INACTIVE,
 };
 
 enum FK_Animation
@@ -53,9 +55,10 @@ class FalseKnight : public Entity
     uniform_int_distribution<int> cd;
     uniform_int_distribution<int> move;
 
-    FK_State state = FK_IDLE;
+    FK_State state = FK_INACTIVE;
     HDirection direction = H_LEFT;
     Mace *mace;
+    Shockwave* shockwave;
 
     uint armorHealth = 65;
     uint currentArmorHealth = armorHealth;
@@ -92,10 +95,12 @@ class FalseKnight : public Entity
     bool canKill = false;
 
   public:
-    FalseKnight();
+    FalseKnight(int iX, int iY);
     ~FalseKnight();
 
     bool TakeDamage(uint damage, Direction dir);
+
+    void Activate();
 
     void Update();
     void Draw();

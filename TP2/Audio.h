@@ -38,6 +38,7 @@ public:
     void Add(uint id, string filename, uint nVoices = 1);   // adiciona arquivo a coleção de sons
     void Play(uint id, bool repeat = false);                // inicia a reprodução do som
     void Stop(uint id);                                     // para a reprodução do som
+    void Stop(uint id, uint voice);                         // para a reprodução de uma voz específica
     void Volume(uint id, float level);                      // ajusta volume do som
     void Frequency(uint id, float level);                   // ajusta a frequência do som
 }; 

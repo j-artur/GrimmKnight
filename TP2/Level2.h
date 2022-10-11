@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "ScreenTransition.h"
 #include "TP2.h"
+#include "FalseKnight.h"
 
 class Level2 : public Level
 {
@@ -15,6 +16,7 @@ class Level2 : public Level
     Sprite *foreground = nullptr;
     TileSet *tiktikTileSet = nullptr;
     TileSet *wanderingTileSet = nullptr;
+
 
     Scene *scene = nullptr;
 
@@ -27,6 +29,8 @@ class Level2 : public Level
     Cooldown enteringCd{LevelTransition::DURATION};
 
   public:
+    static FalseKnight* fk;
+
     void Init();
     void Update();
     void Draw();

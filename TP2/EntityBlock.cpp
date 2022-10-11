@@ -63,3 +63,26 @@ EntityBlockRight::EntityBlockRight(int iX, int iY, int iHeight)
 
     MoveTo(absX, absY);
 }
+
+EntityBlockBossActivator::EntityBlockBossActivator(int iX, int iY, int iHeight, Boss boss)
+{
+    type = ENTITY_BLOCK_BOSS_ACTIVATOR;
+
+    this->boss = boss;
+
+    float y1 = iY * 32.0f;
+    float height = iHeight * 32.0f;
+    float y2 = y1 + height;
+
+    absX = (iX + 1) * 32.0f;
+    absY = (y1 + y2) / 2.0f;
+
+    BBox(new Rect(0.0f, -height / 2.0f, 0.0f, height / 2.0f));
+
+    MoveTo(absX, absY);
+}
+
+Boss EntityBlockBossActivator::WhatBoss()
+{
+    return boss;
+}

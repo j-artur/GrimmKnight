@@ -34,7 +34,7 @@ public:
 
 inline void Barrel::Draw()
 {
-    sprite->Draw(round(x), round(y), LAYER_BOSS_ATTACK);
+    sprite->Draw(round(x), round(y), LAYER_BOSS_ATTACK, scale, rotation);
 }
 
 #endif

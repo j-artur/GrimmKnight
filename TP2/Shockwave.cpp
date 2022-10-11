@@ -26,7 +26,6 @@ Shockwave::Shockwave(HDirection direction, TileSet *tileset)
 
 Shockwave::~Shockwave()
 {
-    delete ts;
     delete anim;
 }
 

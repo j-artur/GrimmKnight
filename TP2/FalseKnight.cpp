@@ -4,11 +4,9 @@
 #include "TP2.h"
 #include "Wall.h"
 
-FalseKnight::FalseKnight()
+FalseKnight::FalseKnight(int iX, int iY)
 {
     type = ENEMY;
-
-    TP2::audio->Play(SFK_THEME, true);
 
     hp = armorHealth;
 
@@ -23,7 +21,7 @@ FalseKnight::FalseKnight()
     betweenAttacksCd.Restart();
 
     tileSet = new TileSet("Resources/WIP/FalseKnight.png", 303, 192, 5, 35);
-    shockwaveTileSet = new TileSet("Resources/attack.png", 64, 64, 5, 10);
+    shockwaveTileSet = new TileSet("Resources/attack.png", 64, 64, 3, 4);
     barrelSprite = new Sprite("Resources/WIP/rock.png");
     animation = new Animation(tileSet, 0.2f, true);
 
@@ -52,6 +50,9 @@ FalseKnight::FalseKnight()
     animation->Add(FK_BLUDGEONING * H_LEFT, bludgeonLeft, 10);
     animation->Add(FK_STUN * H_RIGHT, stunRight, 1);
     animation->Add(FK_STUN * H_LEFT, stunLeft, 1);
+    animation->Add(FK_INACTIVE, stunLeft, 1);
+
+    MoveTo(iX * 32.0f + 18.0f, iY * 32.0f + 18.0f);
 
     animation->Select(state * direction);
     BBox(new Rect(-80, -192 / 2, 150, 192 / 2));
@@ -84,6 +85,12 @@ bool FalseKnight::TakeDamage(uint damage, Direction dir)
     }
 
     return false;
+}
+
+void FalseKnight::Activate()
+{
+    state = FK_IDLE;
+    TP2::audio->Play(SFK_THEME, true);
 }
 
 void FalseKnight::Update()
@@ -155,7 +162,8 @@ void FalseKnight::Update()
                 {
                     voiceCtrl = false;
                     TP2::audio->Play(SFK_SWING);
-                    TP2::audio->Play(SFK_VOICE_ATTACK);
+                    if (canKill)
+                        TP2::audio->Play(SFK_VOICE_ATTACK);
                 }
                 mace->MoveTo(x - 110.0f * attackDirection, y - 100.0f);
                 break;
@@ -512,6 +520,12 @@ void FalseKnight::JumpTo(FK_JumpTo jumpToLocation)
 {
         jumpCd.Restart();
         isJumping = true;
+        if (voiceCtrl && state == FK_LEAP)
+        {
+            voiceCtrl = false;
+            if (canKill)
+                TP2::audio->Play(SFK_VOICE_ATTACK);
+        }
 
         float timeJumping = state == FK_BLUDGEON ? 1.4f : 2.0f;
         float jumpingTo = jumpToLocation == PLAYER ? TP2::player->X() : window->CenterX();

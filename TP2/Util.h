@@ -56,6 +56,7 @@ enum Objects
     ENTITY_BLOCK_BOTTOM,
     ENTITY_BLOCK_LEFT,
     ENTITY_BLOCK_RIGHT,
+    ENTITY_BLOCK_BOSS_ACTIVATOR,
     ENTITY_ACTION_AREA,
     SPIKE,
     SCREEN_TRANSITION,
@@ -82,6 +83,12 @@ enum Orientation
 {
     VERTICAL,
     HORIZONTAL,
+};
+
+enum Boss
+{
+    FALSE_KNIGHT,
+    MANTIS_LORDS,
 };
 
 const float KNOCKBACK_SPEED = 128.0f;

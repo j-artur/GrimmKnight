@@ -16,9 +16,12 @@ enum TiktikState
 class Tiktik : public Entity
 {
   private:
+
     Animation *animation;
     TiktikState state = TIKTIK_WALKING;
     HDirection direction = H_RIGHT;
+
+    uint voiceId;
 
     Cooldown hurtCd{0.3f};
     Cooldown dieCd{2.0f};
@@ -31,7 +34,8 @@ class Tiktik : public Entity
     bool audioCtrl = true;
 
   public:
-    Tiktik(TileSet *tileSet, int x, int y);
+
+    Tiktik(TileSet *tileSet, int x, int y, uint voiceId);
     ~Tiktik();
 
     bool TakeDamage(uint damage, Direction dir);

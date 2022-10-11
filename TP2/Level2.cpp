@@ -3,6 +3,10 @@
 #include "Level4.h"
 #include "Spike.h"
 #include "Wall.h"
+#include "EntityBlock.h"
+#include "FalseKnight.h"
+
+FalseKnight* Level2::fk = nullptr;
 
 void Level2::Init()
 {
@@ -66,6 +70,12 @@ void Level2::Init()
     AddWalls(scene, 2, 43, 1, 3);
     AddWalls(scene, 3, 46, 36, 2);
     AddWalls(scene, 39, 43, 1, 3);
+
+    scene->Add(new EntityBlockBossActivator(10, 30, 16, FALSE_KNIGHT), STATIC);
+
+    fk = new FalseKnight(29, 43);
+
+    scene->Add(fk, MOVING);
 
     scene->Add(new Spike(26, 4, 6, 1, DOWN), STATIC);
     scene->Add(new Spike(28, 7, 4, 1, UP), STATIC);

@@ -37,4 +37,13 @@ class EntityBlockRight : public EntityBlock
     EntityBlockRight(int x, int y, int h);
 };
 
+class EntityBlockBossActivator : public EntityBlock
+{
+private:
+    Boss boss;
+public:
+   EntityBlockBossActivator(int iX, int iY, int iHeight, Boss boss);
+   Boss WhatBoss();
+};
+
 #endif

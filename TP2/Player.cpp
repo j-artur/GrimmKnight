@@ -5,6 +5,8 @@
 #include "TP2.h"
 #include "Util.h"
 #include "Wall.h"
+#include "EntityBlock.h"
+#include "Level2.h"
 
 Player::Player()
 {
@@ -785,6 +787,16 @@ void Player::OnCollision(Object *other)
                 TakeDamage(1, ((Spike *)other)->Dir());
         }
         break;
+    }
+    case ENTITY_BLOCK_BOSS_ACTIVATOR:
+    {
+        EntityBlockBossActivator* activator = (EntityBlockBossActivator*)other;
+        if (activator->WhatBoss() == FALSE_KNIGHT)
+        {
+            Level2::fk->Activate();
+        }
+
+        TP2::scene->Delete(activator, STATIC);
     }
     }
 }

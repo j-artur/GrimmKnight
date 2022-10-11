@@ -41,7 +41,7 @@ void TP2::Init()
     audio->Add(PLAYER_WALK, "Resources/Audio/Player/hero_walk_footsteps_stone.wav");
 
     audio->Add(ENEMY_DAMAGE, "Resources/Audio/enemy_damage.wav");
-    audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav");
+    audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav",3);
 
     audio->Add(CAVE_NOISES, "Resources/Audio/cave_noises.wav");
     audio->Add(MAIN_MUSIC, "Resources/Audio/S23-11.wav");

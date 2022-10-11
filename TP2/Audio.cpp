@@ -100,6 +100,14 @@ void Audio::Stop(uint id)
         selected->voices[i]->Stop();
 }
 
+void Audio::Stop(uint id, uint voice)
+{
+    // recupera som da tabela
+    Sound* selected = soundTable[id];
+
+    selected->voices[voice]->Stop();
+}
+
 // ---------------------------------------------------------------------------------
 
 void Audio::Volume(uint id, float level)

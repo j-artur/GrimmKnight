@@ -5,13 +5,16 @@
 #include "TP2.h"
 #include "Wall.h"
 
-Tiktik::Tiktik(TileSet *tileSet, int iX, int iY)
+Tiktik::Tiktik(TileSet *tileSet, int iX, int iY, uint voiceId)
 {
     type = ENEMY;
+
+    this->voiceId = voiceId;
 
     hp = 8;
 
     TP2::audio->Play(ENEMY_CRAWLER, true);
+    TP2::audio->Volume(ENEMY_CRAWLER, 0.5f);
 
     animation = new Animation(tileSet, 0.3f, true);
 
@@ -92,7 +95,8 @@ void Tiktik::Update()
 
         if (audioCtrl)
         {
-            TP2::audio->Stop(ENEMY_CRAWLER);
+            TP2::audio->Volume(ENEMY_CRAWLER, 1.0f);
+            TP2::audio->Stop(ENEMY_CRAWLER, voiceId);
             audioCtrl = false;
         }
 
