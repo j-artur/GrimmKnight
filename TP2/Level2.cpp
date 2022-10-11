@@ -1,12 +1,12 @@
 #include "Level2.h"
+#include "EntityBlock.h"
+#include "FalseKnight.h"
 #include "Level1.h"
 #include "Level4.h"
 #include "Spike.h"
 #include "Wall.h"
-#include "EntityBlock.h"
-#include "FalseKnight.h"
 
-FalseKnight* Level2::fk = nullptr;
+FalseKnight *Level2::fk = nullptr;
 
 void Level2::Init()
 {
@@ -36,17 +36,18 @@ void Level2::Init()
     level4Transition->MoveTo(1280.0f, 192.0f);
     scene->Add(level4Transition, STATIC);
 
-    AddWalls(scene, 0, 0, 24, 2);
-    AddWalls(scene, 24, 0, 16, 4);
+    AddWalls(scene, 0, 0, 26, 2);
+    AddWalls(scene, 26, 0, 14, 4);
     AddWalls(scene, 0, 2, 2, 17);
     AddWalls(scene, 2, 11, 2, 1);
     AddWalls(scene, 5, 14, 2, 1);
     AddWalls(scene, 2, 17, 2, 1);
     AddWalls(scene, 10, 7, 2, 2);
     AddWalls(scene, 8, 9, 4, 2);
-    AddWalls(scene, 20, 8, 20, 2);
-    AddWalls(scene, 24, 7, 4, 1);
-    AddWalls(scene, 32, 7, 2, 1);
+    AddWalls(scene, 20, 8, 4, 2);
+    AddWalls(scene, 34, 8, 6, 2);
+    AddWalls(scene, 24, 6, 4, 4);
+    AddWalls(scene, 32, 6, 2, 4);
     AddWalls(scene, 36, 10, 2, 2);
     AddWalls(scene, 14, 15, 4, 2);
     AddWalls(scene, 22, 15, 4, 2);
@@ -71,14 +72,14 @@ void Level2::Init()
     AddWalls(scene, 3, 46, 36, 2);
     AddWalls(scene, 39, 43, 1, 3);
 
+    scene->Add(new Spike(28, 6, 1, 4, RIGHT), STATIC);
+    scene->Add(new Spike(31, 6, 1, 4, LEFT), STATIC);
+
     scene->Add(new EntityBlockBossActivator(10, 30, 16, FALSE_KNIGHT), STATIC);
 
     fk = new FalseKnight(29, 43);
 
     scene->Add(fk, MOVING);
-
-    scene->Add(new Spike(26, 4, 6, 1, DOWN), STATIC);
-    scene->Add(new Spike(28, 7, 4, 1, UP), STATIC);
 }
 
 void Level2::Update()
