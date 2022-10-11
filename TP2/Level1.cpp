@@ -2,6 +2,7 @@
 #include "EntityBlock.h"
 #include "Level0.h"
 #include "Level2.h"
+#include "Level3.h"
 #include "LevelTransition.h"
 #include "TP2.h"
 #include "Wall.h"
@@ -97,17 +98,17 @@ void Level1::Update()
     {
         TP2::NextLevel<Level2>();
     }
-    // else if (level3Transition->Transitioning())
-    // {
-    //     TP2::player->AddCooldowns(gameTime);
-    //     TP2::player->Translate(-LevelTransition::DISTANCE * gameTime, 0.0f);
-    //     TP2::player->UpdateAnimation();
-    //     level3Transition->Update();
-    // }
-    // else if (level3Transition->Done())
-    // {
-    //     TP2::NextLevel<Level3>();
-    // }
+    else if (level3Transition->Transitioning())
+    {
+        TP2::player->AddCooldowns(gameTime);
+        TP2::player->Translate(-LevelTransition::DISTANCE * gameTime, 0.0f);
+        TP2::player->UpdateAnimation();
+        level3Transition->Update();
+    }
+    else if (level3Transition->Done())
+    {
+        TP2::NextLevel<Level3>();
+    }
     else if (enteringCd.Down())
     {
         TP2::player->AddCooldowns(gameTime);
@@ -160,7 +161,7 @@ void Level1::EnterFrom(LevelId id)
         break;
     case LEVEL3:
         enteringFrom = LEVEL3;
-        TP2::player->MoveTo(0.0f, 706.0f);
+        TP2::player->MoveTo(0.0f, 674.0f);
         TP2::player->State(WALKING);
         TP2::player->Dir(H_RIGHT);
         enteringCd.Restart();
