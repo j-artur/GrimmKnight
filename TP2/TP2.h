@@ -20,8 +20,6 @@ class TP2 : public Game
     HUD *hud;
     Sprite *pauseScreen = nullptr;
     Sprite *transitionScreen = nullptr;
-    bool pauseKeyCtrl = false;
-    bool bBoxKeyCtrl = false;
 
     static bool transitioning;
     static Cooldown levelTransition;

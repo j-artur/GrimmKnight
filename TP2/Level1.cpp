@@ -7,7 +7,6 @@
 #include "TP2.h"
 #include "Wall.h"
 #include "WanderingHusk.h"
-// #include "Level3.h"
 
 void Level1::Init()
 {

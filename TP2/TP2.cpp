@@ -42,7 +42,7 @@ void TP2::Init()
     audio->Add(PLAYER_WALK, "Resources/Audio/Player/hero_walk_footsteps_stone.wav");
 
     audio->Add(ENEMY_DAMAGE, "Resources/Audio/enemy_damage.wav");
-    audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav",3);
+    audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav", 3);
 
     audio->Add(CAVE_NOISES, "Resources/Audio/cave_noises.wav");
     audio->Add(MAIN_MUSIC, "Resources/Audio/S23-11.wav");
@@ -94,21 +94,10 @@ void TP2::Update()
     else if (window->KeyDown('M'))
         player->FullMana();
 
-    if (window->KeyDown('B') && !bBoxKeyCtrl)
-    {
+    if (window->KeyPress('B'))
         viewBBox = !viewBBox;
-        bBoxKeyCtrl = true;
-    }
-    if (window->KeyUp('B'))
-        bBoxKeyCtrl = false;
-
-    if (window->KeyDown(VK_ESCAPE) && !pauseKeyCtrl && currentLevel != TITLESCREEN && currentLevel != ENDSCREEN)
-    {
-        pauseKeyCtrl = true;
+    if (window->KeyPress(VK_ESCAPE) && currentLevel != TITLESCREEN && currentLevel != ENDSCREEN)
         paused = !paused;
-    }
-    if (window->KeyUp(VK_ESCAPE))
-        pauseKeyCtrl = false;
 
     if (paused)
     {

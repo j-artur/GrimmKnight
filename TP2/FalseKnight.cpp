@@ -20,42 +20,43 @@ FalseKnight::FalseKnight(int iX, int iY)
     nextMove = 2;
     betweenAttacksCd.Restart();
 
-    tileSet = new TileSet("Resources/WIP/FalseKnight.png", 303, 192, 5, 35);
+    tileSet = new TileSet("Resources/FalseKnight.png", 452, 260, 6, 24);
     shockwaveTileSet = new TileSet("Resources/attack.png", 64, 64, 3, 4);
     barrelSprite = new Sprite("Resources/WIP/rock.png");
     animation = new Animation(tileSet, 0.2f, true);
 
-    uint idleRight[5] = {0, 1, 2, 3, 4};
-    uint idleLeft[5] = {0, 1, 2, 3, 4};
-    uint leapRight[10] = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-    uint leapLeft[10] = {5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-    uint prepSlamRight[6] = {15, 16, 17, 18, 19, 20};
-    uint prepSlamLeft[6] = {15, 16, 17, 18, 19, 20};
-    uint attackRight[8] = {21, 22, 23, 24, 25, 26, 27, 28};
-    uint attackLeft[8] = {21, 22, 23, 24, 25, 26, 27, 28};
-    uint bludgeonRight[10] = {29, 30, 31, 32, 33, 34, 35, 36, 37, 38};
-    uint bludgeonLeft[10] = {29, 30, 31, 32, 33, 34, 35, 36, 37, 38};
-    uint stunLeft[1] = {39};
-    uint stunRight[1] = {39};
+    uint idleRight[2] = {0, 1};
+    uint idleLeft[2] = {12, 13};
+    uint leapRight[2] = {3, 4};
+    uint leapLeft[2] = {15, 16};
+    uint prepSlamRight[1] = {5};
+    uint prepSlamLeft[1] = {17};
+    uint attackRight[2] = {6, 7};
+    uint attackLeft[2] = {18, 19};
+    uint bludgeonRight[2] = {8, 9};
+    uint bludgeonLeft[2] = {20, 21};
+    uint stunLeft[2] = {10, 11};
+    uint stunRight[2] = {22, 23};
+    uint inactive[1] = {23};
 
-    animation->Add(FK_IDLE * H_LEFT, idleLeft, 5);
-    animation->Add(FK_IDLE * H_RIGHT, idleRight, 5);
-    animation->Add(FK_PREP_SLAM * H_LEFT, prepSlamLeft, 6);
-    animation->Add(FK_PREP_SLAM * H_RIGHT, prepSlamRight, 6);
-    animation->Add(FK_SLAMMING * H_LEFT, attackLeft, 8);
-    animation->Add(FK_SLAMMING * H_RIGHT, attackRight, 8);
-    animation->Add(FK_LEAPING * H_LEFT, leapLeft, 10);
-    animation->Add(FK_LEAPING * H_RIGHT, leapRight, 10);
-    animation->Add(FK_BLUDGEONING * H_RIGHT, bludgeonRight, 10);
-    animation->Add(FK_BLUDGEONING * H_LEFT, bludgeonLeft, 10);
-    animation->Add(FK_STUN * H_RIGHT, stunRight, 1);
-    animation->Add(FK_STUN * H_LEFT, stunLeft, 1);
-    animation->Add(FK_INACTIVE, stunLeft, 1);
+    animation->Add(FK_IDLE * H_LEFT, idleLeft, 2);
+    animation->Add(FK_IDLE * H_RIGHT, idleRight, 2);
+    animation->Add(FK_PREP_SLAM * H_LEFT, prepSlamLeft, 1);
+    animation->Add(FK_PREP_SLAM * H_RIGHT, prepSlamRight, 1);
+    animation->Add(FK_SLAMMING * H_LEFT, attackLeft, 2);
+    animation->Add(FK_SLAMMING * H_RIGHT, attackRight, 2);
+    animation->Add(FK_LEAPING * H_LEFT, leapLeft, 2);
+    animation->Add(FK_LEAPING * H_RIGHT, leapRight, 2);
+    animation->Add(FK_BLUDGEONING * H_RIGHT, bludgeonRight, 2);
+    animation->Add(FK_BLUDGEONING * H_LEFT, bludgeonLeft, 2);
+    animation->Add(FK_STUN * H_RIGHT, stunRight, 2);
+    animation->Add(FK_STUN * H_LEFT, stunLeft, 2);
+    animation->Add(FK_INACTIVE, inactive, 1);
 
-    MoveTo(iX * 32.0f + 18.0f, iY * 32.0f + 18.0f);
+    MoveTo(iX * 32.0f, iY * 32.0f);
 
     animation->Select(state * direction);
-    BBox(new Rect(-80, -192 / 2, 150, 192 / 2));
+    BBox(new Rect(-64.0f, -16.0f, 64.0f, 124.0f));
 }
 
 FalseKnight::~FalseKnight()
