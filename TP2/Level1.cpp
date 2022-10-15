@@ -6,6 +6,7 @@
 #include "Level3.h"
 #include "LevelTransition.h"
 #include "TP2.h"
+#include "Totem.h"
 #include "Wall.h"
 #include "WanderingHusk.h"
 
@@ -18,6 +19,7 @@ void Level1::Init()
     background = new Sprite("Resources/Level1Bg.png");
     foreground = new Sprite("Resources/Level1Fg.png");
     wanderingTileSet = new TileSet("Resources/WanderingHusk.png", 4, 3);
+    totem = new Sprite("Resources/TotemLeft.png");
 
     scene = new Scene();
     TP2::scene = scene;
@@ -41,7 +43,7 @@ void Level1::Init()
     scene->Add(level2Transition, STATIC);
 
     level3Transition = new LevelTransition(LEFT);
-    level3Transition->MoveTo(0.0f, 672.0f);
+    level3Transition->MoveTo(0.0f, 640.0f);
     scene->Add(level3Transition, STATIC);
 
     AddWalls(scene, 0, 0, 40, 10);
@@ -72,6 +74,8 @@ void Level1::Init()
 
     scene->Add(new WanderingHusk(wanderingTileSet, 13, 41), MOVING);
     scene->Add(new WanderingHusk(wanderingTileSet, 20, 31), MOVING);
+
+    scene->Add(new Totem(totem, 17, 20), STATIC);
 
     if (!TP2::baldurKilled)
         scene->Add(new Baldur(3, 20), MOVING);
@@ -146,6 +150,7 @@ void Level1::Finalize()
     delete background;
     delete foreground;
     delete wanderingTileSet;
+    delete totem;
     scene->Remove(TP2::player, MOVING);
     delete scene;
 }

@@ -103,6 +103,16 @@ void Attack::OnCollision(Object *other)
             TP2::player->Knockback();
             break;
         }
+        case TOTEM: {
+            Entity *totem = (Entity *)other;
+            if (totem->TakeDamage(1, direction))
+            {
+                // TP2::audio->Play(TOTEM_DAMAGE);
+                TP2::player->Knockback();
+                TP2::player->AddMana();
+            }
+            break;
+        }
         }
     }
 }

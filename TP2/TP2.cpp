@@ -18,9 +18,12 @@ bool TP2::viewBBox = false;
 bool TP2::paused = false;
 bool TP2::baldurKilled = false;
 bool TP2::fkDefeated = false;
-
 bool TP2::transitioning = false;
+bool TP2::gettingFireball = false;
+bool TP2::gettingDash = false;
 Cooldown TP2::levelTransition{2.0f};
+Cooldown TP2::fireballCd{4.0f};
+Cooldown TP2::dashCd{4.0f};
 LevelId TP2::currentLevel = TITLESCREEN;
 Scene *TP2::pausedScene = nullptr;
 
@@ -28,6 +31,8 @@ void TP2::Init()
 {
     pauseScreen = new Sprite("Resources/PauseScreen.png");
     transitionScreen = new Sprite("Resources/TransitionScreen.png");
+    fireballScreen = new Sprite("Resources/LearnFireball.png");
+    dashScreen = new Sprite("Resources/LearnDash.png");
 
     cursor = new Cursor();
     player = new Player();
@@ -91,9 +96,9 @@ void TP2::Update()
     else if (window->KeyDown(VK_F6))
         NextLevel<TitleScreen>();
     else if (window->KeyDown(VK_F7))
-        player->LearnFireball();
+        GetFireball();
     else if (window->KeyDown(VK_F8))
-        player->LearnDash();
+        GetDash();
     else if (window->KeyDown('H'))
         player->FullHP();
     else if (window->KeyDown('M'))
@@ -104,10 +109,37 @@ void TP2::Update()
     if (window->KeyPress(VK_ESCAPE) && currentLevel != TITLESCREEN && currentLevel != ENDSCREEN)
         paused = !paused;
 
+    if (transitioning)
+    {
+        levelTransition.Add(gameTime);
+        if (levelTransition.Up())
+            transitioning = false;
+    }
+
     if (paused)
     {
         pausedScene->Update();
         pausedScene->CollisionDetection();
+    }
+    else if (gettingFireball)
+    {
+        if (fireballCd.Up())
+        {
+            gettingFireball = false;
+            player->LearnFireball();
+        }
+        else
+            fireballCd.Add(gameTime);
+    }
+    else if (gettingDash)
+    {
+        if (dashCd.Up())
+        {
+            gettingDash = false;
+            player->LearnDash();
+        }
+        else
+            dashCd.Add(gameTime);
     }
     else
     {
@@ -131,14 +163,21 @@ void TP2::Draw()
         pausedScene->Draw();
     }
 
+    if (gettingFireball)
+        fireballScreen->Draw(window->CenterX(), window->CenterY(), LAYER_TRANSITION_SCREEN, 1.0f, 0.0f,
+                             {1.0f, 1.0f, 1.0f,
+                              (float)max(sin(3.0f * M_PI * fireballCd.Time() / 4.0f),
+                                         ceil(sin(3.0f * M_PI * (fireballCd.Time() - 2.0f / 3.0f) / 8.0f)))});
+
+    if (gettingDash)
+        dashScreen->Draw(window->CenterX(), window->CenterY(), LAYER_TRANSITION_SCREEN, 1.0f, 0.0f,
+                         {1.0f, 1.0f, 1.0f,
+                          (float)max(sin(3.0f * M_PI * dashCd.Time() / 4.0f),
+                                     ceil(sin(3.0f * M_PI * (dashCd.Time() - 2.0f / 3.0f) / 8.0f)))});
+
     if (transitioning)
-    {
         transitionScreen->Draw(window->CenterX(), window->CenterY(), LAYER_TRANSITION_SCREEN, 1.0f, 0.0f,
                                {1.0f, 1.0f, 1.0f, (float)sin(M_PI * levelTransition.Time() / 2.0f)});
-        levelTransition.Add(gameTime);
-        if (levelTransition.Up())
-            transitioning = false;
-    }
 }
 
 void TP2::Finalize()
@@ -154,6 +193,18 @@ void TP2::StartTransition()
 {
     transitioning = true;
     levelTransition.Restart();
+}
+
+void TP2::GetFireball()
+{
+    gettingFireball = true;
+    fireballCd.Restart();
+}
+
+void TP2::GetDash()
+{
+    gettingDash = true;
+    dashCd.Restart();
 }
 
 int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,

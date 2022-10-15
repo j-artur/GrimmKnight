@@ -19,10 +19,18 @@ class TP2 : public Game
     static Level *level;
     HUD *hud;
     Sprite *pauseScreen = nullptr;
-    Sprite *transitionScreen = nullptr;
 
+    Sprite *transitionScreen = nullptr;
     static bool transitioning;
     static Cooldown levelTransition;
+
+    Sprite *fireballScreen = nullptr;
+    static bool gettingFireball;
+    static Cooldown fireballCd;
+
+    Sprite *dashScreen = nullptr;
+    static bool gettingDash;
+    static Cooldown dashCd;
 
   public:
     static LevelId currentLevel;
@@ -41,6 +49,8 @@ class TP2 : public Game
     void Finalize();
 
     static void StartTransition();
+    static void GetFireball();
+    static void GetDash();
 
     template <class T> static void NextLevel()
     {

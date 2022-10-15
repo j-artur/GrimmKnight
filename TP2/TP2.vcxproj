@@ -198,6 +198,7 @@
     <ClCompile Include="TileSet.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TitleScreen.cpp" />
+    <ClCompile Include="Totem.cpp" />
     <ClCompile Include="TP2.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Wall.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="TileSet.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TitleScreen.h" />
+    <ClInclude Include="Totem.h" />
     <ClInclude Include="TP2.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="Util.h" />

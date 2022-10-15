@@ -1,6 +1,7 @@
 #ifndef _LEVEL3_H_
 #define _LEVEL3_H_
 
+#include "ActionArea.h"
 #include "Camera.h"
 #include "Level.h"
 #include "LevelTransition.h"
@@ -13,7 +14,8 @@ class Level3 : public Level
   private:
     Sprite *background = nullptr;
     Sprite *foreground = nullptr;
-    Sprite *totem = nullptr;
+    Sprite *totemLeft = nullptr;
+    Sprite *totemRight = nullptr;
 
     Scene *scene = nullptr;
 
@@ -23,6 +25,7 @@ class Level3 : public Level
     ScreenTransition *screenTransition2 = nullptr;
     ScreenTransition *screenTransition3 = nullptr;
     LevelTransition *levelTransition = nullptr;
+    ActionArea *dashArea = nullptr;
 
     Cooldown enteringCd{LevelTransition::DURATION};
 

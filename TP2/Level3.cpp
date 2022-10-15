@@ -1,6 +1,7 @@
 #include "Level3.h"
 #include "Level1.h"
 #include "Spike.h"
+#include "Totem.h"
 #include "Wall.h"
 
 void Level3::Init()
@@ -9,6 +10,8 @@ void Level3::Init()
 
     background = new Sprite("Resources/Level3Bg.png");
     foreground = new Sprite("Resources/Level3Fg.png");
+    totemLeft = new Sprite("Resources/TotemLeft.png");
+    totemRight = new Sprite("Resources/TotemRight.png");
 
     scene = new Scene();
     TP2::scene = scene;
@@ -148,6 +151,14 @@ void Level3::Init()
     scene->Add(new Spike(67, 6, 4, 1, UP), STATIC);
     scene->Add(new Spike(62, 29, 4, 1, DOWN), STATIC);
     scene->Add(new Spike(62, 32, 4, 1, UP), STATIC);
+
+    scene->Add(new Totem(totemRight, 3, 30), STATIC);
+    scene->Add(new Totem(totemLeft, 30, 20), STATIC);
+    scene->Add(new Totem(totemLeft, 48, 6), STATIC);
+
+    dashArea = new ActionArea(-32.0f, -96.0f, 32.0f, 96.0f);
+    dashArea->MoveTo(1760.0f, 160.0f);
+    scene->Add(dashArea, STATIC);
 }
 
 void Level3::Update()
@@ -190,6 +201,8 @@ void Level3::Update()
         screenTransition3->Update();
         TP2::player->AddCooldowns(0.1f * gameTime);
     }
+    else if (dashArea->IsPlayerInside() && !TP2::player->HasDash())
+        TP2::GetDash();
     else
     {
         scene->Update();
@@ -208,7 +221,8 @@ void Level3::Finalize()
 {
     delete background;
     delete foreground;
-    delete totem;
+    delete totemLeft;
+    delete totemRight;
     scene->Remove(TP2::player, MOVING);
     delete scene;
 }
