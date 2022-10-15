@@ -791,6 +791,7 @@ void Player::OnCollision(Object *other)
         if (activator->WhatBoss() == FALSE_KNIGHT)
         {
             Level2::fk->Activate();
+            Level2::leftGate->Close();
         }
 
         TP2::scene->Delete(activator, STATIC);

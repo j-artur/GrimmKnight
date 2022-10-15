@@ -473,6 +473,7 @@ void FalseKnight::Update()
         if (hp <= 0)
         {
             state = FK_DEAD;
+            Level2::rightGate->Open();
             TP2::scene->Remove(head, STATIC);
             if (voice2Ctrl)
             {

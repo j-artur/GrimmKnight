@@ -6,6 +6,8 @@
 #include "Wall.h"
 
 FalseKnight *Level2::fk = nullptr;
+Gate *Level2::leftGate = nullptr;
+Gate *Level2::rightGate = nullptr;
 
 void Level2::Init()
 {
@@ -13,6 +15,7 @@ void Level2::Init()
 
     background = new Sprite("Resources/Level2Bg.png");
     foreground = new Sprite("Resources/Level2Fg.png");
+    gate = new Image("Resources/Gate.png");
 
     scene = new Scene();
     TP2::scene = scene;
@@ -73,21 +76,29 @@ void Level2::Init()
     scene->Add(new Spike(28, 6, 1, 4, RIGHT), STATIC);
     scene->Add(new Spike(31, 6, 1, 4, LEFT), STATIC);
 
-    // soube fazer essa porra nao
-    bossWall = new RightWall(7, 42, 4);
-    scene->Add(bossWall, STATIC);
-
     if (!TP2::fkDefeated)
-        scene->Add(new EntityBlockBossActivator(10, 30, 16, FALSE_KNIGHT), STATIC);
+    {
+        scene->Add(new EntityBlockBossActivator(14, 30, 16, FALSE_KNIGHT), STATIC);
 
-    fk = new FalseKnight(29, 43);
+        fk = new FalseKnight(29, 43);
+        scene->Add(fk, MOVING);
 
-    // scene->Add(new EntityBlockLeft(7, 30, 16), STATIC);
-    // scene->Add(new EntityBlockTop(8, 29, 28), STATIC);
-    // scene->Add(new EntityBlockRight(36, 30, 16), STATIC);
-    // scene->Add(new EntityBlockBottom(8, 46, 28), STATIC);
+        leftGate = new Gate(gate, H_LEFT, 7, 39);
+        scene->Add(leftGate, STATIC);
 
-    scene->Add(fk, MOVING);
+        rightGate = new Gate(gate, H_RIGHT, 36, 39);
+        rightGate->Close();
+        scene->Add(rightGate, STATIC);
+    }
+
+    scene->Add(new EntityBlockLeft(7, 30, 16), STATIC);
+    scene->Add(new EntityBlockTop(8, 29, 28), STATIC);
+    scene->Add(new EntityBlockRight(36, 30, 16), STATIC);
+    scene->Add(new EntityBlockBottom(8, 46, 28), STATIC);
+
+    fireballArea = new ActionArea(-16.0f, -64.0f, 16.0f, 32.0f);
+    fireballArea->MoveTo(1216.0f, 1440.0f);
+    scene->Add(fireballArea, STATIC);
 }
 
 void Level2::Update()
@@ -129,6 +140,11 @@ void Level2::Update()
     {
         screenTransition->Update();
         TP2::player->AddCooldowns(0.1f * gameTime);
+    }
+    else if (fireballArea->IsPlayerInside() && !TP2::player->HasFireball())
+    {
+        TP2::player->State(STILL);
+        TP2::GetFireball();
     }
     else
     {

@@ -127,6 +127,7 @@ void TP2::Update()
         {
             gettingFireball = false;
             player->LearnFireball();
+            Level2::leftGate->Open();
         }
         else
             fireballCd.Add(gameTime);

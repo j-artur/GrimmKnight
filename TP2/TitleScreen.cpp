@@ -58,6 +58,7 @@ void TitleScreen::Finalize()
     delete bgTileSet;
     scene->Remove(TP2::cursor, MOVING);
     delete scene;
+    TP2::audio->Stop(MAIN_MUSIC);
 }
 
 void TitleScreen::EnterFrom(LevelId id)

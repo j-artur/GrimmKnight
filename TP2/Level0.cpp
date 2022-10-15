@@ -308,6 +308,8 @@ void Level0::Finalize()
     delete tutorialAttack;
     scene->Remove(TP2::player, MOVING);
     delete scene;
+    TP2::audio->Stop(CAVE_NOISES);
+    TP2::audio->Stop(ENEMY_CRAWLER);
 }
 
 void Level0::EnterFrom(LevelId id)

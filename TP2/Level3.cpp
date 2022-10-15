@@ -202,7 +202,10 @@ void Level3::Update()
         TP2::player->AddCooldowns(0.1f * gameTime);
     }
     else if (dashArea->IsPlayerInside() && !TP2::player->HasDash())
+    {
+        TP2::player->State(STILL);
         TP2::GetDash();
+    }
     else
     {
         scene->Update();

@@ -153,6 +153,7 @@ void Level1::Finalize()
     delete totem;
     scene->Remove(TP2::player, MOVING);
     delete scene;
+    TP2::audio->Stop(CAVE_NOISES);
 }
 
 void Level1::EnterFrom(LevelId id)
