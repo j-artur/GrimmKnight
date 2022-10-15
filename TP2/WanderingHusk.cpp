@@ -13,7 +13,7 @@ WanderingHusk::WanderingHusk(TileSet *tileSet, int iX, int iY)
 
     animation = new Animation(tileSet, 0.3f, true);
 
-    actionArea = new ActionArea();
+    actionArea = new ActionArea(-192.0f, -100.0f, 192.0f, 24.0f);
     actionArea->MoveTo(x, y);
 
     TP2::scene->Add(actionArea, MOVING);

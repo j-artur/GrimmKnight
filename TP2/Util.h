@@ -51,6 +51,7 @@ enum Objects
     WALL_LEFT,
     WALL_RIGHT,
     ENEMY,
+    BALDUR,
     ENEMY_ATTACK,
     ENTITY_BLOCK_TOP,
     ENTITY_BLOCK_BOTTOM,
@@ -100,6 +101,7 @@ const int SCREEN_HEIGHT = 768;
 const float LAYER_BG = 0.99f;
 const float LAYER_LIGHT = 0.95f;
 const float LAYER_FG = 0.90f;
+const float LAYER_ENEMY_DEAD = 0.875f;
 const float LAYER_PLAYER = 0.85f;
 const float LAYER_ENEMY = 0.80f;
 const float LAYER_ENEMY_ATTACK = 0.75f;

@@ -10,12 +10,14 @@ class ActionArea : public Object
 {
   private:
     bool playerInside = false;
+    float x1;
+    float x2;
 
     HDirection playerDirection = H_LEFT;
     Player *player = TP2::player;
 
   public:
-    ActionArea();
+    ActionArea(float x1, float y1, float x2, float y2);
     ~ActionArea();
 
     void Update();

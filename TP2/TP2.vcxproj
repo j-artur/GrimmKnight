@@ -159,6 +159,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Attack.cpp" />
     <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Baldur.cpp" />
     <ClCompile Include="Barrel.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Attack.h" />
     <ClInclude Include="Audio.h" />
+    <ClInclude Include="Baldur.h" />
     <ClInclude Include="Barrel.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />

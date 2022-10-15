@@ -33,6 +33,7 @@ class TP2 : public Game
     static Cursor *cursor;
     static bool viewBBox;
     static bool paused;
+    static bool baldurKilled;
 
     void Init();
     void Update();

@@ -16,6 +16,7 @@ Scene *TP2::scene = nullptr;
 Cursor *TP2::cursor = nullptr;
 bool TP2::viewBBox = false;
 bool TP2::paused = false;
+bool TP2::baldurKilled = false;
 
 bool TP2::transitioning = false;
 Cooldown TP2::levelTransition{2.0f};

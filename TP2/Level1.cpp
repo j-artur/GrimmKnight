@@ -1,4 +1,5 @@
 #include "Level1.h"
+#include "Baldur.h"
 #include "EntityBlock.h"
 #include "Level0.h"
 #include "Level2.h"
@@ -44,7 +45,7 @@ void Level1::Init()
     scene->Add(level3Transition, STATIC);
 
     AddWalls(scene, 0, 0, 40, 10);
-    AddWalls(scene, 0, 10, 2, 10);
+    AddWalls(scene, 0, 10, 2, 8);
     AddWalls(scene, 2, 10, 2, 4);
     AddWalls(scene, 4, 10, 2, 2);
     AddWalls(scene, 18, 10, 2, 2);
@@ -71,6 +72,9 @@ void Level1::Init()
 
     scene->Add(new WanderingHusk(wanderingTileSet, 13, 41), MOVING);
     scene->Add(new WanderingHusk(wanderingTileSet, 20, 31), MOVING);
+
+    if (!TP2::baldurKilled)
+        scene->Add(new Baldur(3, 20), MOVING);
 }
 
 void Level1::Update()
