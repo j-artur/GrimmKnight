@@ -9,9 +9,6 @@ Shockwave::Shockwave(HDirection direction, TileSet *tileset)
     ts = tileset;
     anim = new Animation(ts, 0.1f, true);
 
-    int width = 100;
-    int height = 32;
-
     speed = 800.0f;
 
     if (direction == H_LEFT)
@@ -19,7 +16,7 @@ Shockwave::Shockwave(HDirection direction, TileSet *tileset)
         speed = -speed;
     }
 
-    BBox(new Rect(-width / 2.0f, -64.0f, width / 2.0f, 36.0f));
+    BBox(new Rect(-16.0f, -16.0f, 16.0f, 40.0f));
 }
 
 // ---------------------------------------------------------------------------------

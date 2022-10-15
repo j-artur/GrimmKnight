@@ -1,8 +1,8 @@
 #include "FalseKnight.h"
 #include "Barrel.h"
+#include "Level2.h"
 #include "Shockwave.h"
 #include "TP2.h"
-#include "Level2.h"
 #include "Wall.h"
 
 FalseKnight::FalseKnight(int iX, int iY)
@@ -23,7 +23,6 @@ FalseKnight::FalseKnight(int iX, int iY)
     barrelSprite = new Sprite("Resources/WIP/rock.png");
     animation = new Animation(tileSet, 0.2f, true);
 
-
     uint idleRight[2] = {0, 1};
     uint idleLeft[2] = {12, 13};
     uint leapRight[2] = {2, 3};
@@ -38,8 +37,8 @@ FalseKnight::FalseKnight(int iX, int iY)
     uint bludgeonAttackLeft[1] = {21};
     uint stunRight[3] = {10, 11, 5};
     uint stunLeft[3] = {22, 23, 17};
-    uint deadRight[1] = { 5 };
-    uint deadLeft[1] = { 17 };
+    uint deadRight[1] = {5};
+    uint deadLeft[1] = {17};
     uint inactive[1] = {23};
 
     animation->Add(FK_IDLE * H_LEFT, idleLeft, 2);
@@ -268,7 +267,7 @@ void FalseKnight::Update()
                 if (!spawnedShockwave)
                 {
                     TP2::audio->Play(SFK_STRIKE_GROUND);
-                    Shockwave* shockwave = new Shockwave(direction, shockwaveTileSet);
+                    Shockwave *shockwave = new Shockwave(direction, shockwaveTileSet);
                     shockwave->MoveTo(mace->X(), mace->Y());
                     TP2::scene->Add(shockwave, MOVING);
                     spawnedShockwave = true;
@@ -281,7 +280,6 @@ void FalseKnight::Update()
             isAttacking = false;
             betweenAttacksCd.Restart();
             DraftMove();
-
 
             spawnedShockwave = false;
             animation->Delay(0.2f);
@@ -304,8 +302,8 @@ void FalseKnight::Update()
         if (!isJumping)
         {
             TP2::audio->Play(SFK_JUMP);
-            
-            animation->Select(FK_LEAPING* direction);
+
+            animation->Select(FK_LEAPING * direction);
 
             JumpTo(J_MIDDLE);
         }
@@ -346,8 +344,7 @@ void FalseKnight::Update()
 
                 switch (animation->Frame())
                 {
-                case 0:
-                {
+                case 0: {
 
                     mace->MoveTo(bb->X() - 40.0f * directionMult, bb->Y() - 80.0f);
                     hit->MoveTo(bb->X() + 80.0f * directionMult, bb->Y());
@@ -360,16 +357,15 @@ void FalseKnight::Update()
                     }
                     break;
                 }
-                case 1:
-                {
+                case 1: {
 
                     mace->MoveTo(bb->X() + 100.0f * directionMult, bb->Y() + 80.0f);
                     if (!spawnedBarrels)
                     {
                         spawnedBarrels = true;
-                        Sprite* sp = new Sprite("Resources/WIP/rock.png");
+                        Sprite *sp = new Sprite("Resources/WIP/rock.png");
 
-                        Barrel* b1 = new Barrel(sp);
+                        Barrel *b1 = new Barrel(sp);
                         // Barrel* b2 = new Barrel(sp);
                         // Barrel* b3 = new Barrel(sp);
 
@@ -424,8 +420,7 @@ void FalseKnight::Update()
 
             animation->Loop(false);
             animation->Restart();
-            animation->Select(FK_STUN * stunDirection); 
-
+            animation->Select(FK_STUN * stunDirection);
 
             ySpeed = 0;
 
@@ -462,8 +457,6 @@ void FalseKnight::Update()
                 isStunned = false;
                 state = FK_IDLE;
             }
-
-
         }
         stunCd.Add(gameTime);
         headOutCd.Add(gameTime);
@@ -483,7 +476,7 @@ void FalseKnight::Update()
             TP2::scene->Remove(head, STATIC);
             if (voice2Ctrl)
             {
-                animation->Select(FK_DEAD* stunDirection);
+                animation->Select(FK_DEAD * stunDirection);
 
                 TP2::audio->Stop(SFK_THEME);
                 TP2::audio->Play(SFK_DEFEAT);
@@ -513,54 +506,63 @@ void FalseKnight::Draw()
 
 void FalseKnight::OnCollision(Object *other)
 {
+    if (other->BBox()->Type() == RECTANGLE_T && Collision(self, (Rect *)other->BBox()))
+    {
+        switch (other->Type())
+        {
+        case ENTITY_BLOCK_BOTTOM:
+        case WALL_TOP: {
+            Wall *wall = (Wall *)other;
+            Rect *wallBBox = (Rect *)wall->BBox();
+
+            bool justEntered = self->Bottom() >= wall->Y();
+            bool isInside = self->Left() != wallBBox->Right();
+
+            if (justEntered && isInside)
+            {
+                MoveTo(x, other->Y() - self->bottom);
+                ySpeed = 0.0f;
+                xSpeed = 0.0f;
+            }
+            break;
+        }
+        case ENTITY_BLOCK_RIGHT:
+        case WALL_LEFT: {
+            Wall *wall = (Wall *)other;
+            Rect *wallBBox = (Rect *)wall->BBox();
+
+            bool justEntered = self->Right() >= wall->X();
+            bool isInside = self->Top() != wallBBox->Bottom();
+
+            if (justEntered && isInside)
+            {
+                MoveTo(other->X() - self->right, y);
+                xSpeed = 0.0f;
+            }
+            break;
+        }
+        case ENTITY_BLOCK_LEFT:
+        case WALL_RIGHT: {
+            Wall *wall = (Wall *)other;
+            Rect *wallBBox = (Rect *)wall->BBox();
+
+            bool justEntered = self->Left() <= wall->X();
+            bool isInside = self->Top() != wallBBox->Bottom();
+
+            if (justEntered && isInside)
+            {
+                MoveTo(other->X() - self->left, y);
+                xSpeed = 0.0f;
+            }
+            break;
+        }
+        }
+    }
+
     switch (other->Type())
     {
-    case WALL_TOP: {
-        Wall *wall = (Wall *)other;
-        Rect *wallBBox = (Rect *)wall->BBox();
-
-        bool justEntered = self->Bottom() >= wall->Y();
-        bool isInside = self->Left() != wallBBox->Right();
-
-        if (justEntered && isInside)
-        {
-            MoveTo(x, other->Y() - self->bottom);
-            ySpeed = 0.0f;
-            xSpeed = 0.0f;
-        }
-        break;
-    }
-    case WALL_LEFT: {
-        Wall *wall = (Wall *)other;
-        Rect *wallBBox = (Rect *)wall->BBox();
-
-        bool justEntered = self->Right() >= wall->X();
-        bool isInside = self->Top() != wallBBox->Bottom();
-
-        if (justEntered && isInside)
-        {
-            MoveTo(other->X() - self->right, y);
-            xSpeed = 0.0f;
-        }
-        break;
-    }
-    case WALL_RIGHT: {
-        Wall *wall = (Wall *)other;
-        Rect *wallBBox = (Rect *)wall->BBox();
-
-        bool justEntered = self->Left() <= wall->X();
-        bool isInside = self->Top() != wallBBox->Bottom();
-
-        if (justEntered && isInside)
-        {
-            MoveTo(other->X() - self->left, y);
-            xSpeed = 0.0f;
-        }
-        break;
-    }
-    case BARREL:
-    {
-        Barrel* barrel = (Barrel*)other;
+    case BARREL: {
+        Barrel *barrel = (Barrel *)other;
         TP2::audio->Play(SFK_BARREL_DEATH);
         TP2::scene->Delete(barrel, MOVING);
         TakeDamage(5, LEFT);

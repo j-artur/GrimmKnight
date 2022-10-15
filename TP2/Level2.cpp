@@ -65,11 +65,10 @@ void Level2::Init()
     AddWalls(scene, 6, 30, 2, 12);
     AddWalls(scene, 5, 34, 1, 2);
     AddWalls(scene, 5, 40, 1, 2);
-    AddWalls(scene, 36, 30, 2, 13);
-    AddWalls(scene, 38, 42, 1, 1);
+    AddWalls(scene, 36, 30, 3, 13);
     AddWalls(scene, 2, 43, 1, 3);
     AddWalls(scene, 3, 46, 36, 2);
-    AddWalls(scene, 39, 43, 1, 3);
+    AddWalls(scene, 39, 30, 1, 16);
 
     scene->Add(new Spike(28, 6, 1, 4, RIGHT), STATIC);
     scene->Add(new Spike(31, 6, 1, 4, LEFT), STATIC);
@@ -80,8 +79,13 @@ void Level2::Init()
 
     if (!TP2::fkDefeated)
         scene->Add(new EntityBlockBossActivator(10, 30, 16, FALSE_KNIGHT), STATIC);
-    
+
     fk = new FalseKnight(29, 43);
+
+    // scene->Add(new EntityBlockLeft(7, 30, 16), STATIC);
+    // scene->Add(new EntityBlockTop(8, 29, 28), STATIC);
+    // scene->Add(new EntityBlockRight(36, 30, 16), STATIC);
+    // scene->Add(new EntityBlockBottom(8, 46, 28), STATIC);
 
     scene->Add(fk, MOVING);
 }

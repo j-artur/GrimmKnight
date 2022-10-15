@@ -125,4 +125,16 @@ const float LAYER_PAUSE_SCREEN = 0.25f;
 const float LAYER_BUTTON = 0.20f;
 const float LAYER_CURSOR = 0.15f;
 
+inline bool Collision(Rect *ra, Rect *rb)
+{
+    // verificando sobreposição no eixo x
+    bool overlapX = (rb->Left() <= ra->Right() && ra->Left() <= rb->Right());
+
+    // verificando sobreposição no eixo y
+    bool overlapY = (rb->Top() <= ra->Bottom() && ra->Top() <= rb->Bottom());
+
+    // existe colisão se há sobreposição nos dois eixos
+    return overlapX && overlapY;
+}
+
 #endif
