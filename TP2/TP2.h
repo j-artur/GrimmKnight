@@ -34,7 +34,7 @@ class TP2 : public Game
     static bool viewBBox;
     static bool paused;
     static bool baldurKilled;
-
+    static bool fkDefeated;
     void Init();
     void Update();
     void Draw();

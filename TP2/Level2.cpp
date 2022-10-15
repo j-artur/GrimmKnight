@@ -1,5 +1,4 @@
 #include "Level2.h"
-#include "EntityBlock.h"
 #include "FalseKnight.h"
 #include "Level1.h"
 #include "Level4.h"
@@ -75,8 +74,13 @@ void Level2::Init()
     scene->Add(new Spike(28, 6, 1, 4, RIGHT), STATIC);
     scene->Add(new Spike(31, 6, 1, 4, LEFT), STATIC);
 
-    scene->Add(new EntityBlockBossActivator(10, 30, 16, FALSE_KNIGHT), STATIC);
+    // soube fazer essa porra nao
+    bossWall = new RightWall(7, 42, 4);
+    scene->Add(bossWall, STATIC);
 
+    if (!TP2::fkDefeated)
+        scene->Add(new EntityBlockBossActivator(10, 30, 16, FALSE_KNIGHT), STATIC);
+    
     fk = new FalseKnight(29, 43);
 
     scene->Add(fk, MOVING);
@@ -84,6 +88,7 @@ void Level2::Init()
 
 void Level2::Update()
 {
+
     if (level1Transition->Transitioning())
     {
         TP2::player->AddCooldowns(gameTime);

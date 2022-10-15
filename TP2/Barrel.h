@@ -12,7 +12,7 @@ using std::mt19937;
 using std::random_device;
 using std::uniform_int_distribution;
 
-class Barrel : public Object
+class Barrel : public Entity
 {
 private:
     Sprite* sprite;
@@ -22,11 +22,17 @@ private:
 
     Cooldown barrelCd{ 2.0f };
 
-    float speed = 600.0f;
+    float gravity = 400.0f;
+    float Yspeed = 100.0f;
+    float Xspeed = 0.0f;
+
+    bool deathCtrl = true;
 
 public:
     Barrel(Sprite* sp);
     ~Barrel();
+
+    bool TakeDamage(uint damage, Direction dir);
 
     void Update();
     void Draw();

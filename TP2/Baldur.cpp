@@ -47,8 +47,11 @@ void Baldur::Update()
     switch (state)
     {
     case BALDUR_IDLE:
+        soundCtrl = true;
         if (actionArea->IsPlayerInside())
         {
+            if (soundCtrl)
+                TP2::audio->Play(BALDUR_BLOCK_SOUND);
             state = BALDUR_BLOCK;
             animation->Select(BALDUR_BLOCK);
         }
@@ -93,5 +96,11 @@ void Baldur::OnCollision(Object *other)
         TP2::scene->Delete(rightWall, STATIC);
         TP2::scene->Delete(topWall, STATIC);
         deathCd.Restart();
+    }
+
+    if (other->Type() == ATTACK && state == BALDUR_BLOCK)
+    {
+        TP2::player->Knockback();
+        TP2::audio->Play(PLAYER_SPIKE_ATTACK);
     }
 }

@@ -17,6 +17,7 @@ Cursor *TP2::cursor = nullptr;
 bool TP2::viewBBox = false;
 bool TP2::paused = false;
 bool TP2::baldurKilled = false;
+bool TP2::fkDefeated = false;
 
 bool TP2::transitioning = false;
 Cooldown TP2::levelTransition{2.0f};
@@ -59,6 +60,9 @@ void TP2::Init()
     audio->Add(SFK_VOICE_ATTACK, "Resources/Audio/FalseKnight/false_knight_attack.wav");
     audio->Add(SFK_VOICE_RAGE, "Resources/Audio/FalseKnight/false_knight_rage.wav");
     audio->Add(SFK_BARREL_DEATH, "Resources/Audio/FalseKnight/barrel_death.wav");
+    audio->Add(SFK_DEFEAT, "Resources/Audio/FalseKnight/boss_defeat.wav");
+
+    audio->Add(BALDUR_BLOCK_SOUND, "Resources/Audio/block.wav");
     pausedScene = new Scene();
     pausedScene->Add(cursor, MOVING);
 

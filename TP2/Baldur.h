@@ -26,6 +26,8 @@ class Baldur : public Entity
     Wall *rightWall = nullptr;
     Wall *topWall = nullptr;
 
+    bool soundCtrl = true;
+
   public:
     Baldur(int x, int y);
     ~Baldur();

@@ -169,6 +169,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EntityBlock.cpp" />
     <ClCompile Include="FalseKnight.cpp" />
+    <ClCompile Include="FalseKnightHead.cpp" />
     <ClCompile Include="Fireball.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -182,7 +183,6 @@
     <ClCompile Include="Level3.cpp" />
     <ClCompile Include="Level4.cpp" />
     <ClCompile Include="LevelTransition.cpp" />
-    <ClCompile Include="Mace.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -220,6 +220,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityBlock.h" />
     <ClInclude Include="FalseKnight.h" />
+    <ClInclude Include="FalseKnightHead.h" />
     <ClInclude Include="Fireball.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Game.h" />
@@ -234,7 +235,6 @@
     <ClInclude Include="Level3.h" />
     <ClInclude Include="Level4.h" />
     <ClInclude Include="LevelTransition.h" />
-    <ClInclude Include="Mace.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />

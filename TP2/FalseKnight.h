@@ -4,12 +4,12 @@
 #include "Animation.h"
 #include "Cooldown.h"
 #include "Entity.h"
-#include "Mace.h"
 #include "Object.h"
 #include "Sprite.h"
 #include "Util.h"
 #include "Wall.h"
 #include "Shockwave.h"
+#include "FalseKnightHead.h"
 #include <random>
 
 using std::mt19937;
@@ -18,6 +18,7 @@ using std::uniform_int_distribution;
 
 enum FK_State
 {
+    FK_INACTIVE,
     FK_IDLE,
     FK_LEAP,
     FK_SLAM,
@@ -25,16 +26,16 @@ enum FK_State
     FK_RAGE,
     FK_STUN,
     FK_DEAD,
-    FK_INACTIVE,
 };
 
 enum FK_Animation
 {
-    FK_LEAPING = 1,
-    FK_PREP_SLAM = 2,
-    FK_SLAMMING = 4,
-    FK_BLUDGEONING = 8,
-    FK_RAGING = 16,
+    FK_LEAPING = 2,
+    FK_PREP_SLAM = 4,
+    FK_SLAMMING = 8,
+    FK_BLUDGEONING_J = 16,
+    FK_BLUDGEONING = 32,
+    FK_RAGING = 64,
 };
 
 enum FK_JumpTo
@@ -47,9 +48,19 @@ class FalseKnight : public Entity
 {
   private:
     TileSet *tileSet;
+    TileSet* headTileSet;
     TileSet *shockwaveTileSet;
     Sprite *barrelSprite;
     Animation *animation;
+
+    FalseKnightHead* head;
+
+    Rect* self;
+    Rect* horn;
+    Rect* hit;
+    Rect* hand;
+    Circle* mace;
+    Mixed* bb;
 
     mt19937 rng;
     uniform_int_distribution<int> cd;
@@ -57,42 +68,45 @@ class FalseKnight : public Entity
 
     FK_State state = FK_INACTIVE;
     HDirection direction = H_LEFT;
-    Mace *mace;
+    HDirection attackDirection = H_LEFT;
+    HDirection stunDirection = H_LEFT;
     Shockwave* shockwave;
 
     uint armorHealth = 65;
-    uint currentArmorHealth = armorHealth;
     uint headHealth = 40;
-    uint attackCd = 2;
-    uint nextMove;
+    uint currentArmorHealth = armorHealth;
+    uint nextMove = 2;
+    uint oldMove = 2;
 
-    Cooldown slamCd{2.0f};
+    Cooldown slamCd{1.8f};
     Cooldown prepSlamCd{1.2f};
     Cooldown jumpCd{2.0f};
+    Cooldown bludgeonAttackCd{ 0.2f };
     Cooldown rageCd{3.2f};
-    Cooldown attackRageCd{0.8f};
-    Cooldown betweenAttacksCd{5.0f};
+    Cooldown attackRageCd{0.4f};
+    Cooldown betweenAttacksCd{2.5f};
     Cooldown hurtCd{ 0.3f };
-    Cooldown headOutCd{ 1.0f };
-    Cooldown stunCd{ 3.0f };
+    Cooldown headOutCd{ 0.5f };
+    Cooldown stunCd{ 6.0f };
 
     float directionMult = 1.0f;
-    float attackDirection = 1.0f;
     float ySpeed = 0.0f;
     float xSpeed = 0.0f;
-    float leapSpeed = -768.0f;
-    float bludgeonSpeed = -537.6f;
-    float gravity = 768.0f;
+    float jumpSpeed = -468.0f;
+    float gravity = 468.0f;
 
     bool strikeCtrl = true;
     bool voiceCtrl = true;
+    bool voice2Ctrl = true;
     bool isJumping = false;
     bool isAttacking = false;
     bool isStunned = false;
     bool rageStarted = false;
     bool spawnedShockwave = false;
     bool spawnedBarrels = false;
+    bool animRestarted = false;
     bool canKill = false;
+    bool active = false;
 
   public:
     FalseKnight(int iX, int iY);
@@ -106,6 +120,13 @@ class FalseKnight : public Entity
     void Draw();
     void OnCollision(Object *other);
     void JumpTo(FK_JumpTo jumpTo);
+    void DraftMove();
+    bool Active();
 };
+
+inline bool FalseKnight::Active()
+{
+    return active;
+}
 
 #endif

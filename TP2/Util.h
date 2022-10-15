@@ -37,7 +37,10 @@ enum Sounds
     SFK_STRIKE_GROUND,
     SFK_VOICE_ATTACK,
     SFK_VOICE_RAGE,
-    SFK_BARREL_DEATH
+    SFK_BARREL_DEATH,
+    SFK_DEFEAT,
+
+    BALDUR_BLOCK_SOUND,
 };
 
 enum Objects
@@ -64,6 +67,7 @@ enum Objects
     LEVEL_TRANSITION,
     CURSOR,
     BUTTON,
+    BARREL,
 };
 
 enum HDirection

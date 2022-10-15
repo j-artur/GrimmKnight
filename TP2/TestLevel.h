@@ -3,7 +3,6 @@
 
 #include "FalseKnight.h"
 #include "Level.h"
-#include "Mace.h"
 #include "Scene.h"
 #include "TP2.h"
 
@@ -14,7 +13,6 @@ class TestLevel : public Level
     Sprite *foreground = nullptr;
 
     FalseKnight *boss;
-    Mace *mace;
 
     static Scene *scene;
 

@@ -4,7 +4,7 @@
 
 Barrel::Barrel(Sprite *sp)
 {
-    type = ENEMY_ATTACK;
+    type = ENEMY;
     sprite = sp;
 
     random_device rd;
@@ -21,25 +21,45 @@ Barrel::Barrel(Sprite *sp)
     BBox(new Rect(-width / 2.0f, -height / 2.0f, width / 2.0f, height / 2.0f));
 }
 
-// ---------------------------------------------------------------------------------
-
 Barrel::~Barrel()
 {
-    TP2::audio->Play(SFK_BARREL_DEATH);
 }
 
-// ---------------------------------------------------------------------------------
+bool Barrel::TakeDamage(uint damage, Direction dir)
+{
+    switch (dir)
+    {
+    case UP:
+    case DOWN:
+        break;
+    case LEFT:
+        Xspeed = -4000.0f;
+        type = BARREL;
+        break;
+    case RIGHT:
+        Xspeed = 4000.0f;
+        type = BARREL;
+        break;
+    default:
+        break;
+    }
+
+    return false;
+}
 
 void Barrel::Update()
 {
-    Translate(0, speed * gameTime);
 
-    Rotate(1.5);
+    Rotate(1.0f);
 
     if (barrelCd.Up())
     {
-        TP2::scene->Delete(this, MOVING);
+        TP2::scene->Delete();
+        TP2::audio->Play(SFK_BARREL_DEATH);
     }
 
+    Yspeed += gravity * gameTime;
+
+    Translate(Xspeed * gameTime, Yspeed * gameTime);
     barrelCd.Add(gameTime);
 }

@@ -7,16 +7,20 @@
 #include "Scene.h"
 #include "ScreenTransition.h"
 #include "TP2.h"
+#include "EntityBlock.h"
 #include "FalseKnight.h"
 
 class Level2 : public Level
 {
   private:
+    RightWall *bossWall;
+    bool insertedWall = false;
+    bool removedWall = false;
+
     Sprite *background = nullptr;
     Sprite *foreground = nullptr;
     TileSet *tiktikTileSet = nullptr;
-    TileSet *wanderingTileSet = nullptr;
-
+    TileSet *wanderingTileSet = nullptr;    
 
     Scene *scene = nullptr;
 
