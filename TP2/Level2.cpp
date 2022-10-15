@@ -115,17 +115,17 @@ void Level2::Update()
     {
         TP2::NextLevel<Level1>();
     }
-    // else if (level4Transition->Transitioning())
-    // {
-    //     TP2::player->AddCooldowns(gameTime);
-    //     TP2::player->Translate(-LevelTransition::DISTANCE * gameTime, 0.0f);
-    //     TP2::player->UpdateAnimation();
-    //     level4Transition->Update();
-    // }
-    // else if (level4Transition->Done())
-    // {
-    //     TP2::NextLevel<Level4>();
-    // }
+    else if (level4Transition->Transitioning())
+    {
+        TP2::player->AddCooldowns(gameTime);
+        TP2::player->Translate(LevelTransition::DISTANCE * gameTime, 0.0f);
+        TP2::player->UpdateAnimation();
+        level4Transition->Update();
+    }
+    else if (level4Transition->Done())
+    {
+        TP2::NextLevel<Level4>();
+    }
     else if (enteringCd.Down())
     {
         TP2::player->AddCooldowns(gameTime);
@@ -133,7 +133,7 @@ void Level2::Update()
         enteringCd.Add(gameTime);
         if (enteringFrom == LEVEL1)
             TP2::player->Translate(LevelTransition::DISTANCE * gameTime, 0.0f);
-        else if (enteringFrom == LEVEL3)
+        else if (enteringFrom == LEVEL3 || enteringFrom == LEVEL4)
             TP2::player->Translate(-LevelTransition::DISTANCE * gameTime, 0.0f);
     }
     else if (screenTransition->Transitioning())
@@ -174,7 +174,7 @@ void Level2::EnterFrom(LevelId id)
     {
     case LEVEL4:
         enteringFrom = LEVEL4;
-        TP2::player->MoveTo(2560.0f, 158.0f);
+        TP2::player->MoveTo(1280.0f, 226.0f);
         TP2::player->State(WALKING);
         TP2::player->Dir(H_LEFT);
         enteringCd.Restart();

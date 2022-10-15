@@ -97,10 +97,4 @@ void Baldur::OnCollision(Object *other)
         TP2::scene->Delete(topWall, STATIC);
         deathCd.Restart();
     }
-
-    if (other->Type() == ATTACK && state == BALDUR_BLOCK)
-    {
-        TP2::player->Knockback();
-        TP2::audio->Play(PLAYER_SPIKE_ATTACK);
-    }
 }

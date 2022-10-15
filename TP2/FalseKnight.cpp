@@ -128,6 +128,7 @@ void FalseKnight::Activate()
 {
     state = FK_IDLE;
     active = true;
+    TP2::audio->Stop(CAVE_NOISES);
     TP2::audio->Play(SFK_THEME, true);
 }
 

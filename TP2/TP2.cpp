@@ -5,6 +5,7 @@
 #include "Level1.h"
 #include "Level2.h"
 #include "Level3.h"
+#include "Level4.h"
 #include "Util.h"
 
 #define M_PI 3.141592653589793238462643383279502884L
@@ -93,6 +94,8 @@ void TP2::Update()
         NextLevel<Level2>();
     else if (window->KeyDown(VK_F4))
         NextLevel<Level3>();
+    else if (window->KeyDown(VK_F5))
+        NextLevel<Level4>();
     else if (window->KeyDown(VK_F6))
         NextLevel<TitleScreen>();
     else if (window->KeyDown(VK_F7))

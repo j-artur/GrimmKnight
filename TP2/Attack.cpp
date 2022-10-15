@@ -113,6 +113,10 @@ void Attack::OnCollision(Object *other)
             }
             break;
         }
+        case BALDUR: {
+            TP2::audio->Play(PLAYER_SPIKE_ATTACK);
+            TP2::player->Knockback();
+        }
         }
     }
 }
