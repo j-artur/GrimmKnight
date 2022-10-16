@@ -41,6 +41,8 @@ enum Sounds
     SFK_DEFEAT,
 
     BALDUR_BLOCK_SOUND,
+
+    GAME_OVER_SONG,
 };
 
 enum Objects

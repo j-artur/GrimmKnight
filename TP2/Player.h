@@ -89,9 +89,11 @@ class Player : public Entity
 
     bool HasFireball();
     void LearnFireball();
+    void UnlearnFireball();
 
     bool HasDash();
     void LearnDash();
+    void UnlearnDash();
 
     bool TakeDamage(uint damage, Direction dir);
     void AddMana();
@@ -134,6 +136,11 @@ inline void Player::LearnFireball()
     fireball = true;
 }
 
+inline void Player::UnlearnFireball()
+{
+    fireball = false;
+}
+
 inline bool Player::HasDash()
 {
     return dash;
@@ -142,6 +149,11 @@ inline bool Player::HasDash()
 inline void Player::LearnDash()
 {
     dash = true;
+}
+
+inline void Player::UnlearnDash()
+{
+    dash = false;
 }
 
 inline void Player::State(PlayerState state)

@@ -1,4 +1,5 @@
 #include "GameOver.h"
+#include "Button.h"
 #include "Level0.h"
 #include "Level1.h"
 #include "Level2.h"
@@ -10,13 +11,29 @@
 
 void GameOver::Init()
 {
+    id = GAMEOVERSCREEN;
+
+    TP2::audio->Play(GAME_OVER_SONG, true);
+
     bg = new Sprite("Resources/GameOverScreen.png");
     TP2::playerDead = false;
+
+    scene = new Scene();
+    TP2::scene = scene;
+    scene->Add(TP2::cursor, MOVING);
+
+    Button *respawn = new Button(new Sprite("Resources/ButtonRespawn.png"), [&]() { this->respawn = true; });
+    respawn->MoveTo(640.0f, 80.0f);
+    scene->Add(respawn, STATIC);
+
+    Button *quit = new Button(new Sprite("Resources/ButtonQuit.png"), [&]() { this->quit = true; });
+    quit->MoveTo(640.0f, 688.0f);
+    scene->Add(quit, STATIC);
 }
 
 void GameOver::Update()
 {
-    if (window->KeyPress(VK_RETURN))
+    if (respawn)
     {
         TP2::player->Respawn();
         switch (enterFrom)
@@ -41,50 +58,30 @@ void GameOver::Update()
             break;
         }
     }
+    else if (quit)
+        TP2::NextLevel<TitleScreen>();
+    else
+    {
+        scene->Update();
+        scene->CollisionDetection();
+    }
 }
 
 void GameOver::Draw()
 {
     bg->Draw(window->CenterX(), window->CenterY(), LAYER_TITLESCREEN);
+    scene->Draw();
 }
 
 void GameOver::Finalize()
 {
     delete bg;
+    scene->Remove(TP2::cursor, MOVING);
+    delete scene;
+    TP2::audio->Stop(GAME_OVER_SONG);
 }
 
 void GameOver::EnterFrom(LevelId id)
 {
     enterFrom = id;
-
-    switch (id)
-    {
-    case LEVEL0:
-        OutputDebugString("GameOver::EnterFrom(LEVEL0)\n");
-        break;
-    case LEVEL1:
-        OutputDebugString("GameOver::EnterFrom(LEVEL1)\n");
-        break;
-    case LEVEL2:
-        OutputDebugString("GameOver::EnterFrom(LEVEL2)\n");
-        break;
-    case LEVEL3:
-        OutputDebugString("GameOver::EnterFrom(LEVEL3)\n");
-        break;
-    case LEVEL4:
-        OutputDebugString("GameOver::EnterFrom(LEVEL4)\n");
-        break;
-    case TITLESCREEN:
-        OutputDebugString("GameOver::EnterFrom(TITLESCREEN)\n");
-        break;
-    case GAMEOVERSCREEN:
-        OutputDebugString("GameOver::EnterFrom(GAMEOVER)\n");
-        break;
-    case ENDSCREEN:
-        OutputDebugString("GameOver::EnterFrom(ENDSCREEN)\n");
-        break;
-    default:
-        OutputDebugString("GameOver::EnterFrom(UNKNOWN)\n");
-        break;
-    }
 }

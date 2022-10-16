@@ -326,6 +326,7 @@ void Level0::EnterFrom(LevelId id)
         break;
     case TITLESCREEN:
         TP2::player->MoveTo(256.0f, -34.0f);
+        TP2::player->State(FALLING);
         tutorial = TUTORIAL_BEGIN;
         tutorialCd.Restart();
         tutorialTransitionCd.Restart();

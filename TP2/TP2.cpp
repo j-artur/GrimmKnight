@@ -72,6 +72,8 @@ void TP2::Init()
 
     audio->Add(BALDUR_BLOCK_SOUND, "Resources/Audio/block.wav");
 
+    audio->Add(GAME_OVER_SONG, "Resources/Audio/game_over.wav");
+
     pausedScene = new Scene();
     pausedScene->Add(cursor, MOVING);
 
@@ -79,17 +81,24 @@ void TP2::Init()
     resume->MoveTo(640.0f, 96.0f);
     pausedScene->Add(resume, STATIC);
 
-    Button *quit = new Button(new Sprite("Resources/ButtonQuit.png"), []() { Engine::window->Close(); });
+    Button *quit = new Button(new Sprite("Resources/ButtonQuit.png"), [&]() { this->quit = true; });
     quit->MoveTo(640.0f, 672.0f);
     pausedScene->Add(quit, STATIC);
 
     level = new TitleScreen();
     level->Init();
+    level->EnterFrom(LEVEL0);
 }
 
 void TP2::Update()
 {
-    if (playerDead)
+    if (quit)
+    {
+        paused = false;
+        quit = false;
+        NextLevel<TitleScreen>();
+    }
+    else if (playerDead)
         NextLevel<GameOver>();
     else if (window->KeyDown(VK_F1))
         NextLevel<Level0>();
@@ -135,7 +144,8 @@ void TP2::Update()
         {
             gettingFireball = false;
             player->LearnFireball();
-            Level2::leftGate->Open();
+            if (currentLevel == LEVEL2)
+                Level2::leftGate->Open();
         }
         else
             fireballCd.Add(gameTime);

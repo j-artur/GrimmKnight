@@ -20,6 +20,8 @@ class TP2 : public Game
     HUD *hud;
     Sprite *pauseScreen = nullptr;
 
+    bool quit = false;
+
     Sprite *transitionScreen = nullptr;
     static bool transitioning;
     static Cooldown levelTransition;

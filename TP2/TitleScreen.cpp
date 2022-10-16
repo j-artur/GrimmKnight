@@ -1,8 +1,13 @@
 #include "TitleScreen.h"
 #include "Button.h"
 #include "Level0.h"
+#include "Level1.h"
+#include "Level2.h"
+#include "Level3.h"
+#include "Level4.h"
 #include "TP2.h"
 #include "TestLevel.h"
+#include "TitleScreen.h"
 
 void TitleScreen::Init()
 {
@@ -17,6 +22,10 @@ void TitleScreen::Init()
     TP2::scene = scene;
     scene->Add(TP2::cursor, MOVING);
 
+    TP2::player->Respawn();
+    TP2::player->UnlearnFireball();
+    TP2::player->UnlearnDash();
+
     Button *start = new Button(new Sprite("Resources/ButtonStart.png"), [&]() { this->start = true; });
     start->MoveTo(360.0f, 360.0f);
     scene->Add(start, STATIC);
@@ -29,7 +38,9 @@ void TitleScreen::Init()
 void TitleScreen::Update()
 {
     if (start)
+    {
         TP2::NextLevel<Level0>();
+    }
     else if (window->KeyDown('T'))
         TP2::NextLevel<TestLevel>();
     else
