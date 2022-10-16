@@ -1,4 +1,6 @@
 #include "TestLevel.h"
+#include "Radiance.h"
+#include "Beam.h"
 #include "Wall.h"
 
 Scene *TestLevel::scene = nullptr;
@@ -16,10 +18,18 @@ void TestLevel::Init()
     TP2::player->MoveTo(256.0f, -32.0f);
     scene->Add(TP2::player, MOVING);
 
-    boss = new FalseKnight(12, 12);
-    boss->Activate();
-    boss->MoveTo(400.0f, -100.0f);
+    //boss = new FalseKnight(12, 12);
+    Radiance* boss = new Radiance();
+    boss->MoveTo(800.0f, 400.0f);
     scene->Add(boss, MOVING);
+
+    Vector v;
+    v.ScaleTo(35);
+    v.RotateTo(45.0f);
+    Beam* beam = new Beam(v);
+
+    //beam->MoveTo(500.0f, 200.0f);
+    //scene->Add(beam, STATIC);
 
     AddWalls(scene, 0, 22, 40, 2);
 }

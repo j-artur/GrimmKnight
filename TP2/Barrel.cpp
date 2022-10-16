@@ -9,7 +9,7 @@ Barrel::Barrel(Sprite *sp)
 
     random_device rd;
     rng.seed(rd());
-    posX = uniform_int_distribution<int>(50, window->Width() - 50);
+    posX = uniform_int_distribution<int>(256, 1152);
 
     barrelCd.Restart();
 
@@ -33,11 +33,11 @@ bool Barrel::TakeDamage(uint damage, Direction dir)
     case DOWN:
         break;
     case LEFT:
-        Xspeed = -4000.0f;
+        Xspeed = -1000.0f;
         type = BARREL;
         break;
     case RIGHT:
-        Xspeed = 4000.0f;
+        Xspeed = 1000.0f;
         type = BARREL;
         break;
     default:
@@ -58,8 +58,12 @@ void Barrel::Update()
         TP2::audio->Play(SFK_BARREL_DEATH);
     }
 
+    if (type == BARREL)
+        Translate(Xspeed * gameTime, 0);
+    else
+        Translate(0, Yspeed * gameTime);
+
     Yspeed += gravity * gameTime;
 
-    Translate(Xspeed * gameTime, Yspeed * gameTime);
     barrelCd.Add(gameTime);
 }

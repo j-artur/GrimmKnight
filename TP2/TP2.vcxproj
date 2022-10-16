@@ -161,6 +161,7 @@
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Baldur.cpp" />
     <ClCompile Include="Barrel.cpp" />
+    <ClCompile Include="Beam.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Controller.cpp" />
@@ -190,6 +191,7 @@
     <ClCompile Include="LevelTransition.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Radiance.cpp" />
     <ClCompile Include="RadianceTotem.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -198,6 +200,7 @@
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Spike.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Sword.cpp" />
     <ClCompile Include="TestLevel.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Tiktik.cpp" />
@@ -218,6 +221,7 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Baldur.h" />
     <ClInclude Include="Barrel.h" />
+    <ClInclude Include="Beam.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controller.h" />
@@ -249,6 +253,7 @@
     <ClInclude Include="LevelTransition.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Radiance.h" />
     <ClInclude Include="RadianceTotem.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resources.h" />
@@ -258,6 +263,7 @@
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Spike.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Sword.h" />
     <ClInclude Include="TestLevel.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Tiktik.h" />

@@ -181,6 +181,8 @@ void FalseKnight::Update()
     // IDLE
     if (state == FK_IDLE)
     {
+        animation->Loop(true);
+        animation->Delay(0.2f);
         animation->Select(state * direction);
     }
 

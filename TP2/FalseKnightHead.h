@@ -1,5 +1,5 @@
-#ifndef _FALSE_KNIGHT_HEAD_H
-#define _FALSE_KNIGHT_HEAD_H
+#ifndef _FALSE_KNIGHT_HEAD_H_
+#define _FALSE_KNIGHT_HEAD_H_
 
 #include "Animation.h"
 #include "Entity.h"
