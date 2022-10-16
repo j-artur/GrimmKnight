@@ -3,6 +3,7 @@
 
 #include "Camera.h"
 #include "LevelTransition.h"
+#include "RadianceTotem.h"
 #include "Scene.h"
 #include "ScreenTransition.h"
 #include "TP2.h"
@@ -19,6 +20,8 @@ class Level4 : public Level
     Camera *camera = nullptr;
     ScreenTransition *screenTransition = nullptr;
     LevelTransition *levelTransition = nullptr;
+
+    RadianceTotem *radianceTotem = nullptr;
 
     Cooldown enteringCd{LevelTransition::DURATION};
     LevelId enteringFrom;

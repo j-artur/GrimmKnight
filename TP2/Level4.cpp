@@ -23,11 +23,18 @@ void Level4::Init()
     AddWalls(scene, -1, 0, 1, 18);
     AddWalls(scene, 40, 0, 1, 24);
     AddWalls(scene, -1, 22, 41, 2);
+
+    radianceTotem = new RadianceTotem(24, 22);
+    scene->Add(radianceTotem, STATIC);
 }
 
 void Level4::Update()
 {
-
+    // if (radianceTotem->Ready())
+    // {
+    //     // TODO: Change to LevelFinal
+    // }
+    // else
     if (levelTransition->Transitioning())
     {
         TP2::player->AddCooldowns(gameTime);

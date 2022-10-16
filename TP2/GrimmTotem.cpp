@@ -26,6 +26,7 @@ GrimmTotem::~GrimmTotem()
 {
     delete anim;
     delete tileSet;
+    delete interactTutorial;
 }
 
 void GrimmTotem::Update()

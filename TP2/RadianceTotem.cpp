@@ -1,25 +1,30 @@
-#include "DashmasterTotem.h"
+#include "RadianceTotem.h"
 #include "Player.h"
 #include "TP2.h"
 #include "Util.h"
 
-DashmasterTotem::DashmasterTotem(int iX, int iY)
+RadianceTotem::RadianceTotem(int iX, int iY)
 {
-    sprite = new Sprite("Resources/Dashmaster.png");
+    sprite = new Sprite("Resources/RadianceTotem.png");
     interactTutorial = new Sprite("Resources/TutorialInteract.png");
 
-    BBox(new Rect(-64.0f, 96.0f, 64.0f, 96.0f));
+    BBox(new Rect(-64.0f, 80.0f, 64.0f, 80.0f));
 
-    MoveTo(iX * 32.0f + 48.0f, iY * 32.0f - 96.0f);
+    MoveTo(iX * 32.0f + 48.0f, iY * 32.0f - 80.0f);
 }
 
-DashmasterTotem::~DashmasterTotem()
+RadianceTotem::~RadianceTotem()
 {
     delete sprite;
     delete interactTutorial;
 }
 
-void DashmasterTotem::Update()
+bool RadianceTotem::Ready()
+{
+    return ready;
+}
+
+void RadianceTotem::Update()
 {
     if (close)
     {
@@ -37,23 +42,23 @@ void DashmasterTotem::Update()
     close = false;
 }
 
-void DashmasterTotem::Draw()
+void RadianceTotem::Draw()
 {
     sprite->Draw(X(), Y(), LAYER_TOTEM);
-    if (!TP2::player->HasDash() && closeTime > 0.0f)
-        interactTutorial->Draw(x, y + 160.0f, LAYER_TUTORIAL, closeTime / maxCloseTime, 0.0f,
+    if (closeTime > 0.0f)
+        interactTutorial->Draw(x, y - 160.0f, LAYER_TUTORIAL, closeTime / maxCloseTime, 0.0f,
                                {1.0f, 1.0f, 1.0f, closeTime / maxCloseTime});
 }
 
-void DashmasterTotem::OnCollision(Object *obj)
+void RadianceTotem::OnCollision(Object *obj)
 {
     if (obj->Type() == PLAYER)
     {
         close = true;
-        if (!TP2::player->HasDash() && window->KeyPress(VK_UP))
+        if (window->KeyPress(VK_UP))
         {
             TP2::player->State(STILL);
-            TP2::GetDash();
+            ready = true;
         }
     }
 }
