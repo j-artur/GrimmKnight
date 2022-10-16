@@ -2,6 +2,7 @@
 #include "Attack.h"
 #include "EntityBlock.h"
 #include "Fireball.h"
+#include "Heal.h"
 #include "Level2.h"
 #include "Spike.h"
 #include "TP2.h"
@@ -470,7 +471,7 @@ input : {
         // HEAL
         if (window->KeyDown('A') && healKeyCtrl && HasMana())
         {
-            // TODO: Create heal particles animation
+            TP2::scene->Add(new Heal(), STATIC);
             // TODO: Create heal sound
 
             UseMana();

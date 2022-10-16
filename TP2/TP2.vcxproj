@@ -179,6 +179,7 @@
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GrimmTotem.cpp" />
+    <ClCompile Include="Heal.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Level0.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GrimmTotem.h" />
+    <ClInclude Include="Heal.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Level.h" />

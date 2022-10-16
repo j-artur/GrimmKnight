@@ -112,6 +112,7 @@ const float LAYER_TOTEM = 0.93f;
 const float LAYER_FG = 0.90f;
 const float LAYER_ENEMY_DEAD = 0.875f;
 const float LAYER_PLAYER = 0.85f;
+const float LAYER_HEAL = 0.84f;
 const float LAYER_ENEMY = 0.80f;
 const float LAYER_ENEMY_ATTACK = 0.75f;
 const float LAYER_BOSS = 0.70f;
