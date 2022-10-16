@@ -8,6 +8,11 @@ class DashmasterTotem : public Object
 {
   private:
     Sprite *sprite;
+    Sprite *interactTutorial;
+
+    bool close = false;
+    float closeTime = 0.0f;
+    float maxCloseTime = 0.25;
 
   public:
     DashmasterTotem(int x, int y);

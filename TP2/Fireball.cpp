@@ -61,20 +61,24 @@ void Fireball::Update()
 
 void Fireball::OnCollision(Object *obj)
 {
-    switch (obj->Type())
+    if (find(objectsHit.begin(), objectsHit.end(), obj) == objectsHit.end())
     {
-    case WALL_LEFT:
-    case WALL_RIGHT:
-    case SCREEN_TRANSITION:
-    case LEVEL_TRANSITION:
-        // TODO: Add fireball death animation
-        TP2::scene->Delete(this, MOVING);
-        break;
-    case ENEMY: {
-        Entity *enemy = (Entity *)obj;
-        if (enemy->Alive())
-            enemy->TakeDamage(15, Dir());
-        break;
-    }
+        objectsHit.push_back(obj);
+        switch (obj->Type())
+        {
+        case WALL_LEFT:
+        case WALL_RIGHT:
+        case SCREEN_TRANSITION:
+        case LEVEL_TRANSITION:
+            // TODO: Add fireball death animation
+            TP2::scene->Delete(this, MOVING);
+            break;
+        case ENEMY: {
+            Entity *enemy = (Entity *)obj;
+            if (enemy->Alive())
+                enemy->TakeDamage(15, Dir());
+            break;
+        }
+        }
     }
 }

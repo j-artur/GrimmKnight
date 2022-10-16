@@ -159,6 +159,7 @@ void Level2::Finalize()
     delete foreground;
     scene->Remove(TP2::player, MOVING);
     delete scene;
+    TP2::audio->Stop(SFK_THEME);
 }
 
 void Level2::EnterFrom(LevelId id)

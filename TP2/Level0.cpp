@@ -18,6 +18,7 @@ void Level0::Init()
     tutorialMove = new Sprite("Resources/TutorialMove.png");
     tutorialJump = new Sprite("Resources/TutorialJump.png");
     tutorialAttack = new Sprite("Resources/TutorialAttack.png");
+    tutorialHeal = new Sprite("Resources/TutorialHeal.png");
 
     scene = new Scene();
     TP2::scene = scene;
@@ -167,6 +168,30 @@ void Level0::Update()
         tutorialTransitionCd.Add(gameTime);
         if (tutorialTransitionCd.Up())
         {
+            tutorial = TUTORIAL_HEAL_0;
+            tutorialTransitionCd.Restart();
+        }
+        break;
+    case TUTORIAL_HEAL_0:
+        tutorialTransitionCd.Add(gameTime);
+        if (tutorialTransitionCd.Up())
+        {
+            tutorial = TUTORIAL_HEAL_1;
+            tutorialCd.Restart();
+        }
+        break;
+    case TUTORIAL_HEAL_1:
+        tutorialCd.Add(gameTime);
+        if (tutorialCd.Up())
+        {
+            tutorial = TUTORIAL_HEAL_2;
+            tutorialTransitionCd.Restart();
+        }
+        break;
+    case TUTORIAL_HEAL_2:
+        tutorialTransitionCd.Add(gameTime);
+        if (tutorialTransitionCd.Up())
+        {
             tutorial = TUTORIAL_OVER;
         }
         break;
@@ -210,8 +235,6 @@ void Level0::Draw()
     scene->Draw();
     switch (tutorial)
     {
-    case TUTORIAL_BEGIN:
-        break;
     case TUTORIAL_MOVE_0:
         tutorialMove->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
                            {
@@ -222,13 +245,7 @@ void Level0::Draw()
                            });
         break;
     case TUTORIAL_MOVE_1:
-        tutorialMove->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
-                           {
-                               1.0f,
-                               1.0f,
-                               1.0f,
-                               1.0f,
-                           });
+        tutorialMove->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL);
 
         break;
     case TUTORIAL_MOVE_2:
@@ -250,13 +267,7 @@ void Level0::Draw()
                            });
         break;
     case TUTORIAL_JUMP_1:
-        tutorialJump->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
-                           {
-                               1.0f,
-                               1.0f,
-                               1.0f,
-                               1.0f,
-                           });
+        tutorialJump->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL);
         break;
     case TUTORIAL_JUMP_2:
         tutorialJump->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
@@ -277,13 +288,7 @@ void Level0::Draw()
                              });
         break;
     case TUTORIAL_ATTACK_1:
-        tutorialAttack->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
-                             {
-                                 1.0f,
-                                 1.0f,
-                                 1.0f,
-                                 1.0f,
-                             });
+        tutorialAttack->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL);
         break;
     case TUTORIAL_ATTACK_2:
         tutorialAttack->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
@@ -293,6 +298,29 @@ void Level0::Draw()
                                  1.0f,
                                  1.0f - tutorialTransitionCd.Ratio(),
                              });
+        break;
+    case TUTORIAL_HEAL_0:
+        tutorialHeal->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
+                           {
+                               1.0f,
+                               1.0f,
+                               1.0f,
+                               tutorialTransitionCd.Ratio(),
+                           });
+        break;
+    case TUTORIAL_HEAL_1:
+        tutorialHeal->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL);
+        break;
+    case TUTORIAL_HEAL_2:
+        tutorialHeal->Draw(window->CenterX(), window->CenterY(), LAYER_TUTORIAL, 1.0f, 0.0f,
+                           {
+                               1.0f,
+                               1.0f,
+                               1.0f,
+                               1.0f - tutorialTransitionCd.Ratio(),
+                           });
+        break;
+    default:
         break;
     }
 }

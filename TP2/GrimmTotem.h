@@ -9,6 +9,11 @@ class GrimmTotem : public Object
   private:
     TileSet *tileSet;
     Animation *anim;
+    Sprite *interactTutorial;
+
+    bool close = false;
+    float closeTime = 0.0f;
+    float maxCloseTime = 0.25;
 
   public:
     GrimmTotem(int x, int y);

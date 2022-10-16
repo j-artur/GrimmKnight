@@ -20,6 +20,9 @@ enum Tutorial
     TUTORIAL_ATTACK_0,
     TUTORIAL_ATTACK_1,
     TUTORIAL_ATTACK_2,
+    TUTORIAL_HEAL_0,
+    TUTORIAL_HEAL_1,
+    TUTORIAL_HEAL_2,
     TUTORIAL_OVER,
 };
 
@@ -33,6 +36,7 @@ class Level0 : public Level
     Sprite *tutorialMove = nullptr;
     Sprite *tutorialJump = nullptr;
     Sprite *tutorialAttack = nullptr;
+    Sprite *tutorialHeal = nullptr;
 
     Scene *scene = nullptr;
 

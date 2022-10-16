@@ -8,6 +8,7 @@
 #include "TileSet.h"
 #include "Types.h"
 #include "Util.h"
+#include <vector>
 
 enum FireballState
 {
@@ -23,6 +24,7 @@ class Fireball : public Object
     FireballState state = SPAWNING;
     HDirection direction;
     Cooldown spawnCd{0.6f, false};
+    std::vector<Object *> objectsHit;
 
     float speed = 800.0f;
     float distance = 14.0f;
