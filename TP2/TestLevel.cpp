@@ -47,3 +47,7 @@ void TestLevel::Finalize()
 void TestLevel::EnterFrom(LevelId id)
 {
 }
+
+void TestLevel::Respawn()
+{
+}

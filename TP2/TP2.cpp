@@ -1,6 +1,7 @@
 
 #include "TP2.h"
 #include "Button.h"
+#include "GameOver.h"
 #include "Level0.h"
 #include "Level1.h"
 #include "Level2.h"
@@ -15,6 +16,11 @@ Player *TP2::player = nullptr;
 Audio *TP2::audio = nullptr;
 Scene *TP2::scene = nullptr;
 Cursor *TP2::cursor = nullptr;
+Cooldown TP2::levelTransition{2.0f};
+Cooldown TP2::fireballCd{4.0f};
+Cooldown TP2::dashCd{4.0f};
+LevelId TP2::currentLevel = TITLESCREEN;
+Scene *TP2::pausedScene = nullptr;
 bool TP2::viewBBox = false;
 bool TP2::paused = false;
 bool TP2::baldurKilled = false;
@@ -22,11 +28,7 @@ bool TP2::fkDefeated = false;
 bool TP2::transitioning = false;
 bool TP2::gettingFireball = false;
 bool TP2::gettingDash = false;
-Cooldown TP2::levelTransition{2.0f};
-Cooldown TP2::fireballCd{4.0f};
-Cooldown TP2::dashCd{4.0f};
-LevelId TP2::currentLevel = TITLESCREEN;
-Scene *TP2::pausedScene = nullptr;
+bool TP2::playerDead = false;
 
 void TP2::Init()
 {
@@ -53,7 +55,7 @@ void TP2::Init()
     audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav", 3);
 
     audio->Add(CAVE_NOISES, "Resources/Audio/cave_noises.wav");
-    audio->Add(MAIN_MUSIC, "Resources/Audio/S23-11.wav");
+    audio->Add(MAIN_MUSIC, "Resources/Audio/main_theme.wav");
 
     audio->Add(SFK_THEME, "Resources/Audio/FalseKnight/false_knight_theme.wav");
     audio->Add(SFK_STUN, "Resources/Audio/FalseKnight/false_knight_stun.wav");
@@ -69,6 +71,7 @@ void TP2::Init()
     audio->Add(SFK_DEFEAT, "Resources/Audio/FalseKnight/boss_defeat.wav");
 
     audio->Add(BALDUR_BLOCK_SOUND, "Resources/Audio/block.wav");
+
     pausedScene = new Scene();
     pausedScene->Add(cursor, MOVING);
 
@@ -86,7 +89,9 @@ void TP2::Init()
 
 void TP2::Update()
 {
-    if (window->KeyDown(VK_F1))
+    if (playerDead)
+        NextLevel<GameOver>();
+    else if (window->KeyDown(VK_F1))
         NextLevel<Level0>();
     else if (window->KeyDown(VK_F2))
         NextLevel<Level1>();

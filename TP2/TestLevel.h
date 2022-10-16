@@ -23,6 +23,7 @@ class TestLevel : public Level
     void Finalize();
 
     void EnterFrom(LevelId id);
+    void Respawn();
 };
 
 #endif

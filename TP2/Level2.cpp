@@ -96,9 +96,7 @@ void Level2::Init()
     scene->Add(new EntityBlockRight(36, 30, 16), STATIC);
     scene->Add(new EntityBlockBottom(8, 46, 28), STATIC);
 
-    fireballArea = new ActionArea(-16.0f, -64.0f, 16.0f, 32.0f);
-    fireballArea->MoveTo(1216.0f, 1440.0f);
-    scene->Add(fireballArea, STATIC);
+    scene->Add(new GrimmTotem(37, 46), STATIC);
 }
 
 void Level2::Update()
@@ -141,11 +139,6 @@ void Level2::Update()
         screenTransition->Update();
         TP2::player->AddCooldowns(0.1f * gameTime);
     }
-    else if (fireballArea->IsPlayerInside() && !TP2::player->HasFireball())
-    {
-        TP2::player->State(STILL);
-        TP2::GetFireball();
-    }
     else
     {
         scene->Update();
@@ -180,12 +173,17 @@ void Level2::EnterFrom(LevelId id)
         enteringCd.Restart();
         break;
     case LEVEL1:
-    default:
         enteringFrom = LEVEL1;
         TP2::player->MoveTo(0.0f, 706.0f);
         TP2::player->State(WALKING);
         TP2::player->Dir(H_RIGHT);
         enteringCd.Restart();
+        break;
+    case GAMEOVERSCREEN:
+    default:
+        enteringFrom = GAMEOVERSCREEN;
+        TP2::player->MoveTo(112.0f, 706.0f);
+        TP2::player->Dir(H_RIGHT);
         break;
     }
 }

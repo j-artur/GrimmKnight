@@ -21,6 +21,7 @@ class TitleScreen : public Level
     void Finalize();
 
     void EnterFrom(LevelId id);
+    void Respawn();
 };
 
 #endif

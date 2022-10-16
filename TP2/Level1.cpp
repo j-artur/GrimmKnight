@@ -176,13 +176,19 @@ void Level1::EnterFrom(LevelId id)
         enteringCd.Restart();
         break;
     case LEVEL0:
-    default:
         enteringFrom = LEVEL0;
         TP2::player->MoveTo(0.0f, 1442.0f);
         scene->Apply([&](Object *obj) { obj->Translate(0.0f, float(-window->Height())); });
         TP2::player->State(WALKING);
         TP2::player->Dir(H_RIGHT);
         enteringCd.Restart();
+        break;
+    case GAMEOVERSCREEN:
+    default:
+        enteringFrom = GAMEOVERSCREEN;
+        TP2::player->MoveTo(112.0f, 1442.0f);
+        scene->Apply([&](Object *obj) { obj->Translate(0.0f, float(-window->Height())); });
+        TP2::player->Dir(H_RIGHT);
         break;
     }
 }

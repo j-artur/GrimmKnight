@@ -19,7 +19,7 @@ FalseKnight::FalseKnight(int iX, int iY)
 
     tileSet = new TileSet("Resources/FalseKnight.png", 452, 260, 6, 24);
     headTileSet = new TileSet("Resources/FalseKnightHead.png", 76, 76, 2, 4);
-    shockwaveTileSet = new TileSet("Resources/attack.png", 64, 64, 3, 4);
+    shockwaveTileSet = new TileSet("Resources/Shockwave.png", 132, 132, 2, 4);
     barrelSprite = new Sprite("Resources/WIP/rock.png");
     animation = new Animation(tileSet, 0.2f, true);
 
@@ -64,7 +64,6 @@ FalseKnight::FalseKnight(int iX, int iY)
     animation->Select(state * direction);
 
     head = new FalseKnightHead(headTileSet);
-    shockwave = new Shockwave(H_LEFT, shockwaveTileSet);
 
     bb = new Mixed();
 
@@ -268,8 +267,7 @@ void FalseKnight::Update()
                 if (!spawnedShockwave)
                 {
                     TP2::audio->Play(SFK_STRIKE_GROUND);
-                    Shockwave *shockwave = new Shockwave(direction, shockwaveTileSet);
-                    shockwave->MoveTo(mace->X(), mace->Y());
+                    Shockwave *shockwave = new Shockwave(mace, direction, shockwaveTileSet);
                     TP2::scene->Add(shockwave, MOVING);
                     spawnedShockwave = true;
                 }

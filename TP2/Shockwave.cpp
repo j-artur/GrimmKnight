@@ -2,12 +2,20 @@
 #include "TP2.h"
 #include "Util.h"
 
-Shockwave::Shockwave(HDirection direction, TileSet *tileset)
+Shockwave::Shockwave(Geometry *mace, HDirection direction, TileSet *tileset)
 {
     type = ENEMY_ATTACK;
 
     ts = tileset;
     anim = new Animation(ts, 0.1f, true);
+
+    uint seqRight[2] = {0, 1};
+    uint seqLeft[2] = {2, 3};
+
+    anim->Add(H_RIGHT, seqRight, 2);
+    anim->Add(H_LEFT, seqLeft, 2);
+
+    anim->Select(direction);
 
     speed = 800.0f;
 
@@ -16,7 +24,9 @@ Shockwave::Shockwave(HDirection direction, TileSet *tileset)
         speed = -speed;
     }
 
-    BBox(new Rect(-16.0f, -16.0f, 16.0f, 40.0f));
+    BBox(new Rect(-16.0f, -4.0f, 16.0f, 60.0f));
+
+    MoveTo(mace->X(), mace->Y() - 20.0f);
 }
 
 // ---------------------------------------------------------------------------------

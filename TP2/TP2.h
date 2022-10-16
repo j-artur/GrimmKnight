@@ -43,6 +43,7 @@ class TP2 : public Game
     static bool paused;
     static bool baldurKilled;
     static bool fkDefeated;
+    static bool playerDead;
     void Init();
     void Update();
     void Draw();

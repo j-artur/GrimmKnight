@@ -29,15 +29,9 @@ void TitleScreen::Init()
 void TitleScreen::Update()
 {
     if (start)
-    {
         TP2::NextLevel<Level0>();
-        TP2::audio->Stop(MAIN_MUSIC);
-    }
     else if (window->KeyDown('T'))
-    {
         TP2::NextLevel<TestLevel>();
-        TP2::audio->Stop(MAIN_MUSIC);
-    }
     else
     {
         scene->Update();
@@ -62,5 +56,9 @@ void TitleScreen::Finalize()
 }
 
 void TitleScreen::EnterFrom(LevelId id)
+{
+}
+
+void TitleScreen::Respawn()
 {
 }

@@ -3,6 +3,7 @@
 
 #include "ActionArea.h"
 #include "Camera.h"
+#include "DashmasterTotem.h"
 #include "Level.h"
 #include "LevelTransition.h"
 #include "Scene.h"
@@ -25,8 +26,6 @@ class Level3 : public Level
     ScreenTransition *screenTransition2 = nullptr;
     ScreenTransition *screenTransition3 = nullptr;
     LevelTransition *levelTransition = nullptr;
-    ActionArea *dashArea = nullptr;
-
     Cooldown enteringCd{LevelTransition::DURATION};
 
   public:

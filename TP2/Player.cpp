@@ -43,6 +43,8 @@ Player::Player()
     uint dyingLeft[2] = {37, 38};
     uint deadRight[1] = {15};
     uint deadLeft[1] = {39};
+    uint respawnRight[2] = {15, 13};
+    uint respawnLeft[2] = {39, 37};
 
     animation->Add(STILL * H_RIGHT, idleRight, 4);
     animation->Add(STILL * H_LEFT, idleLeft, 4);
@@ -70,6 +72,10 @@ Player::Player()
     animation->Add(DYING * H_LEFT, dyingLeft, 2);
     animation->Add(DEAD * H_RIGHT, deadRight, 1);
     animation->Add(DEAD * H_LEFT, deadLeft, 1);
+    animation->Add(RESPAWNING * H_RIGHT, respawnRight, 2);
+    animation->Add(RESPAWNING * H_LEFT, respawnLeft, 2);
+
+    animation->Select(STILL * H_RIGHT);
 
     light = new Sprite("Resources/Light.png");
 
@@ -161,6 +167,7 @@ void Player::AddCooldowns(float dt)
     knockbackUpCd.Add(dt);
     dyingCd.Add(dt);
     deadCd.Add(dt);
+    respawnCd.Add(dt);
 }
 
 void Player::Respawn()
@@ -168,11 +175,10 @@ void Player::Respawn()
     xSpeed = 0.0f;
     ySpeed = 0.0f;
 
-    // state = RESPAWNING;
-    state = STILL;
-    direction = H_RIGHT;
+    state = RESPAWNING;
 
     FullHP();
+    NoMana();
 
     attackCd.Restart();
     attackAnimCd.Restart();
@@ -186,6 +192,7 @@ void Player::Respawn()
     knockbackUpCd.Restart();
     dyingCd.Restart();
     deadCd.Restart();
+    respawnCd.Restart();
 }
 
 void Player::TakeKnockback()
@@ -304,6 +311,17 @@ void Player::UpdateAnimation()
         break;
     }
     case RESPAWNING: {
+        if (respawnCd.Over(0.25f))
+        {
+            animation->Restart();
+            animation->Frame(1);
+        }
+        else
+        {
+            animation->Restart();
+            animation->Frame(0);
+        }
+
         break;
     }
     default: {
@@ -651,15 +669,19 @@ update : {
         ySpeed += gravity * gameTime;
         Translate(0.0f, ySpeed * gameTime);
         if (deadCd.Up())
-        { // nextState = RESPAWNING;
-            nextState = STILL;
-            Respawn();
-        }
+            TP2::playerDead = true;
         else
             nextState = DEAD;
         break;
     }
     case RESPAWNING: {
+        if (respawnCd.Up())
+        {
+            nextState = STILL;
+            ySpeed = 0.0f;
+        }
+        else
+            nextState = RESPAWNING;
         break;
     }
     }

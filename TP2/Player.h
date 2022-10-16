@@ -31,7 +31,7 @@ class Player : public Entity
     Sprite *light;
     TileSet *attackTileSet;
 
-    PlayerState state = FALLING;
+    PlayerState state = STILL;
     HDirection direction = H_RIGHT;
     Direction attackDirection = RIGHT;
 
@@ -43,6 +43,7 @@ class Player : public Entity
     Cooldown knockbackUpCd{0.25f};
     Cooldown dyingCd{0.5f};
     Cooldown deadCd{1.5f};
+    Cooldown respawnCd{0.5f};
 
     bool jumpKeyCtrl = true;
     bool attackKeyCtrl = true;
@@ -105,6 +106,7 @@ class Player : public Entity
 
     void FullHP();
     void FullMana();
+    void NoMana();
     void Respawn();
 
     void Update();
@@ -165,6 +167,11 @@ inline void Player::FullHP()
 inline void Player::FullMana()
 {
     mana = 9;
+}
+
+inline void Player::NoMana()
+{
+    mana = 0;
 }
 
 #endif

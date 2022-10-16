@@ -330,8 +330,10 @@ void Level0::EnterFrom(LevelId id)
         tutorialCd.Restart();
         tutorialTransitionCd.Restart();
         break;
+    case GAMEOVERSCREEN:
     default:
-        TP2::player->MoveTo(256.0f, -34.0f);
+        TP2::player->MoveTo(256.0f, 450.0f);
+        TP2::player->Dir(H_RIGHT);
         tutorial = TUTORIAL_OVER;
         break;
     }

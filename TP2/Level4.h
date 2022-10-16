@@ -9,21 +9,21 @@
 
 class Level4 : public Level
 {
-private:
-    Sprite* background = nullptr;
-    Sprite* foreground = nullptr;
-    Sprite* totem = nullptr;
+  private:
+    Sprite *background = nullptr;
+    Sprite *foreground = nullptr;
+    Sprite *totem = nullptr;
 
-    Scene* scene = nullptr;
+    Scene *scene = nullptr;
 
-    Camera* camera = nullptr;
-    ScreenTransition* screenTransition = nullptr;
-    LevelTransition* levelTransition = nullptr;
+    Camera *camera = nullptr;
+    ScreenTransition *screenTransition = nullptr;
+    LevelTransition *levelTransition = nullptr;
 
-    Cooldown enteringCd{ LevelTransition::DURATION };
+    Cooldown enteringCd{LevelTransition::DURATION};
     LevelId enteringFrom;
 
-public:
+  public:
     void Init();
     void Update();
     void Draw();

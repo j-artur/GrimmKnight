@@ -81,6 +81,7 @@ void ScreenTransition::Update()
             TP2::player->Knockback();
             break;
         }
+        scene->CollisionDetection();
         positions.clear();
     }
 }

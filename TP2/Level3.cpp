@@ -156,9 +156,7 @@ void Level3::Init()
     scene->Add(new Totem(totemLeft, 30, 20), STATIC);
     scene->Add(new Totem(totemLeft, 48, 6), STATIC);
 
-    dashArea = new ActionArea(-32.0f, -96.0f, 32.0f, 96.0f);
-    dashArea->MoveTo(1760.0f, 160.0f);
-    scene->Add(dashArea, STATIC);
+    scene->Add(new DashmasterTotem(54, 8), STATIC);
 }
 
 void Level3::Update()
@@ -201,11 +199,6 @@ void Level3::Update()
         screenTransition3->Update();
         TP2::player->AddCooldowns(0.1f * gameTime);
     }
-    else if (dashArea->IsPlayerInside() && !TP2::player->HasDash())
-    {
-        TP2::player->State(STILL);
-        TP2::GetDash();
-    }
     else
     {
         scene->Update();
@@ -232,9 +225,20 @@ void Level3::Finalize()
 
 void Level3::EnterFrom(LevelId id)
 {
-    TP2::player->MoveTo(2560.0f, 1442.0f);
-    scene->Apply([&](Object *obj) { obj->Translate(float(-window->Width()), float(-window->Height())); });
-    TP2::player->State(WALKING);
-    TP2::player->Dir(H_LEFT);
-    enteringCd.Restart();
+    switch (id)
+    {
+    case LEVEL1:
+        TP2::player->MoveTo(2560.0f, 1442.0f);
+        scene->Apply([&](Object *obj) { obj->Translate(float(-window->Width()), float(-window->Height())); });
+        TP2::player->State(WALKING);
+        TP2::player->Dir(H_LEFT);
+        enteringCd.Restart();
+        break;
+    case GAMEOVERSCREEN:
+    default:
+        TP2::player->MoveTo(2448.0f, 1442.0f);
+        scene->Apply([&](Object *obj) { obj->Translate(float(-window->Width()), float(-window->Height())); });
+        TP2::player->Dir(H_LEFT);
+        break;
+    }
 }

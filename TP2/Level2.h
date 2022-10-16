@@ -6,6 +6,7 @@
 #include "EntityBlock.h"
 #include "FalseKnight.h"
 #include "Gate.h"
+#include "GrimmTotem.h"
 #include "Level.h"
 #include "LevelTransition.h"
 #include "Scene.h"
@@ -30,8 +31,6 @@ class Level2 : public Level
 
     LevelId enteringFrom;
     Cooldown enteringCd{LevelTransition::DURATION};
-
-    ActionArea *fireballArea = nullptr;
 
   public:
     static FalseKnight *fk;
