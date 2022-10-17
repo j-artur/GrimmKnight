@@ -9,8 +9,6 @@
 #include "Level4.h"
 #include "Util.h"
 
-#define M_PI 3.141592653589793238462643383279502884L
-
 Level *TP2::level = nullptr;
 Player *TP2::player = nullptr;
 Audio *TP2::audio = nullptr;

@@ -150,7 +150,6 @@ void FalseKnight::Update()
     if (betweenAttacksCd.Up() && !isAttacking && state == FK_IDLE)
     {
         isAttacking = true;
-
         strikeCtrl = true;
         voiceCtrl = true;
 

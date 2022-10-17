@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+#define M_PI 3.141592653589793238462643383279502884L
+
 enum Sounds
 {
     JETUP,
@@ -98,6 +100,7 @@ enum Boss
     FALSE_KNIGHT,
     MANTIS_LORDS,
 };
+
 
 const float KNOCKBACK_SPEED = 128.0f;
 const float KNOCKBACK_UP_SPEED = -196.0f;

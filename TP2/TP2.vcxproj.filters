@@ -204,6 +204,9 @@
     <ClCompile Include="Sword.cpp">
       <Filter>Game\Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="Orb.cpp">
+      <Filter>Game\Arquivos de Origem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -393,6 +396,9 @@
       <Filter>Game\Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="Sword.h">
+      <Filter>Game\Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="Orb.h">
       <Filter>Game\Arquivos de Cabeçalho</Filter>
     </ClInclude>
   </ItemGroup>

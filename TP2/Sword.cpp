@@ -40,7 +40,7 @@ void Sword::Update()
 
 	if (spawned)
 	{
-		this->direction.ScaleTo(500.0f);
+		this->direction.ScaleTo(600.0f);
 		Translate(direction.XComponent() * gameTime, -direction.YComponent() * gameTime);
 	}
 

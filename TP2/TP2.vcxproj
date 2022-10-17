@@ -190,6 +190,7 @@
     <ClCompile Include="Level4.cpp" />
     <ClCompile Include="LevelTransition.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Orb.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Radiance.cpp" />
     <ClCompile Include="RadianceTotem.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="Level4.h" />
     <ClInclude Include="LevelTransition.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Orb.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Radiance.h" />
     <ClInclude Include="RadianceTotem.h" />
