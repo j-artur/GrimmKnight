@@ -13,6 +13,8 @@ void Level2::Init()
 {
     id = LEVEL2;
 
+    TP2::audio->Play(CAVE_WIND, true);
+
     background = new Sprite("Resources/Level2Bg.png");
     foreground = new Sprite("Resources/Level2Fg.png");
     gate = new Image("Resources/Gate.png");
@@ -155,6 +157,7 @@ void Level2::Draw()
 
 void Level2::Finalize()
 {
+    TP2::audio->Stop(CAVE_WIND);
     delete background;
     delete foreground;
     scene->Remove(TP2::player, MOVING);

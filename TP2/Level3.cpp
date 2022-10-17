@@ -8,6 +8,9 @@ void Level3::Init()
 {
     id = LEVEL3;
 
+    TP2::audio->Play(LEVEL3_MUSIC, true);
+    TP2::audio->Volume(LEVEL3_MUSIC, 0.5f);
+
     background = new Sprite("Resources/Level3Bg.png");
     foreground = new Sprite("Resources/Level3Fg.png");
     totemLeft = new Sprite("Resources/TotemLeft.png");
@@ -215,6 +218,7 @@ void Level3::Draw()
 
 void Level3::Finalize()
 {
+    TP2::audio->Stop(LEVEL3_MUSIC);
     delete background;
     delete foreground;
     delete totemLeft;

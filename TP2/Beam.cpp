@@ -32,6 +32,7 @@ void Beam::Update()
     if (beamSpawnCd.Up() && spawnCtrl)
     {
         spawnCtrl = false;
+        TP2::audio->Play(SRD_LASER_BURST);
         for (int i = 0; i < 20; i++)
             circles[i]->MoveTo(x + direction.XComponent() * i, y - direction.YComponent() * i);
     }

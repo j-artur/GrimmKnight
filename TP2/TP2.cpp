@@ -51,10 +51,17 @@ void TP2::Init()
     audio->Add(PLAYER_WALK, "Resources/Audio/Player/hero_walk_footsteps_stone.wav");
 
     audio->Add(ENEMY_DAMAGE, "Resources/Audio/enemy_damage.wav");
+    audio->Add(ENEMY_DREAM_DAMAGE, "Resources/Audio/dream_damage.wav");
     audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav", 3);
+    audio->Add(ENEMY_FOOTSTEP, "Resources/Audio/husk_footstep.wav", 2);
+    audio->Add(ENEMY_RUN, "Resources/Audio/husk_run.wav");
+    audio->Add(ENEMY_DEATH, "Resources/Audio/husk_death.wav");
 
-    audio->Add(CAVE_NOISES, "Resources/Audio/cave_noises.wav");
     audio->Add(MAIN_MUSIC, "Resources/Audio/main_theme.wav");
+    audio->Add(LEVEL3_MUSIC, "Resources/Audio/level_3_theme.wav");
+    audio->Add(OPENING, "Resources/Audio/opening.wav");
+    audio->Add(CAVE_NOISES, "Resources/Audio/cave_noises.wav");
+    audio->Add(CAVE_WIND, "Resources/Audio/cave_wind.wav");
 
     audio->Add(SFK_THEME, "Resources/Audio/FalseKnight/false_knight_theme.wav");
     audio->Add(SFK_STUN, "Resources/Audio/FalseKnight/false_knight_stun.wav");
@@ -69,7 +76,18 @@ void TP2::Init()
     audio->Add(SFK_BARREL_DEATH, "Resources/Audio/FalseKnight/barrel_death.wav");
     audio->Add(SFK_DEFEAT, "Resources/Audio/FalseKnight/boss_defeat.wav");
 
+    audio->Add(SRD_THEME, "Resources/Audio/Radiance/radiance_theme.wav");
+    audio->Add(SRD_FINAL_HIT, "Resources/Audio/Radiance/radiance_final_hit.wav");
+    audio->Add(SRD_LASER_BURST, "Resources/Audio/Radiance/radiance_laser_burst.wav");
+    audio->Add(SRD_LASER_PREPARE, "Resources/Audio/Radiance/radiance_laser_prepare.wav");
+    audio->Add(SRD_ORB, "Resources/Audio/Radiance/radiance_orb.wav");
+    audio->Add(SRD_SWORD_BURST, "Resources/Audio/Radiance/radiance_sword_burst.wav");
+    audio->Add(SRD_SWORD_WALL, "Resources/Audio/Radiance/radiance_sword_wall.wav");
+    audio->Add(SRD_TELEPORT, "Resources/Audio/Radiance/radiance_teleport.wav");
+
     audio->Add(BALDUR_BLOCK_SOUND, "Resources/Audio/block.wav");
+
+    audio->Add(SOUL_TOTEM, "Resources/Audio/soul_totem_slash.wav");
 
     audio->Add(GAME_OVER_SONG, "Resources/Audio/game_over.wav");
 

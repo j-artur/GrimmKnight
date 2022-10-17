@@ -111,6 +111,31 @@ void Radiance::DraftSpawn()
     spawnY = rndY(rng);
 }
 
+void Radiance::DraftTeleport()
+{
+    uniform_int_distribution<int> rnd = uniform_int_distribution<int>(1,3);
+    uint r;
+    switch (rnd(rng))
+    {
+    case 1:
+        r = 256.0f;
+        break;
+    case 2:
+        r = 640.0f;
+        break;
+    case 3:
+        r = 1024.0f;
+        break;
+    default:
+        break;
+    }
+
+    if (r == x)
+        return DraftTeleport();
+
+    spawnX = r;
+}
+
 void Radiance::DraftMove()
 {
     oldMove = nextMove;
@@ -170,8 +195,9 @@ void Radiance::Update()
         if (ctrl && preTeleport.Up())
         {
             ctrl = false;
-            DraftSpawn();
+            DraftTeleport();
             MoveTo(spawnX, y);
+            TP2::audio->Play(SRD_TELEPORT, false);
         }
         else if (posTeleport.Up())
             state = RD_IDLE;
@@ -184,6 +210,7 @@ void Radiance::Update()
     if (state == RD_BEAM_BURST)
     {
         DraftAngle(RD_BEAM_A);
+        TP2::audio->Play(SRD_LASER_PREPARE);
         for (auto i : directions)
         {
             Beam *b = new Beam(beamTileSet, i.Angle());
@@ -197,8 +224,9 @@ void Radiance::Update()
     // BEAM WALL
     if (state == RD_BEAM_WALL)
     {
-        if (spawningBeamCd.Up() && count < 16)
+        if (spawningBeamCd.Up() && count < 20)
         {
+            TP2::audio->Play(SRD_LASER_PREPARE);
             Beam *b = new Beam(beamTileSet, vDirection);
             b->MoveTo(projectileXSpawn + (projectileXSpawn == 0.0f ? 40.0f : -40.0f) * count, 0.0f);
             TP2::scene->Add(b, STATIC);
@@ -206,7 +234,7 @@ void Radiance::Update()
             spawningBeamCd.Restart();
         }
 
-        if (count >= 16)
+        if (count >= 20)
             state = RD_IDLE;
 
         spawningBeamCd.Add(gameTime);
@@ -216,6 +244,7 @@ void Radiance::Update()
     if (state == RD_SWORD_BURST)
     {
         DraftAngle(RD_SWORD_A);
+        TP2::audio->Play(SRD_SWORD_BURST);
         for (auto i : directions)
         {
             Sword *s = new Sword(swordSprite, i.Angle());
@@ -229,14 +258,16 @@ void Radiance::Update()
     // SWORD RAIN
     if (state == RD_SWORD_RAIN)
     {
-        DraftGaps(12);
+        DraftGaps(17);
 
-        for (int i = 0; i < 12; i++)
+        TP2::audio->Play(SRD_SWORD_WALL);
+
+        for (int i = 0; i < 17; i++)
         {
             if (i != gaps[0] && i != gaps[1] && i != gaps[2])
             {
                 Sword *s = new Sword(swordSprite, vDirection);
-                s->MoveTo(256.0f + 72 * i, 0.0f);
+                s->MoveTo(64.0f + 72 * i, 0.0f);
                 TP2::scene->Add(s, MOVING);
             }
         }
@@ -265,12 +296,14 @@ void Radiance::Update()
 
             DraftGaps(6);
 
+            TP2::audio->Play(SRD_SWORD_WALL);
+
             for (int i = 0; i < 6; i++)
             {
                 if (i != gaps[0] && i != gaps[1] && i != gaps[2])
                 {
                     Sword *s = new Sword(swordSprite, hDirection);
-                    s->MoveTo(projectileXSpawn, 172.0f + 96.0f * i);
+                    s->MoveTo(projectileXSpawn, 202.0f + 96.0f * i);
                     TP2::scene->Add(s, MOVING);
                 }
             }
@@ -291,6 +324,7 @@ void Radiance::Update()
             Orb *orb = new Orb(orbSprite);
             orb->MoveTo(spawnX, spawnY);
             TP2::scene->Add(orb, MOVING);
+            TP2::audio->Play(SRD_ORB);
 
             count++;
         }

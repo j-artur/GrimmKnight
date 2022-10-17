@@ -9,6 +9,7 @@ void Level0::Init()
 {
     id = LEVEL0;
 
+    TP2::audio->Play(OPENING);
     TP2::audio->Play(CAVE_NOISES, true);
 
     background = new Sprite("Resources/Level0Bg.png");

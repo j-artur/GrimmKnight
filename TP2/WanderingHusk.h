@@ -22,6 +22,7 @@ class WanderingHusk : public Entity
     Animation *animation;
     WH_State state = WH_WALKING;
     HDirection direction = H_RIGHT;
+    uint voiceId;
 
     Cooldown hurtCd{0.3f};
     Cooldown chargeRunCd{0.5f};
@@ -39,7 +40,7 @@ class WanderingHusk : public Entity
     float ySpeed = 0.0f;
 
   public:
-    WanderingHusk(TileSet *tileSet, int x, int y);
+    WanderingHusk(TileSet *tileSet, int x, int y, uint voiceId);
     ~WanderingHusk();
 
     bool TakeDamage(uint damage, Direction dir);

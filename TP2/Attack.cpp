@@ -103,7 +103,7 @@ void Attack::OnCollision(Object *other)
             if (radiance->TakeDamage(5, direction))
             {
                 // TODO: radiance damage sound
-                TP2::audio->Play(ENEMY_DAMAGE);
+                TP2::audio->Play(ENEMY_DREAM_DAMAGE);
                 TP2::player->AddMana();
                 TP2::player->Knockback();
             }
@@ -118,7 +118,8 @@ void Attack::OnCollision(Object *other)
             Entity *totem = (Entity *)other;
             if (totem->TakeDamage(1, direction))
             {
-                // TP2::audio->Play(TOTEM_DAMAGE);
+                
+                TP2::audio->Play(SOUL_TOTEM);
                 TP2::player->Knockback();
                 TP2::player->AddMana();
             }

@@ -19,7 +19,7 @@ class Orb : public Object
 
     float maxSpeed;
 
-    Cooldown orbDeleteCd{5.0f, false};
+    Cooldown orbDeleteCd{6.0f, false};
     Cooldown orbSpawnCd{1.5f, false};
 
     bool spawned = false;

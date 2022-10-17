@@ -88,6 +88,7 @@ class Radiance : public Entity
     void DraftGaps(uint n);
     HDirection DraftDirection();
     void DraftSpawn();
+    void DraftTeleport();
     void DraftMove();
     void Update();
     void Draw();

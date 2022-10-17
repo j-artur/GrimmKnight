@@ -13,6 +13,8 @@ void LevelFinal::Init()
     radianceScreen = new Sprite("Resources/RadianceScreen.png");
     whiteScreen = new Sprite("Resources/WhiteScreen.png");
 
+    TP2::audio->Play(SRD_THEME, true);
+
     scene = new Scene();
     TP2::scene = scene;
 
@@ -39,6 +41,7 @@ void LevelFinal::Update()
     }
     else if (ending)
     {
+        TP2::audio->Stop(SRD_THEME);
         if (endingCd.Down())
             endingCd.Add(gameTime);
         else
@@ -52,7 +55,10 @@ void LevelFinal::Update()
         scene->CollisionDetection();
 
         if (rd != nullptr && !rd->Alive())
+        {
+            TP2::audio->Play(SRD_FINAL_HIT);
             ending = true;
+        }
     }
 }
 
@@ -78,6 +84,7 @@ void LevelFinal::Draw()
 
 void LevelFinal::Finalize()
 {
+    TP2::audio->Stop(SRD_THEME);
     delete background;
     delete foreground;
     scene->Remove(TP2::player, MOVING);

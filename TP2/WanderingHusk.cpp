@@ -5,11 +5,13 @@
 #include "TP2.h"
 #include "Wall.h"
 
-WanderingHusk::WanderingHusk(TileSet *tileSet, int iX, int iY)
+WanderingHusk::WanderingHusk(TileSet *tileSet, int iX, int iY, uint voiceId)
 {
     type = ENEMY;
 
     hp = 15;
+
+    this->voiceId = voiceId;
 
     animation = new Animation(tileSet, 0.3f, true);
 
@@ -17,6 +19,8 @@ WanderingHusk::WanderingHusk(TileSet *tileSet, int iX, int iY)
     actionArea->MoveTo(x, y);
 
     TP2::scene->Add(actionArea, MOVING);
+
+    TP2::audio->Play(ENEMY_FOOTSTEP, true);
 
     uint seqWalkLeft[2] = {0, 3};
     uint seqWalkRight[2] = {6, 9};
@@ -103,6 +107,7 @@ void WanderingHusk::Update()
             if (hp <= 0)
             {
                 dieCd.Restart();
+                TP2::audio->Play(ENEMY_DEATH);
                 state = WH_DEAD;
             }
             else
@@ -110,6 +115,7 @@ void WanderingHusk::Update()
         }
         break;
     case WH_DEAD:
+        TP2::audio->Stop(ENEMY_FOOTSTEP, voiceId);
         xSpeed = 0.0f;
         if (dieCd.Up())
         {
@@ -127,6 +133,7 @@ void WanderingHusk::Update()
         if (chargeRunCd.Up())
         {
             direction = TP2::player->X() < x ? H_LEFT : H_RIGHT;
+            TP2::audio->Play(ENEMY_RUN);
             state = WH_RUNNING;
         }
         break;
