@@ -1,14 +1,14 @@
 #include "Radiance.h"
 #include "Beam.h"
-#include "Sword.h"
 #include "Orb.h"
+#include "Sword.h"
 #include "TP2.h"
 
 Radiance::Radiance()
 {
-    type = ENEMY;
+    type = RADIANCE;
 
-    hp = 150;
+    hp = 350;
 
     random_device rd;
     rng.seed(rd());
@@ -17,28 +17,29 @@ Radiance::Radiance()
     nextMove = RD_SWORD_RAIN;
     betweenAttacksCd.Restart();
 
-    tileSet = new TileSet("Resources/WIP/Radiance.png", 516, 516, 2, 2);
-    swordSprite = new Sprite("Resources/WIP/RadianceSword.png");
-    orbSprite = new Sprite("Resources/Rock.png");
+    tileSet = new TileSet("Resources/Radiance.png", 516, 516, 2, 2);
+    swordSprite = new Sprite("Resources/RadianceSword.png");
+    orbSprite = new Sprite("Resources/Orb.png");
+    beamTileSet = new TileSet("Resources/Beam.png", 2, 1);
+
     animation = new Animation(tileSet, 0.2f, true);
 
-    uint seqIdle[2] = { 0,1 };
+    uint seqIdle[2] = {0, 1};
 
     animation->Add(RD_IDLE, seqIdle, 2);
 
     animation->Select(RD_IDLE);
 
-    //MoveTo(iX * 32.0f, iY * 32.0f);
+    // MoveTo(iX * 32.0f, iY * 32.0f);
 
     DraftAngle(RD_BEAM_A);
-    hDirection = Vector(0.0f, 40.0f);
-    vDirection = Vector(270.0f, 24.0f);
+    hDirection = 0.0f, vDirection = 270.0f;
 
     Mixed *bb = new Mixed();
 
     head = new Rect(-48.0f, -36.0f, 48.0f, 36.0f);
     Rect *body = new Rect(-96.0f, -48.0f, 96.0f, 48.0f);
-    Rect* lowBody = new Rect(-36.0f, -28.0f, 36.0f, 28.0f);
+    Rect *lowBody = new Rect(-36.0f, -28.0f, 36.0f, 28.0f);
 
     bb->Insert(head);
     bb->Insert(body);
@@ -61,15 +62,15 @@ Radiance::~Radiance()
 
 bool Radiance::TakeDamage(uint damage, Direction dir)
 {
-    if (hurtCd.Up())
-    {
-        hp -= damage;
+    if (hurtCd.Down())
+        return false;
 
-        return true;
+    hurtCd.Restart();
+    hp -= damage;
+    if (hp < 0)
+        hp = 0;
 
-        hurtCd.Restart();
-    }
-    return false;
+    return true;
 }
 
 void Radiance::DraftAngle(RD_Attack attack)
@@ -102,10 +103,9 @@ HDirection Radiance::DraftDirection()
 void Radiance::DraftSpawn()
 {
     // x 256 - 1024
-    // y 256 - 640 
+    // y 256 - 640
     uniform_int_distribution<int> rndX = uniform_int_distribution<int>(256, 1024);
     uniform_int_distribution<int> rndY = uniform_int_distribution<int>(256, 640);
-
 
     spawnX = rndX(rng);
     spawnY = rndY(rng);
@@ -121,26 +121,12 @@ void Radiance::DraftMove()
 
     if (nextMove == RD_BEAM_WALL)
         projectileXSpawn = (DraftDirection() == H_LEFT ? window->Width() : 0.0f);
-    
 
-    if (nextMove == RD_SWORD_WALL)
-    {
-        if (DraftDirection() == H_LEFT)
-        {
-            hDirection = Vector(180.0f, 24.0f);
-            projectileXSpawn = window->Width() + swordSprite->Width();
-        }
-        else
-        {
-            hDirection = Vector(0.0f, 24.0f);
-            projectileXSpawn = 0.0f - swordSprite->Width();
-        }
-    }
+    count = 0;
 }
 
 void Radiance::Update()
 {
-
     if (state == RD_IDLE && betweenAttacksCd.Up())
     {
         betweenAttacksCd.Restart();
@@ -189,22 +175,22 @@ void Radiance::Update()
         }
         else if (posTeleport.Up())
             state = RD_IDLE;
-        
+
         preTeleport.Add(gameTime);
         posTeleport.Add(gameTime);
     }
-    
+
     // BEAM BURST
     if (state == RD_BEAM_BURST)
     {
         DraftAngle(RD_BEAM_A);
         for (auto i : directions)
         {
-            Beam* b = new Beam(i);
+            Beam *b = new Beam(beamTileSet, i.Angle());
             b->MoveTo(head->X() + i.XComponent(), head->Y() - i.YComponent());
             TP2::scene->Add(b, STATIC);
         }
-        
+
         state = RD_IDLE;
     }
 
@@ -213,8 +199,8 @@ void Radiance::Update()
     {
         if (spawningBeamCd.Up() && count < 16)
         {
-            Beam* b = new Beam(vDirection);
-            b->MoveTo(projectileXSpawn + (projectileXSpawn == 0.0f ? 40.0f : -40.0f) * count, 100.0f);
+            Beam *b = new Beam(beamTileSet, vDirection);
+            b->MoveTo(projectileXSpawn + (projectileXSpawn == 0.0f ? 40.0f : -40.0f) * count, 0.0f);
             TP2::scene->Add(b, STATIC);
             count++;
             spawningBeamCd.Restart();
@@ -223,18 +209,16 @@ void Radiance::Update()
         if (count >= 16)
             state = RD_IDLE;
 
-
         spawningBeamCd.Add(gameTime);
-
     }
-    
+
     // SWORD BURST
     if (state == RD_SWORD_BURST)
     {
         DraftAngle(RD_SWORD_A);
         for (auto i : directions)
         {
-            Sword* s = new Sword(i, swordSprite);
+            Sword *s = new Sword(swordSprite, i.Angle());
             s->MoveTo(head->X() + i.XComponent(), head->Y() - i.YComponent());
             TP2::scene->Add(s, MOVING);
         }
@@ -251,8 +235,8 @@ void Radiance::Update()
         {
             if (i != gaps[0] && i != gaps[1] && i != gaps[2])
             {
-                Sword* s = new Sword(vDirection, swordSprite);
-                s->MoveTo(256.0f + 72 * i, 200.0f);
+                Sword *s = new Sword(swordSprite, vDirection);
+                s->MoveTo(256.0f + 72 * i, 0.0f);
                 TP2::scene->Add(s, MOVING);
             }
         }
@@ -263,19 +247,38 @@ void Radiance::Update()
     // SWORD WALL
     if (state == RD_SWORD_WALL)
     {
-        DraftGaps(6);
-
-        for (int i = 0; i < 6; i++)
+        if (betweenAttacksCd.Up() && count < 4)
         {
-            if (i != gaps[0] && i != gaps[1] && i != gaps[2])
-            {
-                Sword* s = new Sword(hDirection, swordSprite);
-                s->MoveTo(projectileXSpawn, 172.0f + 96.0f * i);
-                TP2::scene->Add(s, MOVING);
-            }
-        }
+            betweenAttacksCd.Restart();
+            betweenAttacksCd.Leave(1.5f);
 
-        state = RD_IDLE;
+            if (DraftDirection() == H_LEFT)
+            {
+                hDirection = 180.0f;
+                projectileXSpawn = window->Width();
+            }
+            else
+            {
+                hDirection = 0.0f;
+                projectileXSpawn = 0.0f;
+            }
+
+            DraftGaps(6);
+
+            for (int i = 0; i < 6; i++)
+            {
+                if (i != gaps[0] && i != gaps[1] && i != gaps[2])
+                {
+                    Sword *s = new Sword(swordSprite, hDirection);
+                    s->MoveTo(projectileXSpawn, 172.0f + 96.0f * i);
+                    TP2::scene->Add(s, MOVING);
+                }
+            }
+
+            count++;
+        }
+        if (count >= 4)
+            state = RD_IDLE;
     }
 
     // ORB
@@ -285,7 +288,7 @@ void Radiance::Update()
         {
             betweenAttacksCd.Restart();
             DraftSpawn();
-            Orb* orb = new Orb(orbSprite);
+            Orb *orb = new Orb(orbSprite);
             orb->MoveTo(spawnX, spawnY);
             TP2::scene->Add(orb, MOVING);
 
@@ -296,7 +299,7 @@ void Radiance::Update()
             state = RD_IDLE;
     }
 
-
+    hurtCd.Add(gameTime);
     betweenAttacksCd.Add(gameTime);
 
     animation->NextFrame();
@@ -304,5 +307,21 @@ void Radiance::Update()
 
 void Radiance::Draw()
 {
-    animation->Draw(round(x), round(y), LAYER_BOSS);
+    if (hurtCd.Down())
+    {
+        float f = 10.0f - 9.0f * hurtCd.Ratio();
+        animation->Draw(round(x), round(y), LAYER_RADIANCE, 1.0f, 0.0f, {f, f, f, 1.0f});
+    }
+    else if (preTeleport.Down())
+    {
+        float f = 1.0f + 9.0f * preTeleport.Ratio();
+        animation->Draw(round(x), round(y), LAYER_RADIANCE, 1.0f, 0.0f, {f, f, f, 1.0f});
+    }
+    else if (posTeleport.Down())
+    {
+        float f = 10.0f - 9.0f * posTeleport.Ratio();
+        animation->Draw(round(x), round(y), LAYER_RADIANCE, 1.0f, 0.0f, {f, f, f, 1.0f});
+    }
+    else
+        animation->Draw(round(x), round(y), LAYER_RADIANCE);
 }

@@ -75,8 +75,15 @@ void Fireball::OnCollision(Object *obj)
             break;
         case ENEMY: {
             Entity *enemy = (Entity *)obj;
-            if (enemy->Alive())
-                enemy->TakeDamage(15, Dir());
+            if (enemy->TakeDamage(15, Dir()))
+                TP2::audio->Play(ENEMY_DAMAGE);
+            break;
+        }
+        case RADIANCE: {
+            Entity *radiance = (Entity *)obj;
+            if (radiance->TakeDamage(15, Dir()))
+                // TODO: radiance damage sound
+                TP2::audio->Play(ENEMY_DAMAGE);
             break;
         }
         }

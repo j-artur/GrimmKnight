@@ -7,6 +7,7 @@
 #include "Level2.h"
 #include "Level3.h"
 #include "Level4.h"
+#include "TitleScreen.h"
 #include "Util.h"
 
 Level *TP2::level = nullptr;

@@ -7,8 +7,8 @@
 #include "Object.h"
 #include "Sprite.h"
 #include "Util.h"
-#include "Wall.h"
 #include "Vector.h"
+#include "Wall.h"
 #include <random>
 
 using std::mt19937;
@@ -30,19 +30,20 @@ enum RD_State
 
 enum RD_Attack
 {
-    RD_SWORD_A = 20,
+    RD_SWORD_A = 24,
     RD_BEAM_A = 40
 };
 
 class Radiance : public Entity
 {
-private:
-    TileSet* tileSet;
-    Sprite* swordSprite;
-    Sprite* orbSprite;
-    Animation* animation;
+  private:
+    TileSet *tileSet;
+    Sprite *swordSprite;
+    Sprite *orbSprite;
+    TileSet *beamTileSet;
+    Animation *animation;
 
-    Rect* head;
+    Rect *head;
 
     mt19937 rng;
     uniform_int_distribution<int> move;
@@ -59,15 +60,15 @@ private:
     uint spawnY = 0;
 
     Vector directions[6];
-    Vector vDirection;
-    Vector hDirection;
+    float vDirection;
+    float hDirection;
     Vector headDistance[6];
 
-    Cooldown betweenAttacksCd{ 2.0f };
-    Cooldown spawningBeamCd{ 0.075f };
-    Cooldown preTeleport{ 0.5f };
-    Cooldown posTeleport{ 1.0f };
-    Cooldown hurtCd{ 0.5f };
+    Cooldown betweenAttacksCd{2.0f};
+    Cooldown spawningBeamCd{0.075f};
+    Cooldown preTeleport{0.5f};
+    Cooldown posTeleport{1.0f};
+    Cooldown hurtCd{0.25f};
 
     float directionMult = 1.0f;
     float projectileXSpawn = 256.0f;
@@ -77,7 +78,7 @@ private:
     bool isAttacking = false;
     bool ctrl = true;
 
-public:
+  public:
     Radiance();
     ~Radiance();
 

@@ -69,7 +69,3 @@ void TitleScreen::Finalize()
 void TitleScreen::EnterFrom(LevelId id)
 {
 }
-
-void TitleScreen::Respawn()
-{
-}

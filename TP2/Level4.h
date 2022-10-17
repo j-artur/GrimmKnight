@@ -13,6 +13,7 @@ class Level4 : public Level
   private:
     Sprite *background = nullptr;
     Sprite *foreground = nullptr;
+    Sprite *whiteScreen = nullptr;
     Sprite *totem = nullptr;
 
     Scene *scene = nullptr;
@@ -25,6 +26,9 @@ class Level4 : public Level
 
     Cooldown enteringCd{LevelTransition::DURATION};
     LevelId enteringFrom;
+
+    Cooldown readyCd{1.0f, false};
+    bool ready;
 
   public:
     void Init();

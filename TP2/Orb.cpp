@@ -1,55 +1,60 @@
 #include "Orb.h"
 #include "TP2.h"
 
-Orb::Orb(Sprite* sprite)
+Orb::Orb(Sprite *sprite)
 {
-	type = ENEMY_ATTACK;
+    type = ENEMY_ATTACK;
 
-	this->sprite = sprite;
+    this->sprite = sprite;
 
-	maxSpeed = 640.0f;
-
-	BBox(new Circle(16.0f));
+    maxSpeed = 640.0f;
 }
 
 Orb::~Orb()
 {
 }
 
-void Orb::OnCollision(Object* other)
+void Orb::OnCollision(Object *other)
 {
-	if (other->Type() == WALL_TOP)
-		TP2::scene->Delete(this, MOVING);
-	
+    if (other->Type() == WALL_TOP)
+        TP2::scene->Delete(this, MOVING);
 }
 
 void Orb::Update()
 {
-	Rotate(360.0f * gameTime);
+    Rotate(900.0f * gameTime);
 
-	acceleration = Vector(atan2((y - TP2::player->Y()), x - TP2::player->X()) * 180 / M_PI, 640.0f * gameTime);
-	speed.Add(acceleration);
-	
-	if (orbSpawnCd.Up() && !spawned)
-	{
-		spawned = true;
-		speed = Vector(atan2(y - TP2::player->Y(), x - TP2::player->X()) * 180 / M_PI, 320.0f * gameTime);
-	}
+    acceleration = Vector(atan2((y - TP2::player->Y()) / 2.0f, x - TP2::player->X()) * 180 / M_PI, 640.0f * gameTime);
+    speed.Add(acceleration);
 
-	if (orbDeleteCd.Up())
-		TP2::scene->Delete();
+    if (orbSpawnCd.Up() && !spawned)
+    {
+        spawned = true;
+        speed = Vector(atan2(y - TP2::player->Y(), x - TP2::player->X()) * 180 / M_PI, 320.0f * gameTime);
+        BBox(new Circle(16.0f));
+        BBox()->MoveTo(x, y);
+    }
 
-	if (speed.Magnitude() > maxSpeed)
-		speed.ScaleTo(maxSpeed);
+    if (orbDeleteCd.Up())
+        TP2::scene->Delete();
 
-	if (spawned)
-		Translate(-speed.XComponent() * gameTime, -speed.YComponent() * gameTime);
+    if (speed.Magnitude() > maxSpeed)
+        speed.ScaleTo(maxSpeed);
 
-	orbSpawnCd.Add(gameTime);
-	orbDeleteCd.Add(gameTime);
+    if (spawned)
+        Translate(-speed.XComponent() * gameTime, -speed.YComponent() * gameTime);
+
+    orbSpawnCd.Add(gameTime);
+    orbDeleteCd.Add(gameTime);
 }
 
 void Orb::Draw()
 {
-	sprite->Draw(round(x), round(y), LAYER_BOSS_ATTACK, scale, -rotation);
+    if (orbSpawnCd.Down())
+    {
+        float f = 10.0f - 9.0f * orbSpawnCd.Ratio();
+        sprite->Draw(round(x), round(y), LAYER_BOSS_ATTACK, orbSpawnCd.Ratio(), -rotation, {f, f, f, 1.0f});
+    }
+    else
+        sprite->Draw(round(x), round(y), LAYER_BOSS_ATTACK, scale, -rotation);
 }

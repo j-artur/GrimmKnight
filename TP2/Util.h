@@ -73,6 +73,7 @@ enum Objects
     BUTTON,
     BARREL,
     TOTEM,
+    RADIANCE,
 };
 
 enum HDirection
@@ -101,7 +102,6 @@ enum Boss
     MANTIS_LORDS,
 };
 
-
 const float KNOCKBACK_SPEED = 128.0f;
 const float KNOCKBACK_UP_SPEED = -196.0f;
 
@@ -112,11 +112,11 @@ const float LAYER_BG = 0.99f;
 const float LAYER_LIGHT = 0.95f;
 const float LAYER_GATE = 0.94f;
 const float LAYER_TOTEM = 0.93f;
+const float LAYER_RADIANCE = 0.92f;
 const float LAYER_FG = 0.90f;
-const float LAYER_ENEMY_DEAD = 0.875f;
-const float LAYER_PLAYER = 0.85f;
-const float LAYER_HEAL = 0.84f;
-const float LAYER_ENEMY = 0.80f;
+const float LAYER_ENEMY = 0.85f;
+const float LAYER_PLAYER = 0.80f;
+const float LAYER_HEAL = 0.79f;
 const float LAYER_ENEMY_ATTACK = 0.75f;
 const float LAYER_BOSS = 0.70f;
 const float LAYER_BOSS_ATTACK = 0.65f;

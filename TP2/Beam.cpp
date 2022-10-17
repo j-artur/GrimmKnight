@@ -1,50 +1,61 @@
 #include "Beam.h"
 #include "TP2.h"
 
-Beam::Beam(Vector direction)
+Beam::Beam(TileSet *tileSet, float angle)
 {
-	type = ENEMY_ATTACK;
+    type = ENEMY_ATTACK;
 
-	this->direction = direction;
-	bb = new Mixed();
+    animation = new Animation(tileSet, 0.75f, true);
 
-	for (int i = 0; i < 20; i++)
-	{
-		circles[i] = new Circle(20.0f);
+    this->direction = Vector(angle, 40.0f);
+    bb = new Mixed();
 
-		bb->Insert(circles[i]);
-	}
+    RotateTo(angle);
 
-	BBox(bb);
+    for (int i = 0; i < 20; i++)
+    {
+        circles[i] = new Circle(20.0f);
+
+        bb->Insert(circles[i]);
+    }
+
+    BBox(bb);
 }
 
 Beam::~Beam()
 {
-	delete animation;
+    delete animation;
 }
 
 void Beam::Update()
 {
-	if (beamSpawnCd.Up() && spawnCtrl)
-	{
-		spawnCtrl = false;
-		for (int i = 0; i < 20; i++)
-		{
-			circles[i]->MoveTo(x + direction.XComponent() * i, y - direction.YComponent() * i);
-		}
-	}
+    if (beamSpawnCd.Up() && spawnCtrl)
+    {
+        spawnCtrl = false;
+        for (int i = 0; i < 20; i++)
+            circles[i]->MoveTo(x + direction.XComponent() * i, y - direction.YComponent() * i);
+    }
 
-	if (beamDeleteCd.Up())
-	{
-		TP2::scene->Delete();
-	}
+    if (beamDeactivateCd.Up() && deactivateCtrl)
+    {
+        deactivateCtrl = false;
+        for (int i = 0; i < 20; i++)
+            ((Mixed *)BBox())->Remove(circles[i]);
+    }
 
-	beamSpawnCd.Add(gameTime);
-	beamDeleteCd.Add(gameTime);
-	//animation->NextFrame();
+    if (beamDeleteCd.Up())
+    {
+        TP2::scene->Delete();
+    }
+
+    beamSpawnCd.Add(gameTime);
+    beamDeactivateCd.Add(gameTime);
+    beamDeleteCd.Add(gameTime);
+    animation->NextFrame();
 }
 
 void Beam::Draw()
 {
-	//animation->Draw(round(x), round(y), LAYER_BOSS_ATTACK, scale, rotation);
+    animation->Draw(round(x + direction.XComponent()), round(y - direction.YComponent()), LAYER_BOSS_ATTACK, scale,
+                    -rotation);
 }

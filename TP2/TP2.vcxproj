@@ -168,6 +168,7 @@
     <ClCompile Include="Cooldown.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="DashmasterTotem.cpp" />
+    <ClCompile Include="EndScreen.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EntityBlock.cpp" />
     <ClCompile Include="FalseKnight.cpp" />
@@ -180,7 +181,6 @@
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GrimmTotem.cpp" />
-    <ClCompile Include="Heal.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Level0.cpp" />
@@ -188,6 +188,7 @@
     <ClCompile Include="Level2.cpp" />
     <ClCompile Include="Level3.cpp" />
     <ClCompile Include="Level4.cpp" />
+    <ClCompile Include="LevelFinal.cpp" />
     <ClCompile Include="LevelTransition.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Orb.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="Cooldown.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="DashmasterTotem.h" />
+    <ClInclude Include="EndScreen.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityBlock.h" />
@@ -242,7 +244,6 @@
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GrimmTotem.h" />
-    <ClInclude Include="Heal.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Level.h" />
@@ -251,6 +252,7 @@
     <ClInclude Include="Level2.h" />
     <ClInclude Include="Level3.h" />
     <ClInclude Include="Level4.h" />
+    <ClInclude Include="LevelFinal.h" />
     <ClInclude Include="LevelTransition.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Orb.h" />

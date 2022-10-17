@@ -37,6 +37,7 @@ class Player : public Entity
 
     Cooldown attackCd{0.5f};
     Cooldown attackAnimCd{0.2f};
+    Cooldown healCd{0.25f};
     Cooldown hurtCd{1.0f};
     Cooldown hurtAnimCd{0.2f};
     Cooldown knockbackCd{0.15f};

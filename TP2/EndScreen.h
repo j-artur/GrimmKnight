@@ -1,18 +1,16 @@
-#ifndef _TITLESCREEN_H_
-#define _TITLESCREEN_H_
+#ifndef _ENDSCREEN_H_
+#define _ENDSCREEN_H_
 
 #include "Animation.h"
 #include "Level.h"
 #include "Scene.h"
 
-class TitleScreen : public Level
+class EndScreen : public Level
 {
   private:
     TileSet *bgTileSet = nullptr;
     Animation *bgAnimation = nullptr;
     Scene *scene = nullptr;
-
-    bool start = false;
 
   public:
     void Init();

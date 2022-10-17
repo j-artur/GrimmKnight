@@ -2,7 +2,6 @@
 #include "Attack.h"
 #include "EntityBlock.h"
 #include "Fireball.h"
-#include "Heal.h"
 #include "Level2.h"
 #include "Spike.h"
 #include "TP2.h"
@@ -158,6 +157,7 @@ void Player::AddCooldowns(float dt)
 {
     attackCd.Add(dt);
     attackAnimCd.Add(dt);
+    healCd.Add(dt);
     fireballCd.Add(dt);
     fireballAnimCd.Add(dt);
     dashCd.Add(dt);
@@ -469,9 +469,9 @@ input : {
         }
 
         // HEAL
-        if (window->KeyDown('A') && healKeyCtrl && HasMana())
+        if (window->KeyDown('A') && healKeyCtrl && HasMana() && healCd.Up())
         {
-            TP2::scene->Add(new Heal(), STATIC);
+            healCd.Restart();
             // TODO: Create heal sound
 
             UseMana();
@@ -710,8 +710,17 @@ update : {
 
 void Player::Draw()
 {
-    light->Draw(round(x), round(y), LAYER_LIGHT);
-    animation->Draw(round(x), round(y), LAYER_PLAYER);
+    if (TP2::currentLevel != LEVELFINAL)
+        light->Draw(round(x), round(y), LAYER_LIGHT);
+
+    if (healCd.Down())
+    {
+        float g = 8.0f - 7.0f * healCd.Ratio();
+        float b = 10.0f - 9.0f * healCd.Ratio();
+        animation->Draw(round(x), round(y), LAYER_PLAYER, 1.0f, 0.0f, {1.0f, g, b, 1.0f});
+    }
+    else
+        animation->Draw(round(x), round(y), LAYER_PLAYER);
 }
 
 void Player::OnCollision(Object *other)

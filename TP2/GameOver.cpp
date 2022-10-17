@@ -51,6 +51,7 @@ void GameOver::Update()
             TP2::NextLevel<Level3>();
             break;
         case LEVEL4:
+        case LEVELFINAL:
             TP2::NextLevel<Level4>();
             break;
         default:

@@ -502,7 +502,7 @@ void FalseKnight::Update()
 
 void FalseKnight::Draw()
 {
-    animation->Draw(round(x), round(y), LAYER_BOSS);
+    animation->Draw(round(x), round(y), Alive() ? LAYER_BOSS : LAYER_ENEMY);
 }
 
 void FalseKnight::OnCollision(Object *other)

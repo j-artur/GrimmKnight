@@ -1,5 +1,6 @@
 #include "Level4.h"
 #include "Level2.h"
+#include "LevelFinal.h"
 #include "Spike.h"
 #include "Totem.h"
 #include "Wall.h"
@@ -10,6 +11,7 @@ void Level4::Init()
 
     background = new Sprite("Resources/Level4Bg.png");
     foreground = new Sprite("Resources/Level4Fg.png");
+    whiteScreen = new Sprite("Resources/WhiteScreen.png");
 
     scene = new Scene();
     TP2::scene = scene;
@@ -30,12 +32,15 @@ void Level4::Init()
 
 void Level4::Update()
 {
-    // if (radianceTotem->Ready())
-    // {
-    //     // TODO: Change to LevelFinal
-    // }
-    // else
-    if (levelTransition->Transitioning())
+    if (radianceTotem->Ready())
+    {
+        ready = true;
+        if (readyCd.Down())
+            readyCd.Add(gameTime);
+        else
+            TP2::NextLevel<LevelFinal>();
+    }
+    else if (levelTransition->Transitioning())
     {
         TP2::player->AddCooldowns(gameTime);
         TP2::player->Translate(-LevelTransition::DISTANCE * gameTime, 0.0f);
@@ -43,9 +48,7 @@ void Level4::Update()
         levelTransition->Update();
     }
     else if (levelTransition->Done())
-    {
         TP2::NextLevel<Level2>();
-    }
     else if (enteringCd.Down())
     {
         TP2::player->AddCooldowns(gameTime);
@@ -64,6 +67,9 @@ void Level4::Draw()
 {
     background->Draw(window->CenterX(), window->CenterY(), LAYER_BG);
     foreground->Draw(window->CenterX(), window->CenterY(), LAYER_FG);
+    if (ready)
+        whiteScreen->Draw(window->CenterX(), window->CenterY(), LAYER_TRANSITION_SCREEN, 1.0f, 0.0f,
+                          {1.0f, 1.0f, 1.0f, readyCd.Ratio()});
     scene->Draw();
 }
 
@@ -71,6 +77,7 @@ void Level4::Finalize()
 {
     delete background;
     delete foreground;
+    delete whiteScreen;
     scene->Remove(TP2::player, MOVING);
     delete scene;
 }
@@ -79,8 +86,8 @@ void Level4::EnterFrom(LevelId id)
 {
     switch (id)
     {
-    case LEVEL1:
-        enteringFrom = LEVEL1;
+    case LEVEL2:
+        enteringFrom = LEVEL2;
         TP2::player->MoveTo(0.0f, 674.0f);
         TP2::player->State(WALKING);
         TP2::player->Dir(H_RIGHT);

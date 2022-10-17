@@ -82,7 +82,7 @@ void Baldur::Update()
 
 void Baldur::Draw()
 {
-    animation->Draw(x, y, hp ? LAYER_ENEMY : LAYER_ENEMY_DEAD);
+    animation->Draw(x, y, LAYER_ENEMY);
 }
 
 void Baldur::OnCollision(Object *other)

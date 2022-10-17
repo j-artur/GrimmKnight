@@ -98,6 +98,17 @@ void Attack::OnCollision(Object *other)
             }
             break;
         }
+        case RADIANCE: {
+            Entity *radiance = (Entity *)other;
+            if (radiance->TakeDamage(5, direction))
+            {
+                // TODO: radiance damage sound
+                TP2::audio->Play(ENEMY_DAMAGE);
+                TP2::player->AddMana();
+                TP2::player->Knockback();
+            }
+            break;
+        }
         case SPIKE: {
             TP2::audio->Play(PLAYER_SPIKE_ATTACK);
             TP2::player->Knockback();
