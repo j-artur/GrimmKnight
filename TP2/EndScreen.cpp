@@ -1,46 +1,31 @@
 #include "EndScreen.h"
-#include "Button.h"
 #include "TP2.h"
 #include "TitleScreen.h"
+#include "Util.h"
 
 void EndScreen::Init()
 {
     id = ENDSCREEN;
 
-    TP2::audio->Play(MAIN_MUSIC, true);
-
-    bgTileSet = new TileSet("Resources/TitleScreen.png", 1282, 770, 3, 6);
-    bgAnimation = new Animation(bgTileSet, 0.5f, true);
-
-    scene = new Scene();
-    TP2::scene = scene;
-    scene->Add(TP2::cursor, MOVING);
-
-    Button *quit = new Button(new Sprite("Resources/ButtonQuit.png"), []() { Engine::window->Close(); });
-    quit->MoveTo(360.0f, 480.0f);
-    scene->Add(quit, STATIC);
+    bg = new Sprite("Resources/EndScreen.png");
 }
 
 void EndScreen::Update()
 {
-    scene->Update();
-    scene->CollisionDetection();
-    bgAnimation->NextFrame();
+    if (cd.Up())
+        TP2::NextLevel<TitleScreen>();
+    else
+        cd.Add(gameTime);
 }
 
 void EndScreen::Draw()
 {
-    bgAnimation->Draw(window->CenterX(), window->CenterY(), LAYER_TITLESCREEN);
-    scene->Draw();
+    bg->Draw(window->CenterX(), window->CenterY(), LAYER_TITLESCREEN);
 }
 
 void EndScreen::Finalize()
 {
-    delete bgAnimation;
-    delete bgTileSet;
-    scene->Remove(TP2::cursor, MOVING);
-    delete scene;
-    TP2::audio->Stop(MAIN_MUSIC);
+    delete bg;
 }
 
 void EndScreen::EnterFrom(LevelId id)

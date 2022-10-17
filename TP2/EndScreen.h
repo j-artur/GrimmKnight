@@ -1,16 +1,16 @@
 #ifndef _ENDSCREEN_H_
 #define _ENDSCREEN_H_
 
-#include "Animation.h"
+#include "Cooldown.h"
 #include "Level.h"
 #include "Scene.h"
+#include "Sprite.h"
 
 class EndScreen : public Level
 {
   private:
-    TileSet *bgTileSet = nullptr;
-    Animation *bgAnimation = nullptr;
-    Scene *scene = nullptr;
+    Sprite *bg = nullptr;
+    Cooldown cd{3.0f, false};
 
   public:
     void Init();
