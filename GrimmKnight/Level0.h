@@ -52,8 +52,6 @@ class Level0 : public Level
     Cooldown tutorialCd{1.25f, false};
 
   public:
-    static int tikTikCounter;
-
     void Init();
     void Update();
     void Draw();

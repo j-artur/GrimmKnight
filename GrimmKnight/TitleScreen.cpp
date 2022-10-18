@@ -25,6 +25,8 @@ void TitleScreen::Init()
     GrimmKnight::player->Respawn();
     GrimmKnight::player->UnlearnFireball();
     GrimmKnight::player->UnlearnDash();
+    GrimmKnight::baldurKilled = false;
+    GrimmKnight::fkDefeated = false;
 
     Button *start = new Button(new Sprite("Resources/ButtonStart.png"), [&]() { this->start = true; });
     start->MoveTo(360.0f, 360.0f);
