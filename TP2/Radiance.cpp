@@ -343,7 +343,7 @@ void Radiance::Draw()
 {
     if (hurtCd.Down())
     {
-        float f = 100.0f - 99.0f * hurtCd.Ratio();
+        float f = 10.0f - 9.0f * hurtCd.Ratio();
         animation->Draw(round(x), round(y), LAYER_RADIANCE, 1.0f, 0.0f, {f, f, f, 1.0f});
     }
     else if (preTeleport.Down())
@@ -353,7 +353,7 @@ void Radiance::Draw()
     }
     else if (posTeleport.Down())
     {
-        float f = 100.0f - 99.0f * posTeleport.Ratio();
+        float f = 10.0f - 9.0f * posTeleport.Ratio();
         animation->Draw(round(x), round(y), LAYER_RADIANCE, 1.0f, 0.0f, {f, f, f, 1.0f});
     }
     else

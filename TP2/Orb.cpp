@@ -52,7 +52,7 @@ void Orb::Draw()
 {
     if (orbSpawnCd.Down())
     {
-        float f = 100.0f - 99.0f * orbSpawnCd.Ratio();
+        float f = 5.0f - 4.0f * orbSpawnCd.Ratio();
         sprite->Draw(round(x), round(y), LAYER_BOSS_ATTACK, orbSpawnCd.Ratio(), -rotation, {f, f, f, 1.0f});
     }
     else

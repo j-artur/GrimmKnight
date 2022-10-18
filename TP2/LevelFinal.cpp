@@ -68,7 +68,7 @@ void LevelFinal::Draw()
         radianceScreen->Draw(window->CenterX(), window->CenterY(), LAYER_TRANSITION_SCREEN, 1.0f, 0.0f,
                              {1.0f, 1.0f, 1.0f, 3.0f - 3.0f * radianceScreenCd.Ratio()});
 
-    float f = 100.0f - 99.0f * enteringCd.Ratio();
+    float f = 10.0f - 9.0f * enteringCd.Ratio();
     if (enteringCd.Down())
         background->Draw(window->CenterX(), window->CenterY(), LAYER_BG, 1.0f, 0.0f, {f, f, f, 1.0f});
     else
@@ -94,4 +94,5 @@ void LevelFinal::Finalize()
 void LevelFinal::EnterFrom(LevelId id)
 {
     TP2::player->MoveTo(640.0f, 610.0f);
+    TP2::player->FullHP();
 }

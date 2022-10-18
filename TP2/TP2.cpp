@@ -121,25 +121,25 @@ void TP2::Update()
     }
     else if (playerDead)
         NextLevel<GameOver>();
-    else if (window->KeyDown(VK_F1))
+    else if (window->KeyPress(VK_F1))
         NextLevel<Level0>();
-    else if (window->KeyDown(VK_F2))
+    else if (window->KeyPress(VK_F2))
         NextLevel<Level1>();
-    else if (window->KeyDown(VK_F3))
+    else if (window->KeyPress(VK_F3))
         NextLevel<Level2>();
-    else if (window->KeyDown(VK_F4))
+    else if (window->KeyPress(VK_F4))
         NextLevel<Level3>();
-    else if (window->KeyDown(VK_F5))
+    else if (window->KeyPress(VK_F5))
         NextLevel<Level4>();
-    else if (window->KeyDown(VK_F6))
+    else if (window->KeyPress(VK_F6))
         NextLevel<TitleScreen>();
-    else if (window->KeyDown(VK_F7))
+    else if (window->KeyPress(VK_F7))
         GetFireball();
-    else if (window->KeyDown(VK_F8))
+    else if (window->KeyPress(VK_F8))
         GetDash();
-    else if (window->KeyDown('H'))
+    else if (window->KeyPress('H'))
         player->FullHP();
-    else if (window->KeyDown('M'))
+    else if (window->KeyPress('M'))
         player->FullMana();
 
     if (window->KeyPress('B'))
