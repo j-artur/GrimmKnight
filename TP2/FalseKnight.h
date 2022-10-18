@@ -4,12 +4,12 @@
 #include "Animation.h"
 #include "Cooldown.h"
 #include "Entity.h"
+#include "FalseKnightHead.h"
 #include "Object.h"
+#include "Shockwave.h"
 #include "Sprite.h"
 #include "Util.h"
 #include "Wall.h"
-#include "Shockwave.h"
-#include "FalseKnightHead.h"
 #include <random>
 
 using std::mt19937;
@@ -48,19 +48,19 @@ class FalseKnight : public Entity
 {
   private:
     TileSet *tileSet;
-    TileSet* headTileSet;
+    TileSet *headTileSet;
     TileSet *shockwaveTileSet;
     Sprite *barrelSprite;
     Animation *animation;
 
-    FalseKnightHead* head;
+    FalseKnightHead *head;
 
-    Rect* self;
-    Rect* horn;
-    Rect* hit;
-    Rect* hand;
-    Circle* mace;
-    Mixed* bb;
+    Rect *self;
+    Rect *horn;
+    Rect *hit;
+    Rect *hand;
+    Circle *mace;
+    Mixed *bb;
 
     mt19937 rng;
     uniform_int_distribution<int> cd;
@@ -70,7 +70,7 @@ class FalseKnight : public Entity
     HDirection direction = H_LEFT;
     HDirection attackDirection = H_LEFT;
     HDirection stunDirection = H_LEFT;
-    Shockwave* shockwave;
+    Shockwave *shockwave;
 
     uint armorHealth = 65;
     uint headHealth = 40;
@@ -81,13 +81,13 @@ class FalseKnight : public Entity
     Cooldown slamCd{1.8f};
     Cooldown prepSlamCd{1.2f};
     Cooldown jumpCd{2.0f};
-    Cooldown bludgeonAttackCd{ 0.2f };
+    Cooldown bludgeonAttackCd{0.2f};
     Cooldown rageCd{3.2f};
     Cooldown attackRageCd{0.4f};
     Cooldown betweenAttacksCd{2.5f};
-    Cooldown hurtCd{ 0.3f };
-    Cooldown headOutCd{ 0.5f };
-    Cooldown stunCd{ 6.0f };
+    Cooldown hurtCd{0.25f};
+    Cooldown headOutCd{0.5f};
+    Cooldown stunCd{6.0f};
 
     float directionMult = 1.0f;
     float ySpeed = 0.0f;
@@ -107,6 +107,7 @@ class FalseKnight : public Entity
     bool animRestarted = false;
     bool canKill = false;
     bool active = false;
+    bool headOut = false;
 
   public:
     FalseKnight(int iX, int iY);

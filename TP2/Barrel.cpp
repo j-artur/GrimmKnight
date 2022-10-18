@@ -27,6 +27,7 @@ Barrel::~Barrel()
 
 bool Barrel::TakeDamage(uint damage, Direction dir)
 {
+    hurtCd.Restart();
     switch (dir)
     {
     case UP:
@@ -66,4 +67,5 @@ void Barrel::Update()
     Yspeed += gravity * gameTime;
 
     barrelCd.Add(gameTime);
+    hurtCd.Add(gameTime);
 }

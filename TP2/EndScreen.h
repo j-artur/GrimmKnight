@@ -10,7 +10,7 @@ class EndScreen : public Level
 {
   private:
     Sprite *bg = nullptr;
-    Cooldown cd{3.0f, false};
+    Cooldown cd{4.0f, false};
 
   public:
     void Init();

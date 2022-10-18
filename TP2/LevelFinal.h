@@ -23,7 +23,7 @@ class LevelFinal : public Level
     bool radianceSpawned = false;
 
     bool ending = false;
-    Cooldown endingCd{2.0f, false};
+    Cooldown endingCd{4.0f, false};
 
   public:
     void Init();

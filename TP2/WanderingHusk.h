@@ -24,8 +24,8 @@ class WanderingHusk : public Entity
     HDirection direction = H_RIGHT;
     uint voiceId;
 
-    Cooldown audioCd{ 1.0f };
-    Cooldown hurtCd{0.3f};
+    Cooldown audioCd{1.0f};
+    Cooldown hurtCd{0.25f};
     Cooldown chargeRunCd{0.5f};
     Cooldown runCd{3.0f};
     Cooldown dieCd{2.0f};

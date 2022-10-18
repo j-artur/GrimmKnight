@@ -127,6 +127,11 @@ void Tiktik::Draw()
         float f = 1.0f - dieCd.Ratio();
         animation->Draw(round(x), round(y), LAYER_ENEMY, 1.0f, 0.0f, {f, f, f, f});
     }
+    else if (hurtCd.Down())
+    {
+        float f = 100.0f - 99.0f * hurtCd.Ratio();
+        animation->Draw(round(x), round(y), LAYER_ENEMY, 1.0f, 0.0f, {f, f, f, 1.0f});
+    }
     else
         animation->Draw(round(x), round(y), LAYER_ENEMY);
 }

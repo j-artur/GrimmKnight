@@ -22,6 +22,7 @@ class Baldur : public Entity
     BaldurState state = BALDUR_IDLE;
     ActionArea *actionArea = nullptr;
     Cooldown deathCd{0.4f};
+    Cooldown hurtCd{0.25f};
 
     Wall *rightWall = nullptr;
     Wall *topWall = nullptr;

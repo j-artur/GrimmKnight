@@ -16,6 +16,7 @@ Totem::Totem(Sprite *sprite, int iX, int iY)
 
 bool Totem::TakeDamage(uint damage, Direction dir)
 {
+    hurtCd.Restart();
     if (hp <= 0)
         return false;
 
@@ -23,9 +24,19 @@ bool Totem::TakeDamage(uint damage, Direction dir)
     return true;
 }
 
+void Totem::Update()
+{
+    hurtCd.Add(gameTime);
+}
+
 void Totem::Draw()
 {
-    if (Alive())
+    if (hurtCd.Down())
+    {
+        float f = 100.0f - 99.0f * hurtCd.Ratio();
+        sprite->Draw(x, y, LAYER_TOTEM, 1.0f, 0.0f, {f, f, f, 1.0f});
+    }
+    else if (Alive())
         sprite->Draw(x, y, LAYER_TOTEM);
     else
         sprite->Draw(x, y, LAYER_TOTEM, 1.0f, 0.0f, {0.5f, 0.5f, 0.5f, 1.0f});

@@ -53,7 +53,7 @@ void Sword::Draw()
     if (swordSpawnCd.Down())
     {
 
-        float f = 10.0f - 9.0f * swordSpawnCd.Ratio();
+        float f = 100.0f - 99.0f * swordSpawnCd.Ratio();
         sprite->Draw(round(x + direction.XComponent() / 8.0f), round(y - direction.YComponent() / 8.0f),
                      LAYER_BOSS_ATTACK, swordSpawnCd.Ratio(), -rotation, {f, f, f, 1.0f});
     }

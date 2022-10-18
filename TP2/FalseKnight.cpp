@@ -20,7 +20,7 @@ FalseKnight::FalseKnight(int iX, int iY)
     tileSet = new TileSet("Resources/FalseKnight.png", 452, 260, 6, 24);
     headTileSet = new TileSet("Resources/FalseKnightHead.png", 76, 76, 2, 4);
     shockwaveTileSet = new TileSet("Resources/Shockwave.png", 132, 132, 2, 4);
-    barrelSprite = new Sprite("Resources/WIP/rock.png");
+    barrelSprite = new Sprite("Resources/Barrel.png");
     animation = new Animation(tileSet, 0.2f, true);
 
     uint idleRight[2] = {0, 1};
@@ -92,7 +92,7 @@ FalseKnight::~FalseKnight()
 {
     delete tileSet;
     delete headTileSet;
-    delete head;
+    TP2::scene->Delete(head, STATIC);
     delete animation;
     delete shockwaveTileSet;
     delete barrelSprite;
@@ -111,13 +111,12 @@ bool FalseKnight::TakeDamage(uint damage, Direction dir)
         }
         else
         {
+            hurtCd.Restart();
             currentArmorHealth -= damage;
             TP2::audio->Play(SFK_ARMOR_DAMAGE);
             TP2::player->Knockback();
             return false;
         }
-
-        hurtCd.Restart();
     }
 
     return false;
@@ -363,15 +362,8 @@ void FalseKnight::Update()
                     if (!spawnedBarrels)
                     {
                         spawnedBarrels = true;
-                        Sprite *sp = new Sprite("Resources/WIP/rock.png");
 
-                        Barrel *b1 = new Barrel(sp);
-                        // Barrel* b2 = new Barrel(sp);
-                        // Barrel* b3 = new Barrel(sp);
-
-                        TP2::scene->Add(b1, MOVING);
-                        // TP2::scene->Add(b2, MOVING);
-                        // TP2::scene->Add(b3, MOVING);
+                        TP2::scene->Add(new Barrel(barrelSprite), MOVING);
                     }
                     if (strikeCtrl)
                     {
@@ -429,8 +421,12 @@ void FalseKnight::Update()
 
         if (headOutCd.Up() && isStunned)
         {
-            animation->Select(FK_STUN * stunDirection);
-            TP2::scene->Add(head, STATIC);
+            if (!headOut)
+            {
+                animation->Select(FK_STUN * stunDirection);
+                TP2::scene->Add(head, STATIC);
+                headOut = true;
+            }
 
             head->MoveTo(x + 73.0f * (stunDirection == H_LEFT ? -1.0f : 1.0f), y + 80.0f);
             head->setDirection(stunDirection);
@@ -447,6 +443,7 @@ void FalseKnight::Update()
                 }
 
                 isStunned = false;
+                headOut = false;
                 state = FK_IDLE;
             }
             else if (stunCd.Up())
@@ -455,6 +452,7 @@ void FalseKnight::Update()
 
                 currentArmorHealth = armorHealth;
                 isStunned = false;
+                headOut = false;
                 state = FK_IDLE;
             }
         }
@@ -496,13 +494,20 @@ void FalseKnight::Update()
     Translate(xSpeed * gameTime, ySpeed * gameTime);
 
     betweenAttacksCd.Add(gameTime);
+    hurtCd.Add(gameTime);
 
     animation->NextFrame();
 }
 
 void FalseKnight::Draw()
 {
-    animation->Draw(round(x), round(y), Alive() ? LAYER_BOSS : LAYER_ENEMY);
+    if (hurtCd.Down())
+    {
+        float f = 100.0f - 99.0f * hurtCd.Ratio();
+        animation->Draw(round(x), round(y), Alive() ? LAYER_BOSS : LAYER_ENEMY, 1.0f, 0.0f, {f, f, f, 1.0f});
+    }
+    else
+        animation->Draw(round(x), round(y), Alive() ? LAYER_BOSS : LAYER_ENEMY);
 }
 
 void FalseKnight::OnCollision(Object *other)

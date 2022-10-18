@@ -715,8 +715,8 @@ void Player::Draw()
 
     if (healCd.Down())
     {
-        float g = 8.0f - 7.0f * healCd.Ratio();
-        float b = 10.0f - 9.0f * healCd.Ratio();
+        float g = 80.0f - 79.0f * healCd.Ratio();
+        float b = 100.0f - 99.0f * healCd.Ratio();
         animation->Draw(round(x), round(y), LAYER_PLAYER, 1.0f, 0.0f, {1.0f, g, b, 1.0f});
     }
     else

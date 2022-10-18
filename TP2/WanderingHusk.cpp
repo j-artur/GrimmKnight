@@ -20,7 +20,6 @@ WanderingHusk::WanderingHusk(TileSet *tileSet, int iX, int iY, uint voiceId)
 
     TP2::scene->Add(actionArea, MOVING);
 
-
     uint seqWalkLeft[2] = {0, 3};
     uint seqWalkRight[2] = {6, 9};
     uint seqRunLeft[2] = {1, 4};
@@ -182,6 +181,11 @@ void WanderingHusk::Draw()
     {
         float f = 1.0f - dieCd.Ratio();
         animation->Draw(round(x), round(y), LAYER_ENEMY, 1.0f, 0.0f, {f, f, f, f});
+    }
+    else if (hurtCd.Down())
+    {
+        float f = 100.0f - 99.0f * hurtCd.Ratio();
+        animation->Draw(round(x), round(y), LAYER_ENEMY, 1.0f, 0.0f, {f, f, f, 1.0f});
     }
     else
         animation->Draw(round(x), round(y), LAYER_ENEMY);

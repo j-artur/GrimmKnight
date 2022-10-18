@@ -2,6 +2,7 @@
 #define _FALSE_KNIGHT_HEAD_H_
 
 #include "Animation.h"
+#include "Cooldown.h"
 #include "Entity.h"
 #include "Object.h"
 #include "Sprite.h"
@@ -9,13 +10,14 @@
 
 class FalseKnightHead : public Object
 {
-private:
-    TileSet* tileSet;
-    Animation* animation;
+  private:
+    TileSet *tileSet;
+    Animation *animation;
 
     HDirection direction = H_LEFT;
+    Cooldown hurtCd{0.20f};
 
-public:
+  public:
     FalseKnightHead(TileSet *ts);
     ~FalseKnightHead();
 
@@ -25,7 +27,6 @@ public:
 
     void Update();
     void Draw();
-
 };
 
 #endif

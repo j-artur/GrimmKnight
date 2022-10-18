@@ -75,6 +75,7 @@ void Baldur::Update()
     }
 
     deathCd.Add(gameTime);
+    hurtCd.Add(gameTime);
 
     animation->Select(state);
     animation->NextFrame();
@@ -82,7 +83,13 @@ void Baldur::Update()
 
 void Baldur::Draw()
 {
-    animation->Draw(x, y, LAYER_ENEMY);
+    if (hurtCd.Down())
+    {
+        float f = 100.0f - 99.0f * hurtCd.Ratio();
+        animation->Draw(x, y, LAYER_ENEMY, 1.0f, 0.0f, {f, f, f, 1.0f});
+    }
+    else
+        animation->Draw(x, y, LAYER_ENEMY);
 }
 
 void Baldur::OnCollision(Object *other)
@@ -91,6 +98,7 @@ void Baldur::OnCollision(Object *other)
     {
         TP2::baldurKilled = true;
         hp = 0;
+        hurtCd.Restart();
         state = BALDUR_DEAD;
         TP2::scene->Delete(actionArea, MOVING);
         TP2::scene->Delete(rightWall, STATIC);
