@@ -16,10 +16,10 @@ Totem::Totem(Sprite *sprite, int iX, int iY)
 
 bool Totem::TakeDamage(uint damage, Direction dir)
 {
-    hurtCd.Restart();
     if (hp <= 0)
         return false;
 
+    hurtCd.Restart();
     hp -= 1;
     return true;
 }
