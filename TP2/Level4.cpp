@@ -9,6 +9,8 @@ void Level4::Init()
 {
     id = LEVEL4;
 
+    TP2::audio->Play(ABYSS_MUSIC, true);
+
     background = new Sprite("Resources/Level4Bg.png");
     foreground = new Sprite("Resources/Level4Fg.png");
     whiteScreen = new Sprite("Resources/WhiteScreen.png");
@@ -75,6 +77,7 @@ void Level4::Draw()
 
 void Level4::Finalize()
 {
+    TP2::audio->Stop(ABYSS_MUSIC);
     delete background;
     delete foreground;
     delete whiteScreen;

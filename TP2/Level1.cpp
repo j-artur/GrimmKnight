@@ -72,8 +72,8 @@ void Level1::Init()
     scene->Add(new EntityBlockLeft(13, 26, 6), STATIC);
     scene->Add(new EntityBlockRight(32, 26, 6), STATIC);
 
-    scene->Add(new WanderingHusk(wanderingTileSet, 13, 41, 0), MOVING);
-    scene->Add(new WanderingHusk(wanderingTileSet, 20, 31, 1), MOVING);
+    scene->Add(new WanderingHusk(wanderingTileSet, 13, 41, ENEMY_FOOTSTEP_1), MOVING);
+    scene->Add(new WanderingHusk(wanderingTileSet, 20, 31, ENEMY_FOOTSTEP_2), MOVING);
 
     scene->Add(new Totem(totem, 17, 20), STATIC);
 
@@ -154,7 +154,8 @@ void Level1::Finalize()
     scene->Remove(TP2::player, MOVING);
     delete scene;
     TP2::audio->Stop(CAVE_NOISES);
-    TP2::audio->Stop(ENEMY_FOOTSTEP);
+    TP2::audio->Stop(ENEMY_FOOTSTEP_1);
+    TP2::audio->Stop(ENEMY_FOOTSTEP_2);
 }
 
 void Level1::EnterFrom(LevelId id)

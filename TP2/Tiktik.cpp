@@ -13,8 +13,7 @@ Tiktik::Tiktik(TileSet *tileSet, int iX, int iY, uint voiceId)
 
     hp = 8;
 
-    TP2::audio->Play(ENEMY_CRAWLER, true);
-    TP2::audio->Volume(ENEMY_CRAWLER, 0.5f);
+    TP2::audio->Play(voiceId, true);
 
     animation = new Animation(tileSet, 0.3f, true);
 
@@ -95,8 +94,7 @@ void Tiktik::Update()
 
         if (audioCtrl)
         {
-            TP2::audio->Volume(ENEMY_CRAWLER, 1.0f);
-            TP2::audio->Stop(ENEMY_CRAWLER, voiceId);
+            TP2::audio->Stop(voiceId);
             audioCtrl = false;
         }
 

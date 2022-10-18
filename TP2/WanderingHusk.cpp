@@ -20,7 +20,6 @@ WanderingHusk::WanderingHusk(TileSet *tileSet, int iX, int iY, uint voiceId)
 
     TP2::scene->Add(actionArea, MOVING);
 
-    TP2::audio->Play(ENEMY_FOOTSTEP, true);
 
     uint seqWalkLeft[2] = {0, 3};
     uint seqWalkRight[2] = {6, 9};
@@ -56,7 +55,6 @@ WanderingHusk::~WanderingHusk()
 
 bool WanderingHusk::TakeDamage(uint damage, Direction atkDir)
 {
-
     if (state == WH_DEAD || state == WH_HURTING)
         return false;
 
@@ -115,7 +113,7 @@ void WanderingHusk::Update()
         }
         break;
     case WH_DEAD:
-        TP2::audio->Stop(ENEMY_FOOTSTEP, voiceId);
+        TP2::audio->Stop(voiceId);
         xSpeed = 0.0f;
         if (dieCd.Up())
         {
@@ -124,14 +122,25 @@ void WanderingHusk::Update()
         }
         break;
     case WH_WALKING:
+
+        if (audioCtrl)
+        {
+            audioCtrl = false;
+            TP2::audio->Frequency(voiceId, 1.25f);
+            TP2::audio->Play(voiceId, true);
+        }
+
         if (direction == H_LEFT)
             xSpeed = -walkSpeed;
         else
             xSpeed = walkSpeed;
         break;
     case WH_PRE_RUNNING:
+        TP2::audio->Stop(voiceId);
         if (chargeRunCd.Up())
         {
+            audioCtrl = true;
+            runCtrl = true;
             direction = TP2::player->X() < x ? H_LEFT : H_RIGHT;
             TP2::audio->Play(ENEMY_RUN);
             state = WH_RUNNING;
@@ -140,6 +149,12 @@ void WanderingHusk::Update()
     case WH_RUNNING:
         if (runCd.Down())
         {
+            if (runCtrl)
+            {
+                runCtrl = false;
+                TP2::audio->Play(voiceId, true);
+                TP2::audio->Frequency(voiceId, 2.0f);
+            }
             xSpeed = direction == H_LEFT ? -runningSpeed : runningSpeed;
         }
         else

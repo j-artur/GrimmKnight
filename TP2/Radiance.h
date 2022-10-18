@@ -43,8 +43,6 @@ class Radiance : public Entity
     TileSet *beamTileSet;
     Animation *animation;
 
-    Rect *head;
-
     mt19937 rng;
     uniform_int_distribution<int> move;
     uniform_int_distribution<int> angle;

@@ -3,18 +3,21 @@
 #include "Level1.h"
 #include "Spike.h"
 #include "Tiktik.h"
+#include "WanderingHusk.h"
+#include "Totem.h"
 #include "Wall.h"
 
 void Level0::Init()
 {
     id = LEVEL0;
 
-    TP2::audio->Play(OPENING);
     TP2::audio->Play(CAVE_NOISES, true);
 
     background = new Sprite("Resources/Level0Bg.png");
     foreground = new Sprite("Resources/Level0Fg.png");
     tiktikTileSet = new TileSet("Resources/Tiktik.png", 2, 4);
+    wanderingTileSet = new TileSet("Resources/WanderingHusk.png", 4, 3);
+    totemSprite = new Sprite("Resources/TotemRight.png");
 
     tutorialMove = new Sprite("Resources/TutorialMove.png");
     tutorialJump = new Sprite("Resources/TutorialJump.png");
@@ -84,9 +87,14 @@ void Level0::Init()
     scene->Add(new EntityBlockLeft(45, 2, 6), STATIC);
     scene->Add(new EntityBlockRight(74, 2, 6), STATIC);
 
-    scene->Add(new Tiktik(tiktikTileSet, 16, 7, 0), MOVING);
-    scene->Add(new Tiktik(tiktikTileSet, 55, 7, 1), MOVING);
-    scene->Add(new Tiktik(tiktikTileSet, 67, 7, 2), MOVING);
+    scene->Add(new Tiktik(tiktikTileSet, 16, 7, ENEMY_CRAWLER_1), MOVING);
+    scene->Add(new Tiktik(tiktikTileSet, 55, 7, ENEMY_CRAWLER_2), MOVING);
+    scene->Add(new Tiktik(tiktikTileSet, 67, 7, ENEMY_CRAWLER_3), MOVING);
+
+    scene->Add(new WanderingHusk(wanderingTileSet, 56, 21, ENEMY_FOOTSTEP_1), MOVING);
+
+    scene->Add(new Totem(totemSprite, 44, 14), STATIC);
+
 }
 
 void Level0::Update()
@@ -207,7 +215,6 @@ void Level0::Update()
     }
     else if (level1Transition->Done())
     {
-        TP2::audio->Stop(ENEMY_CRAWLER);
         TP2::NextLevel<Level1>();
     }
     else if (enteringCd.Down())
@@ -334,11 +341,15 @@ void Level0::Finalize()
     delete wanderingTileSet;
     delete tutorialMove;
     delete tutorialJump;
+    delete tutorialHeal;
     delete tutorialAttack;
     scene->Remove(TP2::player, MOVING);
     delete scene;
     TP2::audio->Stop(CAVE_NOISES);
-    TP2::audio->Stop(ENEMY_CRAWLER);
+    TP2::audio->Stop(ENEMY_CRAWLER_1);
+    TP2::audio->Stop(ENEMY_CRAWLER_2);
+    TP2::audio->Stop(ENEMY_CRAWLER_3);
+    TP2::audio->Stop(ENEMY_FOOTSTEP_1);
 }
 
 void Level0::EnterFrom(LevelId id)
@@ -354,6 +365,8 @@ void Level0::EnterFrom(LevelId id)
         tutorial = TUTORIAL_OVER;
         break;
     case TITLESCREEN:
+        TP2::audio->Play(OPENING);
+
         TP2::player->MoveTo(256.0f, -34.0f);
         TP2::player->State(FALLING);
         tutorial = TUTORIAL_BEGIN;

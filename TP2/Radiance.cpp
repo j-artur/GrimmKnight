@@ -37,7 +37,7 @@ Radiance::Radiance()
 
     Mixed *bb = new Mixed();
 
-    head = new Rect(-48.0f, -36.0f, 48.0f, 36.0f);
+    Rect *head = new Rect(-48.0f, -36.0f, 48.0f, 36.0f);
     Rect *body = new Rect(-96.0f, -48.0f, 96.0f, 48.0f);
     Rect *lowBody = new Rect(-36.0f, -28.0f, 36.0f, 28.0f);
 
@@ -214,7 +214,7 @@ void Radiance::Update()
         for (auto i : directions)
         {
             Beam *b = new Beam(beamTileSet, i.Angle());
-            b->MoveTo(head->X() + i.XComponent(), head->Y() - i.YComponent());
+            b->MoveTo(x + i.XComponent(), y - 90.0f - i.YComponent());
             TP2::scene->Add(b, STATIC);
         }
 
@@ -248,7 +248,7 @@ void Radiance::Update()
         for (auto i : directions)
         {
             Sword *s = new Sword(swordSprite, i.Angle());
-            s->MoveTo(head->X() + i.XComponent(), head->Y() - i.YComponent());
+            s->MoveTo(x + i.XComponent(), y - 90.0f - i.YComponent());
             TP2::scene->Add(s, MOVING);
         }
 

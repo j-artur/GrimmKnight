@@ -31,6 +31,7 @@ class Level0 : public Level
   private:
     Sprite *background = nullptr;
     Sprite *foreground = nullptr;
+    Sprite* totemSprite = nullptr;
     TileSet *tiktikTileSet = nullptr;
     TileSet *wanderingTileSet = nullptr;
     Sprite *tutorialMove = nullptr;

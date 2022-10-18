@@ -21,15 +21,12 @@ Button::Button(Sprite *sprite, std::function<void(void)> action)
 
 void Button::Update()
 {
-    if (hover && window->KeyDown(VK_LBUTTON) && !pressed)
+    if (hover && window->KeyPress(VK_LBUTTON))
     {
-        pressed = true;
         action();
     }
     else
     {
-        if (window->KeyUp(VK_LBUTTON))
-            pressed = false;
 
         if (hover)
         {

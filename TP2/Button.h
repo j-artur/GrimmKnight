@@ -10,7 +10,6 @@ class Button : public Object
   private:
     Sprite *sprite = nullptr;
     std::function<void(void)> action;
-    bool pressed = false;
     bool hover = false;
     float hoverTime = 0.0f;
     float hoverTimeMax = 0.1f;

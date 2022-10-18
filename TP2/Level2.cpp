@@ -48,7 +48,7 @@ void Level2::Init()
     AddWalls(scene, 2, 17, 2, 1);
     AddWalls(scene, 10, 7, 2, 2);
     AddWalls(scene, 8, 9, 4, 2);
-    AddWalls(scene, 20, 8, 4, 2);
+    AddWalls(scene, 20, 6, 4, 2);
     AddWalls(scene, 34, 8, 6, 2);
     AddWalls(scene, 24, 6, 4, 4);
     AddWalls(scene, 32, 6, 2, 4);

@@ -52,12 +52,16 @@ void TP2::Init()
 
     audio->Add(ENEMY_DAMAGE, "Resources/Audio/enemy_damage.wav");
     audio->Add(ENEMY_DREAM_DAMAGE, "Resources/Audio/dream_damage.wav");
-    audio->Add(ENEMY_CRAWLER, "Resources/Audio/enemy_crawler.wav", 3);
-    audio->Add(ENEMY_FOOTSTEP, "Resources/Audio/husk_footstep.wav", 2);
+    audio->Add(ENEMY_CRAWLER_1, "Resources/Audio/enemy_crawler.wav");
+    audio->Add(ENEMY_CRAWLER_2, "Resources/Audio/enemy_crawler.wav");
+    audio->Add(ENEMY_CRAWLER_3, "Resources/Audio/enemy_crawler.wav");
+    audio->Add(ENEMY_FOOTSTEP_1, "Resources/Audio/husk_footstep.wav");
+    audio->Add(ENEMY_FOOTSTEP_2, "Resources/Audio/husk_footstep.wav");
     audio->Add(ENEMY_RUN, "Resources/Audio/husk_run.wav");
     audio->Add(ENEMY_DEATH, "Resources/Audio/husk_death.wav");
 
     audio->Add(MAIN_MUSIC, "Resources/Audio/main_theme.wav");
+    audio->Add(ABYSS_MUSIC, "Resources/Audio/abyss.wav");
     audio->Add(LEVEL3_MUSIC, "Resources/Audio/level_3_theme.wav");
     audio->Add(OPENING, "Resources/Audio/opening.wav");
     audio->Add(CAVE_NOISES, "Resources/Audio/cave_noises.wav");
@@ -95,11 +99,11 @@ void TP2::Init()
     pausedScene->Add(cursor, MOVING);
 
     Button *resume = new Button(new Sprite("Resources/ButtonResume.png"), [&]() { paused = false; });
-    resume->MoveTo(640.0f, 96.0f);
+    resume->MoveTo(240.0f, 320.0f);
     pausedScene->Add(resume, STATIC);
 
     Button *quit = new Button(new Sprite("Resources/ButtonQuit.png"), [&]() { this->quit = true; });
-    quit->MoveTo(640.0f, 672.0f);
+    quit->MoveTo(240.0f, 448.0f);
     pausedScene->Add(quit, STATIC);
 
     level = new TitleScreen();

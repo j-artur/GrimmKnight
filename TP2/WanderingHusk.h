@@ -24,6 +24,7 @@ class WanderingHusk : public Entity
     HDirection direction = H_RIGHT;
     uint voiceId;
 
+    Cooldown audioCd{ 1.0f };
     Cooldown hurtCd{0.3f};
     Cooldown chargeRunCd{0.5f};
     Cooldown runCd{3.0f};
@@ -32,6 +33,8 @@ class WanderingHusk : public Entity
     ActionArea *actionArea;
 
     bool playerInside = false;
+    bool audioCtrl = true;
+    bool runCtrl = true;
 
     float walkSpeed = 64.0f;
     float runningSpeed = 144.0f;
