@@ -3,6 +3,7 @@
    X   - Attack
  ↑ + X - Attack Up
  ↓ + X - Attack Down
+   A   - Heal
    S   - Fireball
    C   - Dash
   Esc  - Pause
