@@ -30,8 +30,6 @@ Radiance::Radiance()
 
     animation->Select(RD_IDLE);
 
-    // MoveTo(iX * 32.0f, iY * 32.0f);
-
     DraftAngle(RD_BEAM_A);
     hDirection = 0.0f, vDirection = 270.0f;
 
@@ -102,8 +100,6 @@ HDirection Radiance::DraftDirection()
 
 void Radiance::DraftSpawn()
 {
-    // x 256 - 1024
-    // y 256 - 640
     uniform_int_distribution<int> rndX = uniform_int_distribution<int>(256, 1024);
     uniform_int_distribution<int> rndY = uniform_int_distribution<int>(256, 640);
 
@@ -189,7 +185,6 @@ void Radiance::Update()
         }
     }
 
-    // TELEPORT
     if (state == RD_TELEPORT)
     {
         if (ctrl && preTeleport.Up())
@@ -206,7 +201,6 @@ void Radiance::Update()
         posTeleport.Add(gameTime);
     }
 
-    // BEAM BURST
     if (state == RD_BEAM_BURST)
     {
         DraftAngle(RD_BEAM_A);
@@ -221,7 +215,6 @@ void Radiance::Update()
         state = RD_IDLE;
     }
 
-    // BEAM WALL
     if (state == RD_BEAM_WALL)
     {
         if (spawningBeamCd.Up() && count < 20)
@@ -240,7 +233,6 @@ void Radiance::Update()
         spawningBeamCd.Add(gameTime);
     }
 
-    // SWORD BURST
     if (state == RD_SWORD_BURST)
     {
         DraftAngle(RD_SWORD_A);
@@ -255,7 +247,6 @@ void Radiance::Update()
         state = RD_IDLE;
     }
 
-    // SWORD RAIN
     if (state == RD_SWORD_RAIN)
     {
         DraftGaps(17);
@@ -275,7 +266,6 @@ void Radiance::Update()
         state = RD_IDLE;
     }
 
-    // SWORD WALL
     if (state == RD_SWORD_WALL)
     {
         if (betweenAttacksCd.Up() && count < 4)
@@ -314,7 +304,6 @@ void Radiance::Update()
             state = RD_IDLE;
     }
 
-    // ORB
     if (state == RD_ORB)
     {
         if (betweenAttacksCd.Up() && count < 5)

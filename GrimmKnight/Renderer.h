@@ -1,30 +1,16 @@
-/**********************************************************************************
-// Renderer (Arquivo de Cabeçalho)
-//
-// Criação:     11 Mai 2014
-// Atualização: 08 Set 2021
-// Compilador:  Visual C++ 2019
-//
-// Descrição:   Define um renderizador de grupos de sprites
-//
-**********************************************************************************/
-
 #ifndef _PROGJOGOS_RENDERER_H_
 #define _PROGJOGOS_RENDERER_H_
 
-// ---------------------------------------------------------------------------------
-
-#include "Window.h"                                             // cria e configura uma janela do Windows
-#include "Graphics.h"                                           // inicializa dispositivo gráfico da engine
-#include "Sprite.h"                                             // representação de um sprite
-#include "Types.h"                                              // tipos específicos da engine        
-#include "Geometry.h"                                           // formas geométricas para desenho
-#include <vector>                                               // vetor da Standard Template Library
-#include <DirectXMath.h>                                        // tipos da biblioteca matemática do DirectX
+#include "Geometry.h"
+#include "Graphics.h"
+#include "Sprite.h"
+#include "Types.h"
+#include "Window.h"
+#include <DirectXMath.h>
+#include <vector>
 using namespace DirectX;
 using std::vector;
 
-// definição de um vértice para o D3D
 struct Vertex
 {
     XMFLOAT3 pos;
@@ -32,84 +18,71 @@ struct Vertex
     XMFLOAT2 tex;
 };
 
-// ---------------------------------------------------------------------------------
-
 class Renderer
 {
-private:
-    Window                   * window;                          // ponteiro para janela do jogo
-    Graphics                 * graphics;                        // ponteiro para dispositivo gráfico
+  private:
+    Window *window;
+    Graphics *graphics;
 
-    ID3D11InputLayout        * inputLayout;                     // input layout
-    ID3D11VertexShader       * vertexShader;                    // vertex shader
-    ID3D11PixelShader        * pixelShader;                     // pixel shader
-    ID3D11RasterizerState    * rasterState;                     // estado do rasterizador
-    ID3D11SamplerState       * sampler;                         // estado do amostrador de textura
-    ID3D11Buffer             * vertexBuffer;                    // buffer de vértices
-    ID3D11Buffer             * indexBuffer;                     // buffer de índices
-    ID3D11Buffer             * constantBuffer;                  // buffer para o shader
-    uint                       vertexBufferPosition;            // posição atual do vertex buffer
+    ID3D11InputLayout *inputLayout;
+    ID3D11VertexShader *vertexShader;
+    ID3D11PixelShader *pixelShader;
+    ID3D11RasterizerState *rasterState;
+    ID3D11SamplerState *sampler;
+    ID3D11Buffer *vertexBuffer;
+    ID3D11Buffer *indexBuffer;
+    ID3D11Buffer *constantBuffer;
+    uint vertexBufferPosition;
 
-    static const uint MinBatchSize = 128;                       // tamanho mínimo do lote de sprites
-    static const uint MaxBatchSize = 4096;                      // tamanho máximo do lote de sprites    
-    static const uint VerticesPerSprite = 4;                    // número de vértices por sprite
-    static const uint IndicesPerSprite = 6;                     // número de índices por sprite
+    static const uint MinBatchSize = 128;
+    static const uint MaxBatchSize = 4096;
+    static const uint VerticesPerSprite = 4;
+    static const uint IndicesPerSprite = 6;
 
-    // ----------------------------------------
-    // Pixel Ploting
-    // ----------------------------------------
-    ID3D11Texture2D *          pixelPlotTexture;                // textura para plotagem de pixels
-    ID3D11ShaderResourceView * pixelPlotView;                   // visualização para a textura de pixels
-    SpriteData                 pixelPlotSprite;                 // sprite para a textura de pixels
-    long                       videoMemoryPitch;                // número de pixels em cada linha da memória de vídeo
-    ulong *                    videoMemory;                     // ponteiro para a memória de vídeo (32 bits por pixel)
+    ID3D11Texture2D *pixelPlotTexture;
+    ID3D11ShaderResourceView *pixelPlotView;
+    SpriteData pixelPlotSprite;
+    long videoMemoryPitch;
+    ulong *videoMemory;
 
-    void PlotPixel(int x, int y, ulong color);                  // plota pixels sem recorte (clipping)
-    void PlotLine(int x, int y, int flag, ulong color);         // plota pixels para algoritmo de linha
-    void DrawLine(int a1, int b1, int a2, int b2, ulong color); // desenha linha sem recorte (clipping)
-    int  ClipLine(int& x1, int& y1, int& x2, int& y2);          // recorta linha para desenhar na viewport
-    // ----------------------------------------
+    void PlotPixel(int x, int y, ulong color);
+    void PlotLine(int x, int y, int flag, ulong color);
+    void DrawLine(int a1, int b1, int a2, int b2, ulong color);
+    int ClipLine(int &x1, int &y1, int &x2, int &y2);
 
-    SpriteData * storage;                                       // armazém de sprites (vetor dinâmico)
-    uint storageIndex;                                          // índice para posições do armazém
-    vector<SpriteData*> spriteVector;                           // vetor de ponteiros para sprites
-    
-    // renderiza um grupo de sprites de mesma textura
-    void RenderBatch(ID3D11ShaderResourceView * texture, SpriteData ** sprites, uint cont);
+    SpriteData *storage;
+    uint storageIndex;
+    vector<SpriteData *> spriteVector;
 
-public:
-    Renderer();                                                 // construtor
-    ~Renderer();                                                // destrutor
-    
-    // ----------------------------------------
-    // Pixel Ploting
-    // ----------------------------------------
-    void BeginPixels();                                         // trava a textura de plotagem de pixels
-    void Draw(Geometry * shape, ulong color);                   // desenha geometria
-    void Draw(Point * point, ulong color);                      // desenha ponto
-    void Draw(Line * line, ulong color);                        // desenha linha  
-    void Draw(Rect * rect, ulong color);                        // desenha retângulo  
-    void Draw(Circle * circ, ulong color);                      // desenha círculo  
-    void Draw(Poly * pol, ulong color);                         // desenha polígono
-    void Draw(Mixed * mul, ulong color);                        // desenha formas mistas
-    void EndPixels();                                           // destrava a textura de plotagem de pixels    
-    // ----------------------------------------
+    void RenderBatch(ID3D11ShaderResourceView *texture, SpriteData **sprites, uint cont);
 
-    bool Initialize(Window * window, Graphics * graphics);      // inicializa o renderizador
-    void Draw(SpriteData & sprite);                             // adiciona sprite para desenho
-    void Render();                                              // envia sprites para desenho    
+  public:
+    Renderer();
+    ~Renderer();
+
+    void BeginPixels();
+    void Draw(Geometry *shape, ulong color);
+    void Draw(Point *point, ulong color);
+    void Draw(Line *line, ulong color);
+    void Draw(Rect *rect, ulong color);
+    void Draw(Circle *circ, ulong color);
+    void Draw(Poly *pol, ulong color);
+    void Draw(Mixed *mul, ulong color);
+    void EndPixels();
+
+    bool Initialize(Window *window, Graphics *graphics);
+    void Draw(SpriteData &sprite);
+    void Render();
 };
 
-// --------------------------------------------------------------------------------
-// Funções Membro Inline
-
-// plota pixels sem fazer recorte (clipping)
 inline void Renderer::PlotPixel(int x, int y, ulong color)
-{ videoMemory[x + y * videoMemoryPitch] = color; }
+{
+    videoMemory[x + y * videoMemoryPitch] = color;
+}
 
-// plota pixels para o método de desenho de linhas
 inline void Renderer::PlotLine(int x, int y, int flag, ulong color)
-{ flag ? PlotPixel(y, x, color) : PlotPixel(x, y, color); }
+{
+    flag ? PlotPixel(y, x, color) : PlotPixel(x, y, color);
+}
 
-// ---------------------------------------------------------------------------------
 #endif

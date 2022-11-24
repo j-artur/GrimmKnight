@@ -33,15 +33,11 @@ Fireball::Fireball(Player *player, HDirection direction)
     MoveTo(player->X() + distance, player->Y());
 }
 
-// ---------------------------------------------------------------------------------
-
 Fireball::~Fireball()
 {
     delete ts;
     delete anim;
 }
-
-// ---------------------------------------------------------------------------------
 
 void Fireball::Update()
 {
@@ -57,8 +53,6 @@ void Fireball::Update()
     anim->NextFrame();
 }
 
-// ---------------------------------------------------------------------------------
-
 void Fireball::OnCollision(Object *obj)
 {
     if (find(objectsHit.begin(), objectsHit.end(), obj) == objectsHit.end())
@@ -70,7 +64,7 @@ void Fireball::OnCollision(Object *obj)
         case WALL_RIGHT:
         case SCREEN_TRANSITION:
         case LEVEL_TRANSITION:
-            // TODO: Add fireball death animation
+
             GrimmKnight::scene->Delete(this, MOVING);
             break;
         case ENEMY: {
@@ -82,7 +76,7 @@ void Fireball::OnCollision(Object *obj)
         case RADIANCE: {
             Entity *radiance = (Entity *)obj;
             if (radiance->TakeDamage(15, Dir()))
-                // TODO: radiance damage sound
+
                 GrimmKnight::audio->Play(ENEMY_DAMAGE);
             break;
         }

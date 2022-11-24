@@ -231,11 +231,11 @@ void WanderingHusk::OnCollision(Object *other)
     case WALL_RIGHT: {
         Rect *wallBBox = (Rect *)other->BBox();
         if (self->Bottom() != wallBBox->Top() && self->Top() != wallBBox->Bottom())
-        {
-
-            MoveTo(other->X() - self->left, y);
-            direction = H_RIGHT;
-        }
+            \
+            {
+                MoveTo(other->X() - self->left, y);
+                direction = H_RIGHT;
+            }
         break;
     }
     }

@@ -132,7 +132,6 @@ void FalseKnight::Activate()
 
 void FalseKnight::Update()
 {
-    // DIRECTION CONTROL
     direction = GrimmKnight::player->X() < x ? H_LEFT : H_RIGHT;
     directionMult = direction == H_LEFT ? -1.0f : 1.0f;
 
@@ -175,16 +174,12 @@ void FalseKnight::Update()
             break;
         }
     }
-
-    // IDLE
     if (state == FK_IDLE)
     {
         animation->Loop(true);
         animation->Delay(0.2f);
         animation->Select(state * direction);
     }
-
-    // LEAP AND BLUDGEON
     if (state == FK_LEAP || state == FK_BLUDGEON)
     {
         if (!isJumping)
@@ -243,8 +238,6 @@ void FalseKnight::Update()
         bludgeonAttackCd.Add(gameTime);
         jumpCd.Add(gameTime);
     }
-
-    // SLAM
     if (state == FK_SLAM)
     {
         uint oldAnimState = animation->Sequence();
@@ -294,8 +287,6 @@ void FalseKnight::Update()
         slamCd.Add(gameTime);
         prepSlamCd.Add(gameTime);
     }
-
-    // RAGE
     if (state == FK_RAGE)
     {
         if (!isJumping)
@@ -344,7 +335,6 @@ void FalseKnight::Update()
                 switch (animation->Frame())
                 {
                 case 0: {
-
                     mace->MoveTo(bb->X() - 40.0f * directionMult, bb->Y() - 80.0f);
                     hit->MoveTo(bb->X() + 80.0f * directionMult, bb->Y());
 
@@ -357,7 +347,6 @@ void FalseKnight::Update()
                     break;
                 }
                 case 1: {
-
                     mace->MoveTo(bb->X() + 100.0f * directionMult, bb->Y() + 80.0f);
                     if (!spawnedBarrels)
                     {
@@ -396,8 +385,6 @@ void FalseKnight::Update()
         rageCd.Add(gameTime);
         jumpCd.Add(gameTime);
     }
-
-    // STUN
     if (state == FK_STUN)
     {
         isAttacking = false;
@@ -488,8 +475,6 @@ void FalseKnight::Update()
             hit->MoveTo(bb->X(), bb->Y() + 40.0f);
         }
     }
-
-    // GRAVITY ACCELERATION AND MOVEMENT
     ySpeed += gravity * gameTime;
     Translate(xSpeed * gameTime, ySpeed * gameTime);
 

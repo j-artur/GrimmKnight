@@ -10,7 +10,6 @@ void TestLevel::Init()
     id = LEVELFINAL;
 
     background = new Sprite("Resources/Level0Bg.png");
-    // foreground = new Sprite("Resources/Level0Fg.png");
 
     scene = new Scene();
     GrimmKnight::scene = scene;
@@ -20,7 +19,6 @@ void TestLevel::Init()
     GrimmKnight::player->MoveTo(256.0f, -32.0f);
     scene->Add(GrimmKnight::player, MOVING);
 
-    // boss = new FalseKnight(12, 12);
     Radiance *boss = new Radiance();
     boss->MoveTo(800.0f, 400.0f);
     scene->Add(boss, MOVING);
@@ -36,8 +34,6 @@ void TestLevel::Update()
 
 void TestLevel::Draw()
 {
-    // background->Draw(camera->X(), camera->Y(), LAYER_BG);
-    // foreground->Draw(camera->X(), camera->Y(), LAYER_FG);
     scene->Draw();
 }
 

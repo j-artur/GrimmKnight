@@ -29,14 +29,10 @@ Shockwave::Shockwave(Geometry *mace, HDirection direction, TileSet *tileset)
     MoveTo(mace->X(), mace->Y() - 20.0f);
 }
 
-// ---------------------------------------------------------------------------------
-
 Shockwave::~Shockwave()
 {
     delete anim;
 }
-
-// ---------------------------------------------------------------------------------
 
 void Shockwave::Update()
 {
@@ -44,8 +40,6 @@ void Shockwave::Update()
 
     anim->NextFrame();
 }
-
-// ---------------------------------------------------------------------------------
 
 void Shockwave::OnCollision(Object *obj)
 {

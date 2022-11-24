@@ -103,7 +103,6 @@ void Level2::Init()
 
 void Level2::Update()
 {
-
     if (level1Transition->Transitioning())
     {
         GrimmKnight::player->AddCooldowns(gameTime);

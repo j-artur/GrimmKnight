@@ -27,7 +27,6 @@ void Button::Update()
     }
     else
     {
-
         if (hover)
         {
             hoverTime += gameTime;

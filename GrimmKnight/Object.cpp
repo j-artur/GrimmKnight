@@ -1,41 +1,19 @@
-/**********************************************************************************
-// Object (Código Fonte)
-//
-// Criação:     01 Out 2007
-// Atualização: 07 Out 2021
-// Compilador:  Visual C++ 2019
-//
-// Descrição:   Essa é a classe base para todos objetos do jogo.
-//
-//              Um objeto do jogo é qualquer coisa que possámos querer desenhar
-//              ou interagir dentro do jogo. Por exemplo, um soldado, um prédio,
-//              um projétil, uma forma geométrica, etc.
-//
-**********************************************************************************/
-
 #include "Object.h"
 #include "Engine.h"
 
-// -------------------------------------------------------------------------------
-// Inicialização de variáveis estáticas da classe
-
-Window* & Object::window   = Engine::window;        // ponteiro para a janela
-Game*   & Object::game     = Engine::game;          // ponteiro para o jogo
-float   & Object::gameTime = Engine::frameTime;     // tempo do último quadro
-
-// -------------------------------------------------------------------------------
+Window *&Object::window = Engine::window;
+Game *&Object::game = Engine::game;
+float &Object::gameTime = Engine::frameTime;
 
 Object::Object()
 {
-    posX = posY = 0.0f;     // posição
-    posZ = 0.5f;            // profundidade
-    scaleFactor = 1.0f;     // escala
-    rotationAngle = 0.0f;   // rotação
-    type = 0;               // tipo
-    bbox = nullptr;         // bounding box
+    posX = posY = 0.0f;
+    posZ = 0.5f;
+    scaleFactor = 1.0f;
+    rotationAngle = 0.0f;
+    type = 0;
+    bbox = nullptr;
 }
-
-// -------------------------------------------------------------------------------
 
 Object::~Object()
 {
@@ -43,9 +21,7 @@ Object::~Object()
         delete bbox;
 }
 
-// -------------------------------------------------------------------------------
-
-void Object::BBox(Geometry* bb)
+void Object::BBox(Geometry *bb)
 {
     if (bbox)
         delete bbox;
@@ -53,10 +29,8 @@ void Object::BBox(Geometry* bb)
     bbox = bb;
     bbox->MoveTo(x, y);
     bbox->ScaleTo(scaleFactor);
-    bbox->RotateTo(rotationAngle); 
+    bbox->RotateTo(rotationAngle);
 }
-
-// -------------------------------------------------------------------------------
 
 void Object::Translate(float dx, float dy, float dz)
 {
@@ -68,8 +42,6 @@ void Object::Translate(float dx, float dy, float dz)
         bbox->Translate(dx, dy);
 }
 
-// -------------------------------------------------------------------------------
-
 void Object::Scale(float factor)
 {
     scaleFactor *= factor;
@@ -78,16 +50,12 @@ void Object::Scale(float factor)
         bbox->Scale(factor);
 }
 
-// -------------------------------------------------------------------------------
-
 void Object::ScaleTo(float value)
 {
     scaleFactor = value;
     if (bbox)
         bbox->ScaleTo(value);
 }
-
-// -------------------------------------------------------------------------------
 
 void Object::Rotate(float angle)
 {
@@ -97,8 +65,6 @@ void Object::Rotate(float angle)
         bbox->Rotate(angle);
 }
 
-// -------------------------------------------------------------------------------
-
 void Object::RotateTo(float value)
 {
     rotationAngle = value;
@@ -106,8 +72,6 @@ void Object::RotateTo(float value)
     if (bbox)
         bbox->RotateTo(value);
 }
-
-// -------------------------------------------------------------------------------
 
 void Object::MoveTo(float px, float py, float pz)
 {
@@ -119,8 +83,6 @@ void Object::MoveTo(float px, float py, float pz)
         bbox->MoveTo(px, py);
 }
 
-// -------------------------------------------------------------------------------
-
 void Object::MoveTo(float px, float py)
 {
     posX = px;
@@ -130,10 +92,6 @@ void Object::MoveTo(float px, float py)
         bbox->MoveTo(px, py);
 }
 
-// -------------------------------------------------------------------------------
-
-void Object::OnCollision(Object* obj)
+void Object::OnCollision(Object *obj)
 {
 }
-
-// -------------------------------------------------------------------------------

@@ -177,7 +177,6 @@ void Tiktik::OnCollision(Object *other)
         Rect *wallBBox = (Rect *)other->BBox();
         if (self->Bottom() != wallBBox->Top() && self->Top() != wallBBox->Bottom())
         {
-
             MoveTo(other->X() - self->left, y);
             direction = H_RIGHT;
         }

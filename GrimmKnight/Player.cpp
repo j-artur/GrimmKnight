@@ -371,7 +371,6 @@ input : {
             }
         }
 
-        // JUMP
         if (window->KeyDown('Z'))
         {
             if (jumpKeyCtrl && state != FALLING)
@@ -396,7 +395,6 @@ input : {
             }
         }
 
-        // ATTACK
         if (window->KeyDown('X') && attackCd.Up() && attackKeyCtrl)
         {
             nextState = ATTACKING;
@@ -423,13 +421,10 @@ input : {
         if (window->KeyUp('X'))
             attackKeyCtrl = true;
 
-        // FIREBALL
         if (fireball)
         {
             if (window->KeyDown('S') && fireballCd.Up() && fireballKeyCtrl && HasMana())
             {
-                // TODO: Create fireball spawn animation
-
                 GrimmKnight::audio->Play(PLAYER_FIREBALL);
 
                 xSpeed = 0.0f;
@@ -449,7 +444,6 @@ input : {
                 fireballKeyCtrl = true;
         }
 
-        // DASH
         if (dash)
         {
             if (window->KeyDown('C') && dashCd.Up() && dashKeyCtrl && dashGroundCtrl)
@@ -468,11 +462,9 @@ input : {
                 dashKeyCtrl = true;
         }
 
-        // HEAL
         if (window->KeyDown('A') && healKeyCtrl && HasMana() && healCd.Up())
         {
             healCd.Restart();
-            // TODO: Create heal sound
 
             UseMana();
 
@@ -527,8 +519,6 @@ input : {
     PlayerState nextState = state;
 
 update : {
-
-    // update old position
     Rect *self = (Rect *)BBox();
     oldTop = self->Top();
     oldBottom = self->Bottom();

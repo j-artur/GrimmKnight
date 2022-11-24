@@ -47,14 +47,10 @@ Attack::Attack(TileSet *tileSet, Player *player, HDirection dir, Direction atkDi
     }
 }
 
-// ---------------------------------------------------------------------------------
-
 Attack::~Attack()
 {
     delete anim;
 }
-
-// ---------------------------------------------------------------------------------
 
 void Attack::Update()
 {
@@ -79,8 +75,6 @@ void Attack::Update()
         GrimmKnight::scene->Delete();
 }
 
-// ---------------------------------------------------------------------------------
-
 void Attack::OnCollision(Object *other)
 {
     if (find(objectsHit.begin(), objectsHit.end(), other) == objectsHit.end())
@@ -102,7 +96,6 @@ void Attack::OnCollision(Object *other)
             Entity *radiance = (Entity *)other;
             if (radiance->TakeDamage(5, direction))
             {
-                // TODO: radiance damage sound
                 GrimmKnight::audio->Play(ENEMY_DREAM_DAMAGE);
                 GrimmKnight::player->AddMana();
                 GrimmKnight::player->Knockback();
@@ -118,7 +111,6 @@ void Attack::OnCollision(Object *other)
             Entity *totem = (Entity *)other;
             if (totem->TakeDamage(1, direction))
             {
-
                 GrimmKnight::audio->Play(SOUL_TOTEM);
                 GrimmKnight::player->Knockback();
                 GrimmKnight::player->AddMana();

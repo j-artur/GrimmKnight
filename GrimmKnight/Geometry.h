@@ -1,199 +1,210 @@
-/**********************************************************************************
-// Geometry (Arquivo de Cabeçalho)
-//
-// Criação:     05 Oct 2007
-// Atualização: 07 Out 2021
-// Compilador:  Visual C++ 2019
-//
-// Descrição:   Agrupa a definição de todas as formas geométricas suportadas:
-//              ponto, linha, retângulo, círculo, polígono e mista (agrupamento
-//              de uma ou mais geometrias)
-//
-**********************************************************************************/
-
 #ifndef _PROGJOGOS_GEOMETRY_H_
 #define _PROGJOGOS_GEOMETRY_H_
 
-#include "Types.h"                                      // tipos da engine
-#include <list>                                         // lista da STL
-using std::list;                                        // usar list sem std::
-
-// ---------------------------------------------------------------------------
+#include "Types.h"
+#include <list>
+using std::list;
 
 enum GeometryTypes
 {
-    UNKNOWN_T,                                          // desconhecido
-    POINT_T,                                            // ponto
-    LINE_T,                                             // linha
-    RECTANGLE_T,                                        // retângulo
-    CIRCLE_T,                                           // círculo
-    POLYGON_T,                                          // polígono
-    MIXED_T                                             // mista
+    UNKNOWN_T,
+    POINT_T,
+    LINE_T,
+    RECTANGLE_T,
+    CIRCLE_T,
+    POLYGON_T,
+    MIXED_T
 };
-
-// ---------------------------------------------------------------------------
-// Geometry
-// ---------------------------------------------------------------------------
 
 class Geometry
 {
-protected:
-    float x, y;                                         // posição da geometria
-    float scale;                                        // escala da geometria
-    float rotation;                                     // rotação da geometria
-    uint type;                                          // tipo da geometria
+  protected:
+    float x, y;
+    float scale;
+    float rotation;
+    uint type;
 
-public:
-    Geometry();                                         // construtor
-    virtual ~Geometry();                                // destrutor
+  public:
+    Geometry();
+    virtual ~Geometry();
 
-    virtual float X() const                             // coordenada x da geometria
-    { return x; }            
-    
-    virtual float Y() const                             // coordenada y da geometria
-    { return y; }    
+    virtual float X() const
+    {
+        return x;
+    }
 
-    
-    virtual float Scale() const                         // retorna escala da geometria
-    { return scale; }
+    virtual float Y() const
+    {
+        return y;
+    }
 
-    virtual float Rotation() const                      // retorna rotação da geometria
-    { return rotation; }
+    virtual float Scale() const
+    {
+        return scale;
+    }
 
-    virtual uint Type() const                           // retorna tipo 
-    { return type; }        
-    
-    virtual void Translate(float dx, float dy)          // move a geometria pelo delta (dx,dy)
-    { x += dx; y += dy; }
+    virtual float Rotation() const
+    {
+        return rotation;
+    }
 
-    virtual void Scale(float factor)                    // amplia/reduz geometria por um fator de escala
-    { scale *= factor; }
+    virtual uint Type() const
+    {
+        return type;
+    }
 
-    virtual void ScaleTo(float value)                   // ajusta escala para o valor indicado
-    { scale = value; }
+    virtual void Translate(float dx, float dy)
+    {
+        x += dx;
+        y += dy;
+    }
 
-    virtual void Rotate(float angle)                    // rotaciona geometria por um ângulo
-    { rotation += angle; }
+    virtual void Scale(float factor)
+    {
+        scale *= factor;
+    }
 
-    virtual void RotateTo(float value)                  // ajusta a rotação para o valor indicado
-    { rotation = value; }
+    virtual void ScaleTo(float value)
+    {
+        scale = value;
+    }
 
-    virtual void MoveTo(float px, float py)             // move a geometria para a posição (px,py)
-    { x = px; y = py; }
+    virtual void Rotate(float angle)
+    {
+        rotation += angle;
+    }
+
+    virtual void RotateTo(float value)
+    {
+        rotation = value;
+    }
+
+    virtual void MoveTo(float px, float py)
+    {
+        x = px;
+        y = py;
+    }
 };
-
-// --------------------------------------------------------------------------
-// Point
-// --------------------------------------------------------------------------
 
 class Point : public Geometry
 {
-public:
-    Point();                                            // construtor padrão
-    Point(float posX, float posY);                      // construtor usando pontos-flutuantes
-    Point(int posX, int posY);                          // construtor usando inteiros
-    
-    float Distance(const Point & p) const;              // calcula a distância até outro ponto
-};
+  public:
+    Point();
+    Point(float posX, float posY);
+    Point(int posX, int posY);
 
-// --------------------------------------------------------------------------
-// Line
-// -------------------------------------------------------------------------
+    float Distance(const Point &p) const;
+};
 
 class Line : public Geometry
 {
-public:
-    Point a, b;                                         // linha vai do ponto A ao ponto B
-    
-    Line();                                             // construtor padrão
-    Line(float x1, float y1, float x2, float y2);       // construtor usando pontos-flutuantes
-    Line(Point& pa, Point& pb);                         // construtor usando pontos
+  public:
+    Point a, b;
 
-    float Ax() const { return x + (a.X() * scale); }    // coordenadas do mundo do ponto A eixo x
-    float Ay() const { return y + (a.Y() * scale); }    // coordenadas do mundo do ponto A eixo y
-    float Bx() const { return x + (b.X() * scale); }    // coordenadas do mundo do ponto B eixo x
-    float By() const { return y + (b.Y() * scale); }    // coordenadas do mundo do ponto B eixo y
+    Line();
+    Line(float x1, float y1, float x2, float y2);
+    Line(Point &pa, Point &pb);
+
+    float Ax() const
+    {
+        return x + (a.X() * scale);
+    }
+    float Ay() const
+    {
+        return y + (a.Y() * scale);
+    }
+    float Bx() const
+    {
+        return x + (b.X() * scale);
+    }
+    float By() const
+    {
+        return y + (b.Y() * scale);
+    }
 };
-
-// --------------------------------------------------------------------------
-// Rect
-// --------------------------------------------------------------------------
 
 class Rect : public Geometry
 {
-public:
-    float left;                                         // coordenada esquerda do retângulo
-    float top;                                          // coordenada superior do retângulo
-    float right;                                        // coordenada direita do retângulo
-    float bottom;                                       // coordenada inferior do retângulo
+  public:
+    float left;
+    float top;
+    float right;
+    float bottom;
 
-    Rect();                                             // construtor padrão
-    Rect(float x1, float y1, float x2, float y2);       // construtor usando pontos-flutuantes
-    Rect(Point& a, Point& b);                           // construtor usando pontos
+    Rect();
+    Rect(float x1, float y1, float x2, float y2);
+    Rect(Point &a, Point &b);
 
-    float Left() const   { return x + (left*scale);   } // coordenadas do mundo do menor valor do eixo x
-    float Top() const    { return y + (top*scale);    } // coordenadas do mundo do menor valor do eixo y
-    float Right() const  { return x + (right*scale);  } // coordenadas do mundo do maior valor do eixo x
-    float Bottom() const { return y + (bottom*scale); } // coordenadas do mundo do maior valor do eixo y
+    float Left() const
+    {
+        return x + (left * scale);
+    }
+    float Top() const
+    {
+        return y + (top * scale);
+    }
+    float Right() const
+    {
+        return x + (right * scale);
+    }
+    float Bottom() const
+    {
+        return y + (bottom * scale);
+    }
 };
-
-// --------------------------------------------------------------------------
-// Circle
-// --------------------------------------------------------------------------
 
 class Circle : public Geometry
 {
-private:
-    float radius;                                       // raio do círculo
+  private:
+    float radius;
 
-public:
-    Circle();                                           // construtor padrão
-    Circle(float r);                                    // contrutor com raio
+  public:
+    Circle();
+    Circle(float r);
 
-    float Radius() const { return radius * scale; }     // tamanho do raio
-    float CenterX() const { return x; }                 // coordenadas do mundo do centro (eixo x)
-    float CenterY() const { return y; }                 // coordenadas do mundo do centro (eixo y)
+    float Radius() const
+    {
+        return radius * scale;
+    }
+    float CenterX() const
+    {
+        return x;
+    }
+    float CenterY() const
+    {
+        return y;
+    }
 };
-
-// --------------------------------------------------------------------------
-// Poly
-// --------------------------------------------------------------------------
 
 class Poly : public Geometry
 {
-public:
-    uint      vertexCount;                              // número de vértices 
-    Point*    vertexList;                               // vetor de vértices do polígono
+  public:
+    uint vertexCount;
+    Point *vertexList;
 
-    Poly();                                             // construtor padrão
-    Poly(Point * vList, uint vCount);                   // construtor
-    Poly(const Poly& p);                                // construtor de cópia
-    ~Poly();                                            // destructor
+    Poly();
+    Poly(Point *vList, uint vCount);
+    Poly(const Poly &p);
+    ~Poly();
 
-    const Poly& operator=(const Poly& p);               // operador de atribuição
-}; 
-
-// --------------------------------------------------------------------------
-// Mixed
-// --------------------------------------------------------------------------
+    const Poly &operator=(const Poly &p);
+};
 
 class Mixed : public Geometry
 {
-public:
-    list<Geometry*> shapes;                             // lista de formas geométricas
-    
-    Mixed();                                            // construtor padrão
-    ~Mixed();                                           // destructor
+  public:
+    list<Geometry *> shapes;
 
-    void Insert(Geometry * s);                          // insere geometria na lista
-    void Remove(Geometry * s);                          // remove geometria da lista
+    Mixed();
+    ~Mixed();
 
-    void Translate(float dx, float dy);                 // move a geometria pelo delta (dx,dy)
-    void Scale(float factor);                           // amplia/reduz geometria por um fator de escala
-    void ScaleTo(float value);                          // ajusta escala para o valor indicado
-    void MoveTo(float px, float py);                    // move a geometria para a posição (px,py)
+    void Insert(Geometry *s);
+    void Remove(Geometry *s);
+
+    void Translate(float dx, float dy);
+    void Scale(float factor);
+    void ScaleTo(float value);
+    void MoveTo(float px, float py);
 };
-
-// --------------------------------------------------------------------------
 
 #endif

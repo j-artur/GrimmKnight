@@ -1,95 +1,70 @@
-/**********************************************************************************
-// TileSet (Arquivo de Cabeçalho)
-// 
-// Criação:     17 Abr 2012
-// Atualização: 08 Set 2021
-// Compilador:  Visual C++ 2019
-//
-// Descrição:   Representa uma folha de sprites
-//
-**********************************************************************************/
-
 #ifndef _PROGJOGOS_TILESET_H_
 #define _PROGJOGOS_TILESET_H_
 
-// ---------------------------------------------------------------------------------
-// inclusões
-
-#include "Types.h"
 #include "Image.h"
+#include "Types.h"
 #include <string>
 using std::string;
 
-// ---------------------------------------------------------------------------------
-
-class TileSet 
+class TileSet
 {
-private:
-    Image * image;                          // imagem da folha de sprites
-    uint width;                             // largura de um quadro
-    uint height;                            // altura de um quadro
-    uint columns;                           // número de colunas na folha
-    uint size;                              // quantidade de quadros na folha
+  private:
+    Image *image;
+    uint width;
+    uint height;
+    uint columns;
+    uint size;
 
-public:
-    TileSet(string filename,                // nome do arquivo
-            uint tileWidth,                 // largura de um quadro
-            uint tileHeight,                // altura de um quadro
-            uint numCols,                   // número de colunas na folha
-            uint numTiles);                 // quantidade de quadros
+  public:
+    TileSet(string filename, uint tileWidth, uint tileHeight, uint numCols, uint numTiles);
 
-    TileSet(string filename,                // nome do arquivo
-            uint numLines,                  // número de linhas na folha
-            uint numCols);                  // número de colunas na folha
+    TileSet(string filename, uint numLines, uint numCols);
 
-    ~TileSet();                                
+    ~TileSet();
 
-    uint    TileWidth();                    // retorna a largura de um quadro
-    uint    TileHeight();                   // retorna a altura de um quadro
-    uint    Size();                         // retorna número de quadros na folha
-    uint    Columns();                      // retorna o número de colunas na folha
-    uint    Width();                        // retorna a largura da folha
-    uint    Height();                       // retorna a altura da folha
+    uint TileWidth();
+    uint TileHeight();
+    uint Size();
+    uint Columns();
+    uint Width();
+    uint Height();
 
-    // retorna view da textura da folha
-    ID3D11ShaderResourceView * View();        
+    ID3D11ShaderResourceView *View();
 };
 
-// ---------------------------------------------------------------------------------
-// funções membro inline
-
-// retorna a largura de um quadro
 inline uint TileSet::TileWidth()
-{ return width; }
+{
+    return width;
+}
 
-// retorna a altura de um quadro
 inline uint TileSet::TileHeight()
-{ return height; }
+{
+    return height;
+}
 
-// retorna número de quadros na folha
 inline uint TileSet::Size()
-{ return size; }
+{
+    return size;
+}
 
-// retorna o número de colunas na folha
 inline uint TileSet::Columns()
-{ return columns; }
+{
+    return columns;
+}
 
-// retorna a largura da folha
 inline uint TileSet::Width()
-{ return image->Width(); }
+{
+    return image->Width();
+}
 
-// retorna a altura da folha
 inline uint TileSet::Height()
-{ return image->Height(); }
+{
+    return image->Height();
+}
 
-// retorna resource view do tileset
-inline ID3D11ShaderResourceView * TileSet::View()
-{ return image->View(); }
-
-// ---------------------------------------------------------------------------------
+inline ID3D11ShaderResourceView *TileSet::View()
+{
+    return image->View();
+}
 
 #endif
-
-
-
-

@@ -50,7 +50,6 @@ bool Barrel::TakeDamage(uint damage, Direction dir)
 
 void Barrel::Update()
 {
-
     Rotate(1.0f);
 
     if (barrelCd.Up())
